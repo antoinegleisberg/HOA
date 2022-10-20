@@ -7,7 +7,11 @@ public class Tile : MonoBehaviour
     [SerializeField] private Color _baseColor, _offsetColor;
     [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private GameObject _highlight;
-    
+
+    private void Start()
+    {
+
+    }
 
     public void Init(Vector2 pos)
     {
@@ -26,8 +30,7 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Vector3 worldPoint = ray.origin - ray.direction * ray.origin.z / ray.direction.z;
-        Debug.Log(worldPoint);
+        if (!InputManager.instance.isHoveringUI && !InputManager.instance.UIisOpened)
+        GameManager.instance.HandleClickOnTile(InputManager.instance.mouseWorldPosition);
     }
 }

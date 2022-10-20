@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class GameEvents : MonoBehaviour
 {
-    public static GameEvents instance;
+    public static GameEvents instance { get; private set; }
+
     public event Action onOpenUI;
     public event Action onCloseUI;
     public event Action onHoverUI;

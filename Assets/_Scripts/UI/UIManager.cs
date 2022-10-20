@@ -7,12 +7,9 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance { get; private set; }
 
-    [SerializeField] 
-    private Canvas _menusCanvas;
-    [SerializeField] 
-    private Dictionary<string, GameObject> _UIMenus;
+    [SerializeField] private Canvas _menusCanvas;
+    [SerializeField] private Dictionary<string, GameObject> _UIMenus;
     private GameObject _activeMenu;
-    private int UILayer;
 
     private void Awake()
     {
@@ -21,7 +18,12 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        instance._activeMenu = null;
+        _activeMenu = null;
+        InitalizeMenus();
+    }
+
+    private void InitalizeMenus()
+    {
         _UIMenus = new Dictionary<string, GameObject>();
         List<GameObject> UIMenusList = GetChildrenOf(_menusCanvas.gameObject);
         for (int i = 0; i < UIMenusList.Count; i++)
@@ -29,7 +31,6 @@ public class UIManager : MonoBehaviour
             _UIMenus[UIMenusList[i].name] = UIMenusList[i];
             UIMenusList[i].SetActive(false);
         }
-        instance.UILayer = LayerMask.NameToLayer("UI");
     }
 
     public void ToggleMenu(string name)

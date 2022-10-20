@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseGameState : MonoBehaviour
+public abstract class BaseGameState
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public abstract void Init();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void EnterState();
+
+    public abstract void UpdateState();
+
+    public abstract void ExitState();
+
+    public abstract void HandleClickOnTile(Vector3 coordinates);
 }
