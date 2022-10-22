@@ -7,11 +7,11 @@ public class HoverUIEvents : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        GameEvents.instance.HoverUI();
+        UIEvents.instance.HoverUI();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        GameEvents.instance.MouseLeaveUI();
+        UIEvents.instance.MouseLeaveUI();
     }
 }

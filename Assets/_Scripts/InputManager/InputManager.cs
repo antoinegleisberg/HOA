@@ -18,59 +18,53 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         SubscribeToEvents();
-        Vector3 mousePosition = Input.mousePosition;
-        mouseScreenPosition = new Vector2(mousePosition.x, mousePosition.y);
-        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        mouseWorldPosition = ray.origin - ray.direction * ray.origin.z / ray.direction.z;
+        UpdateMousePosition();
         isHoveringUI = false;
         UIisOpened = false;
     }
 
     void Update()
     {
+        UpdateMousePosition();
+    }
+
+    private void UpdateMousePosition()
+    {
         Vector3 mousePosition = Input.mousePosition;
         mouseScreenPosition = new Vector2(mousePosition.x, mousePosition.y);
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         mouseWorldPosition = ray.origin - ray.direction * ray.origin.z / ray.direction.z;
     }
+
     private void SubscribeToEvents()
     {
-        GameEvents.instance.onOpenUI += HandleOpeningUI;
-        GameEvents.instance.onCloseUI += HandleClosingUI;
-        GameEvents.instance.onHoverUI += HandleMouseHoveringUI;
-        GameEvents.instance.onMouseLeaveUI += HandleMouseLeavingUI;
+        UIEvents.instance.onOpenUIMenu += SetOpenUI;
+        UIEvents.instance.onCloseUIMenu += SetClosedUI;
+        UIEvents.instance.onHoverUI += SetMouseHoveringUI;
+        UIEvents.instance.onMouseLeaveUI += SetMouseLeavingUI;
+        UIEvents.instance.onPreviewBuilding += SetClosedUI;
+        UIEvents.instance.onExitPreviewBuilding += SetMouseLeavingUI;
     }
 
     private void UnsubscribeToEvents()
     {
-        GameEvents.instance.onOpenUI -= HandleOpeningUI;
-        GameEvents.instance.onCloseUI -= HandleClosingUI;
-        GameEvents.instance.onHoverUI -= HandleMouseHoveringUI;
-        GameEvents.instance.onMouseLeaveUI -= HandleMouseLeavingUI;
+        UIEvents.instance.onOpenUIMenu -= SetOpenUI;
+        UIEvents.instance.onCloseUIMenu -= SetClosedUI;
+        UIEvents.instance.onHoverUI -= SetMouseHoveringUI;
+        UIEvents.instance.onMouseLeaveUI -= SetMouseLeavingUI;
+        UIEvents.instance.onPreviewBuilding -= SetClosedUI;
+        UIEvents.instance.onExitPreviewBuilding -= SetMouseLeavingUI;
     }
 
-    private void HandleOpeningUI()
-    {
-        UIisOpened = true;
-    }
+    private void SetOpenUI(string menuName) { UIisOpened = true; }
 
-    private void HandleClosingUI()
-    {
-        UIisOpened = false;
-    }
+    private void SetClosedUI() { UIisOpened = false; isHoveringUI = false; }
 
-    private void HandleMouseHoveringUI()
-    {
-        isHoveringUI = true;
-    }
+    private void SetMouseHoveringUI() { isHoveringUI = true; }
 
-    private void HandleMouseLeavingUI()
-    {
-        isHoveringUI = false;
-    }
+    private void SetMouseLeavingUI() { isHoveringUI = false; }
 
-    private void OnDestroy()
-    {
-        UnsubscribeToEvents();
-    }
+    private void SetClosedUI(string buildingName) { SetClosedUI(); }
+
+    private void OnDestroy() { UnsubscribeToEvents(); }
 }

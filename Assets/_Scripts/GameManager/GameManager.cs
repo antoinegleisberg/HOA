@@ -12,10 +12,7 @@ public class GameManager : MonoBehaviour
     public BuildPreviewGameState buildPreviewGameState = new BuildPreviewGameState();
     public OpenedUIGameState openedUIGameState = new OpenedUIGameState();
 
-    private void Awake()
-    {
-        instance = this;
-    }
+    private void Awake() { instance = this; }
 
     void Start()
     {
@@ -24,32 +21,47 @@ public class GameManager : MonoBehaviour
         buildPreviewGameState.Init();
         openedUIGameState.Init();
 
+        SubscribeToEvents();
+
         currentGameState = startupGameState;
         currentGameState.EnterState();
     }
 
-    void Update()
-    {
-        currentGameState.UpdateState();
-    }
+    void Update() { currentGameState.UpdateState(); }
 
     public void SwitchState(BaseGameState newState)
     {
+        Debug.Log($"Entering {newState} state");
         currentGameState.ExitState();
         currentGameState = newState;
         currentGameState.EnterState();
     }
 
-    public void HandleClickOnTile(Vector3 coordinates)
+    public void HandleClickOnTile(Vector3 coordinates) { currentGameState.HandleClickOnTile(coordinates); }
+
+    private void SubscribeToEvents()
     {
-        Debug.Log(coordinates);
-        currentGameState.HandleClickOnTile(coordinates);
+        UIEvents.instance.onOpenUIMenu += SwitchToOpenedUIGameState;
+        UIEvents.instance.onCloseUIMenu += SwitchToDefaultGameState;
+        UIEvents.instance.onPreviewBuilding += SwitchToPreviewBuildingGameState;
+        UIEvents.instance.onExitPreviewBuilding += SwitchToDefaultGameState;
     }
 
-    public void HandleNewBuilding(string name)
+    private void UnsubscribeToEvents()
+    {
+        UIEvents.instance.onOpenUIMenu -= SwitchToOpenedUIGameState;
+        UIEvents.instance.onCloseUIMenu -= SwitchToDefaultGameState;
+        UIEvents.instance.onPreviewBuilding -= SwitchToPreviewBuildingGameState;
+        UIEvents.instance.onExitPreviewBuilding -= SwitchToDefaultGameState;
+    }
+
+    private void SwitchToOpenedUIGameState(string menuName) { SwitchState(openedUIGameState); }
+    private void SwitchToDefaultGameState() { SwitchState(defaultGameState); }
+    private void SwitchToPreviewBuildingGameState(string buildingName)
     {
         SwitchState(buildPreviewGameState);
-        buildPreviewGameState.Preview(name);
-        Debug.Log(buildPreviewGameState == currentGameState);
+        buildPreviewGameState.Preview(buildingName);
     }
+
+    private void OnDestroy() { UnsubscribeToEvents(); }
 }

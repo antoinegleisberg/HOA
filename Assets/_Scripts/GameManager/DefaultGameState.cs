@@ -6,20 +6,13 @@ public class DefaultGameState : BaseGameState
 {
     public override void Init() { }
 
-    public override void EnterState()
-    {
-        // Time.timeScale = 1;
-    }
+    public override void EnterState() { GameEvents.instance.EnterDefaultGameState(); }
 
-    public override void ExitState()
-    {
-        // Time.timeScale = 0;
-    }
+    public override void ExitState() { GameEvents.instance.ExitDefaultGameState(); }
     
     public override void UpdateState() { }
 
-    public override void HandleClickOnTile(Vector3 coordinates)
-    {
-        
-    }
+    public override void HandleClickOnTile(Vector3 coordinates) { }
+
+    public override void OnDestroy() { }
 }

@@ -17,4 +17,6 @@ public class StartupGameState : BaseGameState
     public override void UpdateState() { }
 
     public override void HandleClickOnTile(Vector3 coordinates) { }
+
+    public override void OnDestroy() { }
 }

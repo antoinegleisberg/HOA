@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d758366effea6ca4d81d4aaa85aea327, type: 3}
+  m_Name: Farm
+  m_EditorClassIdentifier: 
+  buildingName: Farm
+  sprite: {fileID: 21300000, guid: 9a83fffed540fc44a957c13b587691dd, type: 3}
+  size: {x: 3, y: 3}
+  BuildingPrefab: {fileID: -2570744299637513071, guid: 08b4d2c6f6c22ea4a90eb5272ea29ddb, type: 3}
+  PreviewPrefab: {fileID: 2620761906586355094, guid: a9cc5417924d11c45b193d90fc1a1be7, type: 3}

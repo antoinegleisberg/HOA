@@ -5,35 +5,22 @@ using UnityEngine;
 
 public class GameEvents : MonoBehaviour
 {
-    public static GameEvents instance { get; private set; }
+    public static GameEvents instance;
 
-    public event Action onOpenUI;
-    public event Action onCloseUI;
-    public event Action onHoverUI;
-    public event Action onMouseLeaveUI;
+    public static Action onEnterDefaultGameState;
+    public static Action onExitDefaultGameState;
+    public static Action onEnterPreviewBuildingGameState;
+    public static Action onExitPreviewBuildingGameState;
+    public static Action onSelectUnitGameState;
 
-    void Awake()
+    private void Awake()
     {
         instance = this;
     }
 
-    public void OpenUI()
-    {
-        if (onOpenUI != null) onOpenUI();
-    }
-
-    public void CloseUI()
-    {
-        if (onCloseUI != null) onCloseUI();
-    }
-
-    public void HoverUI()
-    {
-        if (onHoverUI != null) onHoverUI();
-    }
-
-    public void MouseLeaveUI()
-    {
-        if (onMouseLeaveUI != null) onMouseLeaveUI();
-    }
+    public void EnterDefaultGameState() { if (onEnterDefaultGameState != null) onEnterDefaultGameState(); }
+    public void ExitDefaultGameState() { if (onExitDefaultGameState != null) onExitDefaultGameState(); }
+    public void EnterPreviewBuildingGameState() { if (onEnterPreviewBuildingGameState != null) onEnterPreviewBuildingGameState(); }
+    public void ExitPreviewBuildingGameState() { if (onExitPreviewBuildingGameState != null) onExitPreviewBuildingGameState(); }
+    public void EnterSelectUnitGameState () { if (onSelectUnitGameState != null) onSelectUnitGameState(); }
 }

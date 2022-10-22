@@ -30,7 +30,6 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!InputManager.instance.isHoveringUI && !InputManager.instance.UIisOpened)
         GameManager.instance.HandleClickOnTile(InputManager.instance.mouseWorldPosition);
     }
 }

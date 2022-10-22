@@ -11,4 +11,6 @@ public abstract class BaseGameState
     public abstract void ExitState();
 
     public abstract void HandleClickOnTile(Vector3 coordinates);
+
+    public abstract void OnDestroy();
 }
