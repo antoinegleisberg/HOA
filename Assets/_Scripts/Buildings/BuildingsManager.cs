@@ -7,16 +7,16 @@ public class BuildingsManager : MonoBehaviour
 {
     public static BuildingsManager instance;
 
-    private Dictionary<string, ScriptableBuilding> _buildings;
+    private Dictionary<string, ScriptableBuilding> _scriptableBuildings;
 
     private void Awake()
     {
         instance = this;
 
-        _buildings = new Dictionary<string, ScriptableBuilding>();
+        _scriptableBuildings = new Dictionary<string, ScriptableBuilding>();
         foreach (ScriptableBuilding building in Resources.LoadAll<ScriptableBuilding>("Buildings"))
         {
-            _buildings[building.buildingName] = building;
+            _scriptableBuildings[building.buildingName] = building;
         }
     }
 
@@ -28,11 +28,13 @@ public class BuildingsManager : MonoBehaviour
     public GameObject GetPreviewBuilding(string buildingName, Vector3 position, Quaternion rotation, Transform parent)
     {
         GameObject previewBuilding = Instantiate(
-            _buildings[buildingName].PreviewPrefab,
+            _scriptableBuildings[buildingName].PreviewPrefab,
             position,
             rotation,
             parent);
         previewBuilding.name = buildingName;
         return previewBuilding;
     }
+
+    public ScriptableBuilding GetBuildingByName(string buildingName) { return _scriptableBuildings[buildingName]; }
 }

@@ -17,7 +17,7 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
-        _canMove = !InputManager.instance.isHoveringUI && !InputManager.instance.UIisOpened;
+        _canMove = !UIManager.instance.isHoveringUI && !UIManager.instance.UIisOpened;
         if (_canMove) MoveCamera();
     }
 

@@ -31,8 +31,8 @@ public class GameManager : MonoBehaviour
 
     public void SwitchState(BaseGameState newState)
     {
-        Debug.Log($"Entering {newState} state");
         currentGameState.ExitState();
+        Debug.Log($"Entering {newState} state");
         currentGameState = newState;
         currentGameState.EnterState();
     }

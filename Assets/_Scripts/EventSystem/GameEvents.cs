@@ -7,11 +7,11 @@ public class GameEvents : MonoBehaviour
 {
     public static GameEvents instance;
 
-    public static Action onEnterDefaultGameState;
-    public static Action onExitDefaultGameState;
-    public static Action onEnterPreviewBuildingGameState;
-    public static Action onExitPreviewBuildingGameState;
-    public static Action onSelectUnitGameState;
+    public event Action onEnterDefaultGameState;
+    public event Action onExitDefaultGameState;
+    public event Action onEnterPreviewBuildingGameState;
+    public event Action onExitPreviewBuildingGameState;
+    public event Action onSelectUnitGameState;
 
     private void Awake()
     {
