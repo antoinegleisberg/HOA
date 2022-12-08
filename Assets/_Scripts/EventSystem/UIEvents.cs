@@ -9,17 +9,17 @@ public class UIEvents : MonoBehaviour
 
     public event Action<string> onOpenUIMenu;
     public event Action onCloseUIMenu;
-    public event Action<string> onPreviewBuilding;
-    public event Action onExitPreviewBuilding;
     public event Action onHoverUI;
     public event Action onMouseLeaveUI;
+    public event Action<string> onEnterPreview;
+    public event Action onExitPreview;
 
     void Awake() { instance = this; }
 
     public void OpenUI(string menuName) { if (onOpenUIMenu != null) onOpenUIMenu(menuName); }
     public void CloseUI() { if (onCloseUIMenu != null) onCloseUIMenu(); }
-    public void PreviewBuilding(string buildingName) { if (onPreviewBuilding != null) onPreviewBuilding(buildingName); }
-    public void ExitPreviewbuilding() { if (onExitPreviewBuilding != null) onExitPreviewBuilding(); }
     public void HoverUI() { if (onHoverUI != null) onHoverUI(); }
     public void MouseLeaveUI() { if (onMouseLeaveUI != null) onMouseLeaveUI(); }
+    public void EnterPreview(string buildingName) { if (onEnterPreview != null) onEnterPreview(buildingName); }
+    public void ExitPreview() { if (onExitPreview != null) onExitPreview(); }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -42,6 +43,10 @@ public class UIManager : MonoBehaviour
         {
             _menus[menu.name] = menu;
             menu.SetActive(false);
+            foreach (RectTransform rT in menu.GetComponentInChildren<RectTransform>())
+            {
+                Debug.Log($"{rT.gameObject}");
+            }
         }
     }
 
@@ -58,8 +63,8 @@ public class UIManager : MonoBehaviour
         UIEvents.instance.onCloseUIMenu += CloseMenu;
         UIEvents.instance.onHoverUI += SetMouseHoveringUI;
         UIEvents.instance.onMouseLeaveUI += SetMouseLeavingUI;
-        UIEvents.instance.onPreviewBuilding += EnterPreviewGameState;
-        UIEvents.instance.onExitPreviewBuilding += ExitPreviewGameState;
+        UIEvents.instance.onEnterPreview += EnterPreviewGameState;
+        UIEvents.instance.onExitPreview += ExitPreviewGameState;
         GameEvents.instance.onEnterDefaultGameState += EnterDefaultGameState;
         GameEvents.instance.onExitDefaultGameState += ExitDefaultGameState;
     }
@@ -70,8 +75,8 @@ public class UIManager : MonoBehaviour
         UIEvents.instance.onCloseUIMenu -= CloseMenu;
         UIEvents.instance.onHoverUI -= SetMouseHoveringUI;
         UIEvents.instance.onMouseLeaveUI -= SetMouseLeavingUI;
-        UIEvents.instance.onPreviewBuilding -= EnterPreviewGameState;
-        UIEvents.instance.onExitPreviewBuilding -= ExitPreviewGameState;
+        UIEvents.instance.onEnterPreview -= EnterPreviewGameState;
+        UIEvents.instance.onExitPreview -= ExitPreviewGameState;
         GameEvents.instance.onEnterDefaultGameState -= EnterDefaultGameState;
         GameEvents.instance.onExitDefaultGameState -= ExitDefaultGameState;
     }

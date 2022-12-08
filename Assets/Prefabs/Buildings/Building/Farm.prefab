@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2077663823287964539}
   - component: {fileID: 5218539093675497715}
   - component: {fileID: -2570744299637513071}
+  - component: {fileID: 6028817816480906483}
   m_Layer: 0
   m_Name: Farm
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3951748613288014532}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.3636365, y: -5.7363634, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -97,3 +98,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff7ec674c0a0f945a8bc39d7a67ff89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6028817816480906483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3951748613288014532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65746b8ec5d28ba4592553585cb937a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxWorkers: 1

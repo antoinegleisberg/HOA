@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     public void SwitchState(BaseGameState newState)
     {
         currentGameState.ExitState();
-        Debug.Log($"Entering {newState} state");
+        // Debug.Log($"Entering {newState} state");
         currentGameState = newState;
         currentGameState.EnterState();
     }
@@ -43,16 +43,16 @@ public class GameManager : MonoBehaviour
     {
         UIEvents.instance.onOpenUIMenu += SwitchToOpenedUIGameState;
         UIEvents.instance.onCloseUIMenu += SwitchToDefaultGameState;
-        UIEvents.instance.onPreviewBuilding += SwitchToPreviewBuildingGameState;
-        UIEvents.instance.onExitPreviewBuilding += SwitchToDefaultGameState;
+        UIEvents.instance.onEnterPreview += SwitchToPreviewBuildingGameState;
+        UIEvents.instance.onExitPreview += SwitchToDefaultGameState;
     }
 
     private void UnsubscribeToEvents()
     {
         UIEvents.instance.onOpenUIMenu -= SwitchToOpenedUIGameState;
         UIEvents.instance.onCloseUIMenu -= SwitchToDefaultGameState;
-        UIEvents.instance.onPreviewBuilding -= SwitchToPreviewBuildingGameState;
-        UIEvents.instance.onExitPreviewBuilding -= SwitchToDefaultGameState;
+        UIEvents.instance.onEnterPreview -= SwitchToPreviewBuildingGameState;
+        UIEvents.instance.onExitPreview -= SwitchToDefaultGameState;
     }
 
     private void SwitchToOpenedUIGameState(string menuName) { SwitchState(openedUIGameState); }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UtilityFunctions : MonoBehaviour
+public class UtilityFunctions
 {
     public static List<GameObject> GetChildrenOf(GameObject parent)
     {

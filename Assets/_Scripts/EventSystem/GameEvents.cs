@@ -13,10 +13,7 @@ public class GameEvents : MonoBehaviour
     public event Action onExitPreviewBuildingGameState;
     public event Action onSelectUnitGameState;
 
-    private void Awake()
-    {
-        instance = this;
-    }
+    private void Awake() { instance = this; }
 
     public void EnterDefaultGameState() { if (onEnterDefaultGameState != null) onEnterDefaultGameState(); }
     public void ExitDefaultGameState() { if (onExitDefaultGameState != null) onExitDefaultGameState(); }

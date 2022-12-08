@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Farm : BaseBuilding
 {
-
+    public override void Init() { }
 }
