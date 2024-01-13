@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace antoinegleisberg.HOA
 {
+    [RequireComponent(typeof(Building))]
     public class Workplace : MonoBehaviour
     {
         private List<Citizen> _workers;

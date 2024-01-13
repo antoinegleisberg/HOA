@@ -1,4 +1,6 @@
 using antoinegleisberg.StateMachine;
+using System.Collections;
+using UnityEngine;
 
 
 namespace antoinegleisberg.HOA
@@ -7,14 +9,7 @@ namespace antoinegleisberg.HOA
     {
         public override void EnterState(Citizen citizen)
         {
-            if (citizen.Workplace == null)
-            {
-                citizen.SwitchState(citizen.SearchWorksiteState);
-            }
-            else
-            {
-                citizen.SwitchState(citizen.WanderingState);
-            }
+            citizen.StartCoroutine(HomeCoroutine(citizen));
         }
 
         public override void ExitState(Citizen citizen)
@@ -25,6 +20,22 @@ namespace antoinegleisberg.HOA
         public override void UpdateState(Citizen citizen)
         {
 
+        }
+
+        private IEnumerator HomeCoroutine(Citizen citizen)
+        {
+            yield return citizen.MoveToBuilding(citizen.Home.GetComponent<Building>());
+
+            yield return new WaitForSeconds(citizen.TimeAtHome);
+
+            if (citizen.Workplace == null)
+            {
+                citizen.SwitchState(citizen.SearchWorksiteState);
+            }
+            else
+            {
+                citizen.SwitchState(citizen.WorkingState);
+            }
         }
     }
 }

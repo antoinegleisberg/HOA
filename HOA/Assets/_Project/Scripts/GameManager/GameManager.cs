@@ -22,11 +22,12 @@ namespace antoinegleisberg.HOA
         private void Awake()
         {
             Instance = this;
-            SwitchState(GameState.Gameplay);
         }
 
         private void Start()
         {
+            SwitchState(GameState.Gameplay);
+            
             UIEvents.Instance.OnBuildMenuOpen += () => SwitchState(GameState.UI);
             UIEvents.Instance.OnBuildMenuClose += () => SwitchState(GameState.Gameplay);
             UIEvents.Instance.OnBuildBuildingSelected += OnBuildingSelected;
@@ -79,7 +80,7 @@ namespace antoinegleisberg.HOA
         {
             if (CurrentState == GameState.Preview)
             {
-                if (!PreviewManager.Instance.CurrentPositionIsValid())
+                if (!PreviewManager.Instance.CurrentPositionIsValid)
                 {
                     return;
                 }

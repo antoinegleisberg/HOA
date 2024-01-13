@@ -3,38 +3,60 @@ using UnityEngine;
 
 namespace antoinegleisberg.HOA
 {
-    public static class BuildingsDB
+    public class BuildingsDB : MonoBehaviour
     {
-        private static Dictionary<string, ScriptableBuilding> _buildings;
+        public static BuildingsDB Instance { get; private set; }
 
-        private static string _path = "Buildings";
+        private Dictionary<Vector2Int, Building> _tileOccupation;
+        private Dictionary<Building, List<Vector2Int>> _buildingTiles;
+        private List<Building> _buildings;
 
-        private static void Init()
+        private void Awake()
         {
-            _buildings = new Dictionary<string, ScriptableBuilding>();
+            Instance = this;
 
-            ScriptableBuilding[] buildings = Resources.LoadAll<ScriptableBuilding>(_path);
-            
-            foreach (ScriptableBuilding building in buildings)
-            {
-                _buildings.Add(building.Name, building);
-            }
+            _tileOccupation = new Dictionary<Vector2Int, Building>();
+            _buildingTiles = new Dictionary<Building, List<Vector2Int>>();
+            _buildings = new List<Building>();
         }
 
-        public static ScriptableBuilding GetBuildingByName(string name)
+        public bool TileIsOccupied(Vector2Int gridPos)
         {
-            if (_buildings == null)
-            {
-                Init();
-            }
+            return _tileOccupation.ContainsKey(gridPos);
+        }
 
-            if (!_buildings.ContainsKey(name))
+        public void AddBuilding(Building building, List<Vector2Int> occupiedTiles)
+        {
+            foreach (Vector2Int tilePos in occupiedTiles)
             {
-                Debug.LogError("BuildingsDB does not contain a building with the name " + name);
-                return null;
+                _tileOccupation.Add(tilePos, building);
             }
+            _buildingTiles.Add(building, occupiedTiles);
+            _buildings.Add(building);
+        }
 
-            return _buildings[name];
+        public Building GetBuildingWithComponentOfType<T>()
+        {
+            foreach (Building building in _buildings)
+            {
+                if (building.GetComponent<T>() != null)
+                {
+                    return building;
+                }
+            }
+            return null;
+        }
+
+        public Storage GetMainStorage()
+        {
+            foreach (Building building in _buildings)
+            {
+                if (building.IsMainStorage)
+                {
+                    return building.GetComponent<Storage>();
+                }
+            }
+            return null;
         }
     }
 }

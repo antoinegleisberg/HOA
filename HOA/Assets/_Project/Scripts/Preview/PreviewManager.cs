@@ -16,7 +16,8 @@ namespace antoinegleisberg.HOA
         [SerializeField] private Tile _tile;
 
         private bool _isPreviewing;
-        private bool _currentPositionIsValid;
+        public bool CurrentPositionIsValid { get; private set; }
+        
         public ScriptableBuilding PreviewBuilding { get; private set; }
         [SerializeField] private SpriteRenderer _previewBuildingSR;
 
@@ -41,9 +42,9 @@ namespace antoinegleisberg.HOA
         {
             _isPreviewing = true;
             _previewBuildingSR.enabled = true;
-            _currentPositionIsValid = false;
+            CurrentPositionIsValid = false;
 
-            PreviewBuilding = BuildingsDB.GetBuildingByName(name);
+            PreviewBuilding = ScriptableBuildingsDB.GetBuildingByName(name);
             _previewBuildingSR.sprite = PreviewBuilding.BuildingPrefab.GetComponent<SpriteRenderer>().sprite;
 
             UpdatePreview();
@@ -53,16 +54,11 @@ namespace antoinegleisberg.HOA
         {
             _isPreviewing = false;
             _previewBuildingSR.enabled = false;
-            _currentPositionIsValid = false;
+            CurrentPositionIsValid = false;
 
             PreviewBuilding = null;
             _greenHighlightTilemap.ClearAllTiles();
             _redHighlightTilemap.ClearAllTiles();
-        }
-
-        public bool CurrentPositionIsValid()
-        {
-            return _currentPositionIsValid;
         }
 
         private void UpdatePreview()
@@ -82,21 +78,19 @@ namespace antoinegleisberg.HOA
 
             _greenHighlightTilemap.ClearAllTiles();
             _redHighlightTilemap.ClearAllTiles();
-            _currentPositionIsValid = true;
+            CurrentPositionIsValid = true;
             foreach (Vector2Int tilePos in occupiedTiles)
             {
                 if (GridManager.Instance.TileIsOccupied(tilePos))
                 {
                     _redHighlightTilemap.SetTile(new Vector3Int(tilePos.x, tilePos.y), _tile);
-                    _currentPositionIsValid = false;
+                    CurrentPositionIsValid = false;
                 }
                 else
                 {
                     _greenHighlightTilemap.SetTile(new Vector3Int(tilePos.x, tilePos.y), _tile);
                 }
             }
-
-            // Debug.Log("Mouse position: " + mousePos + " | World position: " + worldPosition + " | Local pos: " + localPos + " | Grid pos: " + gridPos + " | Local interpolated: " + localInterpolated);
         }
     }
 }

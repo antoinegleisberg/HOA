@@ -6,7 +6,8 @@ namespace antoinegleisberg.HOA
     {
         public override void EnterState(Citizen citizen)
         {
-            Building workplaceBuilding = GridManager.Instance.GetBuildingWithComponentOfType<Workplace>();
+            // works for now, but need to implement limitation of number of workers
+            Building workplaceBuilding = BuildingsDB.Instance.GetBuildingWithComponentOfType<Workplace>();
             if (workplaceBuilding != null)
             {
                 Workplace workplace = workplaceBuilding.GetComponent<Workplace>();

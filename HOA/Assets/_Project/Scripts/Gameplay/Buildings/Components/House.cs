@@ -7,9 +7,15 @@ namespace antoinegleisberg.HOA
     [RequireComponent(typeof(Building))]
     public class House : MonoBehaviour
     {
+        private List<Citizen> _residents;
+
         private void Awake()
         {
-            UnitManager.Instance.SpawnCitizen(transform.position, this);
+            Citizen resident = UnitManager.Instance.SpawnCitizen(transform.position, this);
+            _residents = new List<Citizen>
+            {
+                resident
+            };
         }
     }
 }

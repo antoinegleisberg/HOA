@@ -26,7 +26,7 @@ namespace antoinegleisberg.HOA
             Building instance = Instantiate(buildingPrefab, new Vector3(buildingCenter.x, buildingCenter.y), Quaternion.identity, _buildingsContainer);
             instance.name = scriptableBuilding.Name;
 
-            GridManager.Instance.AddBuilding(instance, occupiedTiles);
+            BuildingsDB.Instance.AddBuilding(instance, occupiedTiles);
         }
     }
 }

@@ -6,17 +6,17 @@ namespace antoinegleisberg.HOA
     {
         public override void EnterState(Citizen stateMachine)
         {
-
+            throw new System.NotImplementedException();
         }
 
         public override void ExitState(Citizen stateMachine)
         {
-
+            throw new System.NotImplementedException();
         }
 
         public override void UpdateState(Citizen stateMachine)
         {
-
+            throw new System.NotImplementedException();
         }
     }
 }

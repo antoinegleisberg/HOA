@@ -18,11 +18,12 @@ namespace antoinegleisberg.HOA
             _citizens = new List<Citizen>();
         }
         
-        public void SpawnCitizen(Vector3 position, House house)
+        public Citizen SpawnCitizen(Vector3 position, House house)
         {
             Citizen citizen = Instantiate(_citizenPrefab, position, Quaternion.identity, _citizensContainer);
             citizen.SetHouse(house);
             _citizens.Add(citizen);
+            return citizen;
         }
     }
 }

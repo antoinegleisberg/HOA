@@ -1,11 +1,20 @@
 using antoinegleisberg.StateMachine;
+using System.Collections;
 using UnityEngine;
 
 namespace antoinegleisberg.HOA
 {
     public class Citizen : MonoBehaviour
     {
-        public House House { get; private set; }
+        [SerializeField] private float _speed;
+
+        [field: SerializeField] public float WanderingDistance { get; private set; }
+
+        [field: SerializeField] public float TimeAtWork { get; private set; }
+        [field: SerializeField] public float TimeAtHome { get; private set; }
+        [field: SerializeField] public float TimeWandering { get; private set; }
+
+        public House Home { get; private set; }
         public Workplace Workplace { get; private set; }
 
         
@@ -22,23 +31,17 @@ namespace antoinegleisberg.HOA
         {
             HomeState = new HomeState();
             SearchWorksiteState = new SearchWorksiteState();
-            WorkingState = new WorkingState();
             StoringState = new StoringState();
             TakingFromStorageState = new TakingFromStorageState();
             WanderingState = new WanderingState();
+            WorkingState = new WorkingState();
 
             _stateMachine = new StateMachine<Citizen>(this, HomeState);
-            HomeState.EnterState(this);
-        }
-
-        private void Update()
-        {
-            _stateMachine.Update();
         }
 
         public void SetHouse(House house)
         {
-            House = house;
+            Home = house;
         }
 
         public void SetWorkplace(Workplace workplace)
@@ -52,9 +55,19 @@ namespace antoinegleisberg.HOA
             _stateMachine.SwitchState(newState);
         }
 
-        public void MoveToBuilding(Building target)
+        public IEnumerator MoveToPosition(Vector3 targetPosition)
         {
-
+            Transform t = transform;
+            while (t.position != targetPosition)
+            {
+                t.position = Vector3.MoveTowards(t.position, targetPosition, _speed * Time.deltaTime);
+                yield return null;
+            }
+        }
+        
+        public IEnumerator MoveToBuilding(Building target)
+        {
+            yield return StartCoroutine(MoveToPosition(target.transform.position));
         }
     }
 }
