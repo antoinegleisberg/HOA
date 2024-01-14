@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +6,7 @@ namespace antoinegleisberg.HOA
     [RequireComponent(typeof(Building))]
     public class House : MonoBehaviour
     {
-        private List<Citizen> _residents;
+        [SerializeField] private List<Citizen> _residents;
 
         private void Awake()
         {

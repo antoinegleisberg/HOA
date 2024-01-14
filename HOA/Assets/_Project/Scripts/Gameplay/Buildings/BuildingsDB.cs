@@ -47,13 +47,31 @@ namespace antoinegleisberg.HOA
             return null;
         }
 
-        public Storage GetMainStorage()
+        public List<Workplace> GetAvailableWorkplaces()
+        {
+            List<Workplace> workplaces = new List<Workplace>();
+            foreach (Building building in _buildings)
+            {
+                Workplace workplace = building.GetComponent<Workplace>();
+                if (workplace != null && workplace.RemainingWorkersSpace() > 0)
+                {
+                    workplaces.Add(workplace);
+                }
+            }
+            return workplaces;
+        }
+
+        public MainStorage GetAvailableMainStorage(ScriptableItem itemToAdd)
         {
             foreach (Building building in _buildings)
             {
                 if (building.IsMainStorage)
                 {
-                    return building.GetComponent<Storage>();
+                    MainStorage storage = building.GetComponent<MainStorage>();
+                    if (storage.Inventory.CanAddItem(itemToAdd))
+                    {
+                        return storage;
+                    }
                 }
             }
             return null;

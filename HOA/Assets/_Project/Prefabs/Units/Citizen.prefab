@@ -98,3 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 0.5
+  <WanderingDistance>k__BackingField: 2
+  <TimeAtWork>k__BackingField: 20
+  <TimeAtHome>k__BackingField: 5
+  <TimeWandering>k__BackingField: 5

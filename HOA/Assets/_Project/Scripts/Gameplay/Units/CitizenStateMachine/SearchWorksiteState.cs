@@ -1,4 +1,5 @@
 using antoinegleisberg.StateMachine;
+using System.Collections.Generic;
 
 namespace antoinegleisberg.HOA
 {
@@ -6,12 +7,16 @@ namespace antoinegleisberg.HOA
     {
         public override void EnterState(Citizen citizen)
         {
-            // works for now, but need to implement limitation of number of workers
-            Building workplaceBuilding = BuildingsDB.Instance.GetBuildingWithComponentOfType<Workplace>();
-            if (workplaceBuilding != null)
+            List<Workplace> workplaces = BuildingsDB.Instance.GetAvailableWorkplaces();
+            Workplace workplace = null;
+            if (workplaces.Count > 0)
             {
-                Workplace workplace = workplaceBuilding.GetComponent<Workplace>();
+                workplace = workplaces[0];
+            }
+            if (workplace != null)
+            {
                 citizen.SetWorkplace(workplace);
+                workplace.AddWorker(citizen);
                 citizen.SwitchState(citizen.WorkingState);
             }
             else

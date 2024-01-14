@@ -36,6 +36,12 @@
       "source": "local",
       "dependencies": {}
     },
+    "com.antoinegleisberg.scenemanagement": {
+      "version": "file:C:/Users/antoi/Documents/Informatique/Projets/Unity/UnityPackages/SceneManagement",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.antoinegleisberg.statemachine": {
       "version": "file:C:/Users/antoi/Documents/Informatique/Projets/Unity/UnityPackages/StateMachine",
       "depth": 0,

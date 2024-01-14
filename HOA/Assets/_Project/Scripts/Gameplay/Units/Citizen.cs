@@ -14,8 +14,8 @@ namespace antoinegleisberg.HOA
         [field: SerializeField] public float TimeAtHome { get; private set; }
         [field: SerializeField] public float TimeWandering { get; private set; }
 
-        public House Home { get; private set; }
-        public Workplace Workplace { get; private set; }
+        [field:SerializeField] public House Home { get; private set; }
+        [field: SerializeField] public Workplace Workplace { get; private set; }
 
         
         private StateMachine<Citizen> _stateMachine;
