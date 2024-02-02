@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using antoinegleisberg.SaveSystem;
 using UnityEngine;
 
 namespace antoinegleisberg.HOA
 {
+    [RequireComponent(typeof(GuidHolder))]
     public class Building : MonoBehaviour
     {
         [field: SerializeField] public ScriptableBuilding ScriptableBuilding { get; private set; }

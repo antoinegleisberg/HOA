@@ -17,7 +17,12 @@ namespace antoinegleisberg.HOA
             {
                 return;
             }
-            
+
+            if (GameManager.Instance.CurrentState == GameState.Paused)
+            {
+                return;
+            }
+
             if (UIManager.Instance.UiIsHovered)
             {
                 return;

@@ -39,14 +39,16 @@ namespace antoinegleisberg.HOA
             _stateMachine = new StateMachine<Citizen>(this, HomeState);
         }
 
-        public void SetHouse(House house)
+        public void ClaimHouse(House house)
         {
             Home = house;
+            house.Residents.Add(this);
         }
 
-        public void SetWorkplace(Workplace workplace)
+        public void ClaimWorkplace(Workplace workplace)
         {
             Workplace = workplace;
+            workplace.AddWorker(this);
         }
 
         public void SwitchState(BaseState<Citizen> newState)

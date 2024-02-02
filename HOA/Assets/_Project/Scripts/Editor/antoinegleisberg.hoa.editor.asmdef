@@ -1,0 +1,20 @@
+{
+    "name": "antoinegleisberg.hoa.editor",
+    "rootNamespace": "antoinegleisberg.HOA.Editor",
+    "references": [
+        "GUID:b38d3b1f3a7622b42a5f566283f3456d",
+        "GUID:243ee34947716e94e870f9c0e514a6b0",
+        "GUID:b1dbff4675d0a5442914bb6368ff5a86"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -38,7 +38,7 @@ namespace antoinegleisberg.HOA
             int centerCellX = Mathf.FloorToInt((rangeX.First + rangeX.Second) / 2f);
             int centerCellY = Mathf.FloorToInt((rangeY.First + rangeY.Second) / 2f);
             
-            Vector3 cellCoordinatesInWorldCoordinateSpace = GridManager.Instance.Grid.CellToWorld(new Vector3Int(centerCellX, centerCellY));
+            Vector3 cellCoordinatesInWorldCoordinateSpace = GridManager.Instance.CellToWorldPosition(new Vector3Int(centerCellX, centerCellY));
 
             if (size.x % 2 == 1)
             {

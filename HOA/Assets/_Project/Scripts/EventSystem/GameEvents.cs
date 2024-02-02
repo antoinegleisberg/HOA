@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace antoinegleisberg.HOA
@@ -10,6 +8,8 @@ namespace antoinegleisberg.HOA
         public static GameEvents Instance { get; private set; }
 
         public event Action OnEnterGameplayState;
+        public event Action OnPauseGameplay;
+        public event Action OnResumeGameplay;
         public event Action OnEnterUIState;
         public event Action OnEnterPreviewState;
 
@@ -21,6 +21,16 @@ namespace antoinegleisberg.HOA
         public void EnterGameplayState()
         {
             OnEnterGameplayState?.Invoke();
+        }
+
+        public void PauseGameplay()
+        {
+            OnPauseGameplay?.Invoke();
+        }
+
+        public void ResumeGameplay()
+        {
+            OnResumeGameplay?.Invoke();
         }
 
         public void EnterUIState()

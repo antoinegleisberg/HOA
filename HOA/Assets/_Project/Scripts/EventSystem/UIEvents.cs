@@ -9,6 +9,8 @@ namespace antoinegleisberg.HOA
 
         public event Action OnBuildMenuOpen;
         public event Action OnBuildMenuClose;
+        public event Action OnSettingsMenuOpen;
+        public event Action OnSettingsMenuClose;
         public event Action<string> OnBuildBuildingSelected;
         public event Action OnCancelPreview;
 
@@ -25,6 +27,16 @@ namespace antoinegleisberg.HOA
         public void CloseBuildMenu()
         {
             OnBuildMenuClose?.Invoke();
+        }
+
+        public void OpenSettingsMenu()
+        {
+            OnSettingsMenuOpen?.Invoke();
+        }
+
+        public void CloseSettingsMenu()
+        {
+            OnSettingsMenuClose?.Invoke();
         }
 
         public void SelectBuildingToBuild(string name)

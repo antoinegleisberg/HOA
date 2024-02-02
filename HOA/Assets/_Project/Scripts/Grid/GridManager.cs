@@ -6,11 +6,38 @@ namespace antoinegleisberg.HOA
     {
         public static GridManager Instance { get; private set; }
 
-        [field:SerializeField] public Grid Grid { get; private set; }
+        [SerializeField] private Grid _grid;
+
+        private Camera _mainCamera;
 
         private void Awake()
         {
             Instance = this;
+            _mainCamera = Camera.main;
+        }
+
+        public Vector3 MouseToWorldPosition(Vector3 mousePosition)
+        {
+            float zOffset = -_mainCamera.transform.position.z;
+            return _mainCamera.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, zOffset));
+        }
+
+        public Vector3 WorldToInterpolatedCellPosition(Vector3 worldPosition)
+        {
+            Vector3 localPos = _grid.WorldToLocal(worldPosition);
+            Vector3 localCellInterpolated = _grid.LocalToCellInterpolated(localPos);
+            return localCellInterpolated;
+        }
+
+        public Vector3 MouseToInterpolatedCellPosition(Vector3 mousePosition)
+        {
+            Vector3 worldPos = MouseToWorldPosition(mousePosition);
+            return WorldToInterpolatedCellPosition(worldPos);
+        }
+        
+        public Vector3 CellToWorldPosition(Vector3Int cellPosition)
+        {
+            return _grid.CellToWorld(cellPosition);
         }
 
         public bool TileIsOccupied(Vector2Int gridPos)

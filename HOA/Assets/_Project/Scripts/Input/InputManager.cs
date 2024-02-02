@@ -12,6 +12,7 @@ namespace antoinegleisberg.HOA
         public Vector2 MouseRelativeScreenPosition {get; private set; }
 
         public event Action OnMouseClick;
+        public event Action OnCancel;
 
         [SerializeField] private PlayerInput _playerInput;
 
@@ -35,6 +36,13 @@ namespace antoinegleisberg.HOA
             MouseScreenPosition = mouseScreenPosition;
             MouseRelativeScreenPosition = new Vector2(mouseScreenPosition.x / Screen.currentResolution.width, mouseScreenPosition.y / Screen.currentResolution.height);
         }
-        
+
+        public void OnCancelPressed(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                OnCancel?.Invoke();
+            }
+        }
     }
 }

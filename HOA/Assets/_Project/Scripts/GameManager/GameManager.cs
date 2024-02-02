@@ -8,7 +8,8 @@ namespace antoinegleisberg.HOA
     {
         Gameplay,
         UI,
-        Preview
+        Preview,
+        Paused
     }
 
     public class GameManager : MonoBehaviour
@@ -32,7 +33,10 @@ namespace antoinegleisberg.HOA
             UIEvents.Instance.OnBuildMenuClose += () => SwitchState(GameState.Gameplay);
             UIEvents.Instance.OnBuildBuildingSelected += OnBuildingSelected;
             UIEvents.Instance.OnCancelPreview += OnCancelPreview;
+            UIEvents.Instance.OnSettingsMenuOpen += () => SwitchState(GameState.Paused);
+            UIEvents.Instance.OnSettingsMenuClose += () => SwitchState(GameState.Gameplay);
 
+            InputManager.Instance.OnCancel += OnCancel;
             InputManager.Instance.OnMouseClick += OnMouseClick;
         }
 
@@ -43,8 +47,16 @@ namespace antoinegleisberg.HOA
             UIEvents.Instance.OnBuildMenuClose -= () => SwitchState(GameState.Gameplay);
             UIEvents.Instance.OnBuildBuildingSelected -= OnBuildingSelected;
             UIEvents.Instance.OnCancelPreview -= OnCancelPreview;
+            UIEvents.Instance.OnSettingsMenuOpen -= () => SwitchState(GameState.Paused);
+            UIEvents.Instance.OnSettingsMenuClose -= () => SwitchState(GameState.Gameplay);
 
+            InputManager.Instance.OnCancel -= OnCancel;
             InputManager.Instance.OnMouseClick -= OnMouseClick;
+        }
+
+        public void SaveGame()
+        {
+            GameLoader.Instance.SaveGame();
         }
 
         private void SwitchState(GameState newState)
@@ -60,6 +72,9 @@ namespace antoinegleisberg.HOA
                     break;
                 case GameState.Preview:
                     GameEvents.Instance.EnterPreviewState();
+                    break;
+                case GameState.Paused:
+                    GameEvents.Instance.PauseGameplay();
                     break;
             }
         }
@@ -91,16 +106,23 @@ namespace antoinegleisberg.HOA
                 }
 
                 Vector2 mousePos = InputManager.Instance.MouseScreenPosition;
-                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10));
-
-                Vector3 localPosition = GridManager.Instance.Grid.WorldToLocal(worldPosition);
-
-                Vector3 interpolatedCellPosition = GridManager.Instance.Grid.LocalToCellInterpolated(localPosition);
-                
-                BuildingsBuilder.Instance.BuildBuilding(PreviewManager.Instance.PreviewBuilding, interpolatedCellPosition);
+                Vector3 worldPos = GridManager.Instance.MouseToWorldPosition(mousePos);
+                BuildingsBuilder.Instance.BuildBuilding(PreviewManager.Instance.PreviewBuilding, worldPos);
                 
                 PreviewManager.Instance.CancelPreview();
                 SwitchState(GameState.Gameplay);
+            }
+        }
+
+        private void OnCancel()
+        {
+            if (_currentState == GameState.Gameplay)
+            {
+                UIEvents.Instance.OpenSettingsMenu();
+            }
+            else
+            {
+                UIEvents.Instance.CloseSettingsMenu();
             }
         }
     }

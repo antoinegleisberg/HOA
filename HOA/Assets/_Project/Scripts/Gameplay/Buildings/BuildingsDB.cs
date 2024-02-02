@@ -1,9 +1,11 @@
+using antoinegleisberg.SaveSystem;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace antoinegleisberg.HOA
 {
-    public class BuildingsDB : MonoBehaviour
+    [RequireComponent(typeof(SaveableEntity))]
+    public class BuildingsDB : MonoBehaviour, ISaveable
     {
         public static BuildingsDB Instance { get; private set; }
 
@@ -75,6 +77,50 @@ namespace antoinegleisberg.HOA
                 }
             }
             return null;
+        }
+
+        public void LoadData(object data)
+        {
+            BuildingsDBSaveData buildingsDBSaveData = (BuildingsDBSaveData)data;
+            for (int i = 0; i < buildingsDBSaveData.Buildings.Length; i++)
+            {
+                BuildingSaveData buildingSaveData = buildingsDBSaveData.Buildings[i];
+                Vector3 position = new Vector3(buildingSaveData.WorldPosition[0], buildingSaveData.WorldPosition[1], buildingSaveData.WorldPosition[2]);
+                Building building = BuildingsBuilder.Instance.BuildBuilding(buildingSaveData.BuildingName, position);
+                building.GetComponent<GuidHolder>().UniqueId = buildingSaveData.Guid;
+            }
+        }
+
+        public object GetSaveData()
+        {
+            BuildingsDBSaveData buildingsDBSaveData = new BuildingsDBSaveData();
+            buildingsDBSaveData.Buildings = new BuildingSaveData[_buildings.Count];
+            for (int i = 0; i < _buildings.Count; i++)
+            {
+                float[] position = new float[3] { _buildings[i].transform.position.x, _buildings[i].transform.position.y, _buildings[i].transform.position.z };
+                BuildingSaveData buildingSaveData = new BuildingSaveData()
+                {
+                    BuildingName = _buildings[i].ScriptableBuilding.Name,
+                    WorldPosition = position,
+                    Guid = _buildings[i].GetComponent<GuidHolder>().UniqueId
+                };
+                buildingsDBSaveData.Buildings[_buildings.IndexOf(_buildings[i])] = buildingSaveData;
+            }
+            return buildingsDBSaveData;
+        }
+
+        [System.Serializable]
+        private struct BuildingSaveData
+        {
+            public string BuildingName;
+            public float[] WorldPosition;
+            public string Guid;
+        }
+
+        [System.Serializable]
+        private struct BuildingsDBSaveData
+        {
+            public BuildingSaveData[] Buildings;
         }
     }
 }

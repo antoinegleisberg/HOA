@@ -9,7 +9,6 @@ namespace antoinegleisberg.HOA
         public static PreviewManager Instance { get; private set; }
 
         [SerializeField] private Camera _camera;
-        [SerializeField] private Grid _grid;
         [SerializeField] private Tilemap _floorTilemap;
         [SerializeField] private Tilemap _greenHighlightTilemap;
         [SerializeField] private Tilemap _redHighlightTilemap;
@@ -63,16 +62,16 @@ namespace antoinegleisberg.HOA
 
         private void UpdatePreview()
         {
-
             Vector2 mousePos = InputManager.Instance.MouseScreenPosition;
 
-            Vector3 worldPosition = _camera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10));
+            Vector3 worldPosition = GridManager.Instance.MouseToWorldPosition(mousePos); // _camera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10));
 
-            Vector3 localPos = _grid.WorldToLocal(worldPosition);
-
-            Vector3 localInterpolated = _grid.LocalToCellInterpolated(localPos);
+            // Vector3 localPos = GridManager.Instance.Grid.WorldToLocal(worldPosition);
+            // Vector3 localInterpolated = GridManager.Instance.Grid.LocalToCellInterpolated(localPos);
 
             _previewBuildingSR.transform.position = worldPosition;
+
+            Vector3 localInterpolated = GridManager.Instance.MouseToInterpolatedCellPosition(mousePos);
 
             List<Vector2Int> occupiedTiles = BuildingsPlacer.GetOccupiedTiles(localInterpolated, PreviewBuilding.Size);
 

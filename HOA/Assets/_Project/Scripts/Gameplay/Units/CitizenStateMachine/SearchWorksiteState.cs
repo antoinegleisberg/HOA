@@ -15,7 +15,7 @@ namespace antoinegleisberg.HOA
             }
             if (workplace != null)
             {
-                citizen.SetWorkplace(workplace);
+                citizen.ClaimWorkplace(workplace);
                 workplace.AddWorker(citizen);
                 citizen.SwitchState(citizen.WorkingState);
             }
