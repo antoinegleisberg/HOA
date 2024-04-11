@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 3917434282994887205}
   - component: {fileID: 3917434282994887206}
   - component: {fileID: 3917434282994887204}
-  - component: {fileID: 1463404718281677357}
+  - component: {fileID: -9136845848754345685}
   - component: {fileID: 4370717596068081305}
   - component: {fileID: 2849549972486886126}
+  - component: {fileID: 4920701827895081121}
   m_Layer: 0
   m_Name: lumberjack
   m_TagString: Untagged
@@ -101,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ScriptableBuilding>k__BackingField: {fileID: 11400000, guid: 796a101569f1d0b47a07f489f4adfac7, type: 2}
---- !u!114 &1463404718281677357
+--- !u!114 &-9136845848754345685
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,11 +111,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3917434282994887207}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84e1c3b20a149ca4b8fc81c33223570d, type: 3}
+  m_Script: {fileID: 11500000, guid: b59cc168d4f4c8b4092590dfcbd30fe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <AvailableRecipes>k__BackingField:
-  - {fileID: 11400000, guid: 9c3d1608bf36cbf428d3c7b6e4fe2c15, type: 2}
+  <ResourceSiteType>k__BackingField: 0
 --- !u!114 &4370717596068081305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa570e33a3fb7c4899eb79e495503ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxWorkers: 2
+  _maxWorkers: 1
   _workers: []
 --- !u!114 &2849549972486886126
 MonoBehaviour:
@@ -141,6 +141,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9f0bdc86c2fd34ebfa9b2b21cc9771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _storageSpaceInitializer:
+  _itemCapacities:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
-    Second: 20
+    Second: 10
+  _maxCapacity: 0
+--- !u!114 &4920701827895081121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3917434282994887207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f66eda809684a0469744d86297be55d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uid: 

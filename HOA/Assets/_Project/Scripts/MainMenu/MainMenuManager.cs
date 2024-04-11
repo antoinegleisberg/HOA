@@ -1,6 +1,6 @@
 using UnityEngine;
 using antoinegleisberg.HOA.Saving;
-using System;
+using antoinegleisberg.HOA.EventSystems.SceneManagement;
 
 namespace antoinegleisberg.HOA.MainMenu
 {
@@ -9,8 +9,6 @@ namespace antoinegleisberg.HOA.MainMenu
         [SerializeField] private MainMenu _mainMenu;
         [SerializeField] private NewGameMenu _newGameMenu;
         [SerializeField] private SelectSaveMenu _selectSaveMenu;
-
-        public event Action<string> OnStartGame;
 
         private void Start()
         {
@@ -42,7 +40,7 @@ namespace antoinegleisberg.HOA.MainMenu
         {
             Debug.Log("Start game with save name: " + saveName);
             SaveInfo saveInfo = SaveManager.GetSave(saveName);
-            OnStartGame?.Invoke(saveInfo.SaveName);
+            SceneManagementEvents.Instance.StartGame(saveInfo.SaveName);
         }
 
         public void CreateNewGame(string saveName, string presetName)

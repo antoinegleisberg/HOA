@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Wood
   Icon: {fileID: 0}
-  Description: A very essential resource used to build stuff.
+  Description: A very essential resource obtained by cutting down trees
   StackSize: 64

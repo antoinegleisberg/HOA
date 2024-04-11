@@ -1,5 +1,5 @@
 {
-    "name": "antoinegleisberg.hoa.editor",
+    "name": "antoinegleisberg.HOA.Editor",
     "rootNamespace": "antoinegleisberg.HOA.Editor",
     "references": [
         "GUID:b38d3b1f3a7622b42a5f566283f3456d",

@@ -1,18 +1,17 @@
 {
-    "name": "antoinegleisberg.hoa",
+    "name": "antoinegleisberg.HOA",
     "rootNamespace": "antoinegleisberg.HOA",
     "references": [
+        "GUID:9610a55fa6028dc429ea4e2a2c6da485",
+        "GUID:051591775543c2e40b97279308927024",
+        "GUID:e94c7155cde17c541899409cc1af81bd",
         "GUID:fc139f6affff7e942ba600dd9a7e4386",
         "GUID:4869924b58e0e0a4da09b56eab7e6076",
         "GUID:9e231bd6491211440b930c6a47b0e255",
         "GUID:2ba79049fef498747983d50e9cce6873",
         "GUID:1ce3a391b34b6fd49bab5a46869f8737",
-        "GUID:34bc1089d0de12147835967075fd4a0d",
         "GUID:243ee34947716e94e870f9c0e514a6b0",
-        "GUID:75469ad4d38634e559750d17036d5f7c",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:b38d3b1f3a7622b42a5f566283f3456d",
-        "GUID:2ec159d65f4192d4a823124a5653f31d"
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

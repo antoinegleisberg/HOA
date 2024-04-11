@@ -52,7 +52,7 @@ namespace antoinegleisberg.HOA.MainMenu
             foreach (string saveName in saveNames)
             {
                 LoadSaveButton loadSaveButton = Instantiate(_loadSaveButtonPrefab, _loadSaveButtonsContainer);
-                SaveInfo saveInfo = SaveManager.GetSaveInfo(saveName);
+                SaveInfo saveInfo = SaveManager.GetSave(saveName);
                 loadSaveButton.UpdateButton(saveInfo);
                 loadSaveButton.OnLoadSaveButtonClicked += OnLoadSaveButtonClicked;
                 _loadSaveButtons.Add(loadSaveButton);

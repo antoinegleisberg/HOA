@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Input
 {
     public class InputManager : MonoBehaviour
     {

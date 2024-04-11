@@ -1,0 +1,19 @@
+{
+    "name": "antoinegleisberg.HOA.GameLoader",
+    "rootNamespace": "antoinegleisberg.HOA.GameLoader",
+    "references": [
+        "GUID:b38d3b1f3a7622b42a5f566283f3456d",
+        "GUID:9610a55fa6028dc429ea4e2a2c6da485",
+        "GUID:34bc1089d0de12147835967075fd4a0d",
+        "GUID:243ee34947716e94e870f9c0e514a6b0"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

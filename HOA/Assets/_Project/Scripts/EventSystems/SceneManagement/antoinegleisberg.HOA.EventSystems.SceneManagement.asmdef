@@ -1,0 +1,14 @@
+{
+    "name": "antoinegleisberg.HOA.EventSystems.SceneManagement",
+    "rootNamespace": "antoinegleisberg.HOA.EventSystems.SceneManagement",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
