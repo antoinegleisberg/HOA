@@ -22,22 +22,28 @@ namespace antoinegleisberg.HOA
             return _mainCamera.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, zOffset));
         }
 
+        public Vector3 MouseToInterpolatedCellPosition(Vector3 mousePosition)
+        {
+            Vector3 worldPos = MouseToWorldPosition(mousePosition);
+            return WorldToInterpolatedCellPosition(worldPos);
+        }
+
         public Vector3 WorldToInterpolatedCellPosition(Vector3 worldPosition)
         {
             Vector3 localPos = _grid.WorldToLocal(worldPosition);
             Vector3 localCellInterpolated = _grid.LocalToCellInterpolated(localPos);
             return localCellInterpolated;
         }
-
-        public Vector3 MouseToInterpolatedCellPosition(Vector3 mousePosition)
-        {
-            Vector3 worldPos = MouseToWorldPosition(mousePosition);
-            return WorldToInterpolatedCellPosition(worldPos);
-        }
         
         public Vector3 CellToWorldPosition(Vector3Int cellPosition)
         {
             return _grid.CellToWorld(cellPosition);
+        }
+
+        public Vector3 CellInterpolatedToWorldPosition(Vector3 interpolatedCellPosition)
+        {
+            Vector3 localInterpolatedPos = _grid.CellToLocalInterpolated(interpolatedCellPosition);
+            return _grid.LocalToWorld(localInterpolatedPos);
         }
 
         public bool TileIsOccupied(Vector2Int gridPos)

@@ -8,17 +8,13 @@ namespace antoinegleisberg.HOA
     {
         private class Node
         {
-            public Vector2 InterpolatedCellPosition { get; private set; }
-            private Vector2Int _adjustedInterpolatedCellPosition;
+            public Vector2Int Coordinates { get; private set; }
             private List<Node> _neighbours;
 
-            public Node(Vector2 interpolatedCellPosition)
+            public Node(Vector2Int coordinates)
             {
-                InterpolatedCellPosition = interpolatedCellPosition;
+                Coordinates = coordinates;
                 _neighbours = new List<Node>();
-                int adjustedX = Mathf.RoundToInt(2 * interpolatedCellPosition.x);
-                int adjustedY = Mathf.RoundToInt(2 * interpolatedCellPosition.y);
-                _adjustedInterpolatedCellPosition = new Vector2Int(adjustedX, adjustedY);
             }
 
             public void AddNeighbour(Node neighbour)
@@ -32,7 +28,7 @@ namespace antoinegleisberg.HOA
 
                 foreach (Node neighbour in _neighbours)
                 {
-                    Vector2Int difference = _adjustedInterpolatedCellPosition - neighbour._adjustedInterpolatedCellPosition;
+                    Vector2Int difference = Coordinates - neighbour.Coordinates;
                     int distance = 14;
                     if (difference.x == 0 || difference.y == 0)
                     {
@@ -46,7 +42,7 @@ namespace antoinegleisberg.HOA
 
             public int HeuristicDistance(Node other)
             {
-                Vector2Int difference = _adjustedInterpolatedCellPosition - other._adjustedInterpolatedCellPosition;
+                Vector2Int difference = Coordinates - other.Coordinates;
                 int diffX = difference.x;
                 int diffY = difference.y;
                 int minDiff = Mathf.Min(diffX, diffY);

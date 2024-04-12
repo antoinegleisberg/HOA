@@ -1499,8 +1499,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dbce77cc19b45346b7b3f706a6e5992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grid: {fileID: 639761772}
-  _pathfindingGraphRange: 2
+  _pathfindingGraphRange: 10
+  _nodesPerUnit: 2
 --- !u!1 &641472466
 GameObject:
   m_ObjectHideFlags: 0
