@@ -1,3 +1,4 @@
+using antoinegleisberg.Types;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,12 +33,12 @@ namespace antoinegleisberg.HOA
 
         public Building SpawnBuilding(ScriptableBuilding scriptableBuilding, Vector3 worldPosition)
         {
-            return BuildBuilding(scriptableBuilding.BuildingPrefab, scriptableBuilding.Size, worldPosition, scriptableBuilding.Name);
+            return InstantiateBuilding(scriptableBuilding.BuildingPrefab, scriptableBuilding.Size, worldPosition, scriptableBuilding.Name);
         }
 
         public Building BuildBuildingBuildsite(ScriptableBuilding scriptableBuilding, Vector3 worldPosition)
         {
-            Building building = BuildBuilding(_constructionSitePrefab, scriptableBuilding.Size, worldPosition, scriptableBuilding.Name + " Construction Site");
+            Building building = InstantiateBuilding(_constructionSitePrefab, scriptableBuilding.Size, worldPosition, scriptableBuilding.Name + " Construction Site");
             building.Initialize(scriptableBuilding);
             return building;
         }
@@ -54,16 +55,18 @@ namespace antoinegleisberg.HOA
             return SpawnBuilding(scriptableBuilding, position);
         }
 
-        private Building BuildBuilding(Building prefab, Vector2Int buildingSize, Vector3 worldPosition, string name)
+        private Building InstantiateBuilding(Building prefab, Vector2Int buildingSize, Vector3 worldPosition, string name)
         {
             Vector2 interpolatedCellPosition = GridManager.Instance.WorldToInterpolatedCellPosition(worldPosition);
             List<Vector2Int> occupiedTiles = BuildingsPlacer.GetOccupiedTiles(interpolatedCellPosition, buildingSize);
+            Pair<Pair<int, int>, Pair<int, int>> occupationRange = BuildingsPlacer.GetOccupationRange(interpolatedCellPosition, buildingSize);
             Vector2 buildingCenter = BuildingsPlacer.GetBuildingCenterWorldCoordinates(interpolatedCellPosition, buildingSize);
 
             Building instance = Instantiate(prefab, new Vector3(buildingCenter.x, buildingCenter.y), Quaternion.identity, _buildingsContainer);
             instance.name = name;
 
             BuildingsDB.Instance.AddBuilding(instance, occupiedTiles);
+            PathfindingGraph.Instance.RemoveNodeRange(occupationRange);
 
             return instance;
         }

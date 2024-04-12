@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using antoinegleisberg.Types;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace antoinegleisberg.HOA
 {
@@ -20,6 +21,16 @@ namespace antoinegleisberg.HOA
             public void AddNeighbour(Node neighbour)
             {
                 _neighbours.Add(neighbour);
+            }
+
+            public void RemoveNeighbour(Node neighbour)
+            {
+                _neighbours.Remove(neighbour);
+            }
+
+            public IReadOnlyList<Node> Neighbours()
+            {
+                return _neighbours;
             }
 
             public List<Pair<Node, int>> GetDistancesToNeighbours()

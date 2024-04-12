@@ -53,6 +53,13 @@ namespace antoinegleisberg.HOA
             return new Vector2(cellCoordinatesInWorldCoordinateSpace.x, cellCoordinatesInWorldCoordinateSpace.y);
         }
 
+        public static Pair<Pair<int, int>, Pair<int, int>> GetOccupationRange(Vector2 interpolatedCellPosition, Vector2Int size)
+        {
+            Pair<int, int> xRange = GetOccupationRange(interpolatedCellPosition.x, size.x);
+            Pair<int, int> yRange = GetOccupationRange(interpolatedCellPosition.y, size.y);
+            return new Pair<Pair<int, int>, Pair<int, int>>(xRange, yRange);
+        }
+
         private static Pair<int, int> GetOccupationRange(float interpolatedCellPosition, int size)
         {
             int min = Mathf.RoundToInt(interpolatedCellPosition - size / 2f);

@@ -1,11 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
 using antoinegleisberg.Pathfinding;
+using antoinegleisberg.Types;
 
 namespace antoinegleisberg.HOA
 {
     public partial class PathfindingGraph : MonoBehaviour
     {
+        public static PathfindingGraph Instance { get; private set; }
+
         // Temporary area of pathfinding graph generation
         // Will be replaced once map area loading or smthg is implemented
         [SerializeField] private int _pathfindingGraphRange;
@@ -25,6 +28,7 @@ namespace antoinegleisberg.HOA
 
         private void Awake()
         {
+            Instance = this;
             GenerateGraph();
             _pathfinder = Pathfinder<Node>.GetAStarPathfinder(
                 (Node n1, Node n2) => n1.HeuristicDistance(n2), (Node n) => n.GetDistancesToNeighbours());
@@ -33,6 +37,29 @@ namespace antoinegleisberg.HOA
         private void Start()
         {
 
+        }
+
+        public void RemoveNodeRange(Pair<Pair<int, int>, Pair<int, int>> range)
+        {
+            // Coordinate range to remove
+            int xMin = range.First.First * _nodesPerUnit + 1;
+            int xMax = range.First.Second * _nodesPerUnit;
+            int yMin = range.Second.First * _nodesPerUnit + 1;
+            int yMax = range.Second.Second * _nodesPerUnit;
+
+            for (int x = xMin; x < xMax; ++x)
+            {
+                for (int y = yMin; y < yMax; ++y)
+                {
+                    Vector2Int coords = new Vector2Int(x, y);
+                    Node node = _nodes[coords];
+                    foreach (Node neighbour in node.Neighbours())
+                    {
+                        neighbour.RemoveNeighbour(node);
+                    }
+                    _nodes.Remove(coords);
+                }
+            }
         }
 
         private Vector2Int WorldToClosestNodeCoordinates(Vector3 worldPosition)
@@ -116,6 +143,11 @@ namespace antoinegleisberg.HOA
             {
                 Vector3 worldPos = NodeCoordinatesToWorld(nodePos);
                 Gizmos.DrawSphere(worldPos, 0.05f);
+            }
+
+            if (!_nodes.ContainsKey(_startPos) || !_nodes.ContainsKey(_destPos))
+            {
+                return;
             }
 
             Gizmos.color = Color.red;
