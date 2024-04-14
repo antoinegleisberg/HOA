@@ -1,5 +1,6 @@
 using antoinegleisberg.StateMachine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace antoinegleisberg.HOA
@@ -60,10 +61,11 @@ namespace antoinegleisberg.HOA
         public IEnumerator MoveToPosition(Vector3 targetPosition)
         {
             Transform t = transform;
-            while (t.position != targetPosition)
+            List<Vector3> path = PathfindingGraph.Instance.GetPath(t.position, targetPosition);
+
+            for (int i = 0; i < path.Count; ++i)
             {
-                t.position = Vector3.MoveTowards(t.position, targetPosition, _speed * Time.deltaTime);
-                yield return null;
+                yield return StartCoroutine(MoveStraightToPosition(t, path[i]));
             }
         }
         
@@ -77,6 +79,15 @@ namespace antoinegleisberg.HOA
             yield return StartCoroutine(MoveToBuilding(target.GetComponent<Building>()));
 
             
+        }
+
+        private IEnumerator MoveStraightToPosition(Transform t, Vector3 targetPosition)
+        {
+            while (Vector3.Distance(t.position, targetPosition) > Mathf.Epsilon)
+            {
+                t.position = Vector3.MoveTowards(t.position, targetPosition, _speed * Time.deltaTime);
+                yield return null;
+            }
         }
     }
 }

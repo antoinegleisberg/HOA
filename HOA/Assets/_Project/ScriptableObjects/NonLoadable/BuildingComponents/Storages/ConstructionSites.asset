@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4e6d53ad393f0646a55cdcbb67057a4, type: 3}
-  m_Name: House
+  m_Script: {fileID: 11500000, guid: 7b8a91910e013ef4499e476fd4027f20, type: 3}
+  m_Name: ConstructionSites
   m_EditorClassIdentifier: 
-  Name: House
-  Size: {x: 2, y: 3}
-  BuildingPrefab: {fileID: 2716792528281252283, guid: 0a05c6f4b3123f6468b9ff51869a91bb, type: 3}
+  ItemCapacities: []
+  MaxCapacity: 0

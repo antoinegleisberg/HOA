@@ -6,8 +6,15 @@ namespace antoinegleisberg.HOA
     [RequireComponent(typeof(Building))]
     public class Workplace : MonoBehaviour
     {
-        [SerializeField] private int _maxWorkers;
+        [SerializeField] private ScriptableWorkplace _scriptableWorkplace;
         [SerializeField] private List<Citizen> _workers;
+
+        private int _maxWorkers {
+            get
+            {
+                return _scriptableWorkplace.MaxWorkers;
+            }
+        }
 
         private void Awake()
         {

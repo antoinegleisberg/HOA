@@ -5,6 +5,13 @@ namespace antoinegleisberg.HOA
     [RequireComponent(typeof(Building), typeof(Storage))]
     public class ResourceGatheringSite : MonoBehaviour
     {
-        [field: SerializeField] public ResourceSiteType ResourceSiteType { get; private set; }
+        [SerializeField] private ScriptableResourceGatheringSite _scriptableResourceGatheringSite;
+
+        public ResourceSiteType ResourceSiteType {
+            get
+            {
+                return _scriptableResourceGatheringSite.ResourceSiteType;
+            }
+        }
     }
 }

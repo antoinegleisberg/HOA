@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _residents: []
-  _maxResidents: 2
+  _scriptableHouse: {fileID: 11400000, guid: cecfd9acfa9c5e84da17e7ac43d2554b, type: 2}
 --- !u!114 &2193525181889443421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9f0bdc86c2fd34ebfa9b2b21cc9771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _storageSpaceInitializer: []
+  _scriptableStorage: {fileID: 11400000, guid: ac6a6788f03ada74e929e1cd7476a71f, type: 2}
 --- !u!114 &4495276284566604862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,4 +140,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f66eda809684a0469744d86297be55d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uid: 286feca2-f817-42e8-a5a7-5a443909e2f0
+  _uid: 

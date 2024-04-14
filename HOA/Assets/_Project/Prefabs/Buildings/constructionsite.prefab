@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 480b4bfe3395e0c4f8e9dbff830877cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ScriptableBuilding>k__BackingField: {fileID: 11400000, guid: f37906b4b32644a459ff20af7418fdb7, type: 2}
+  <ScriptableBuilding>k__BackingField: {fileID: 0}
 --- !u!114 &546589944149238995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9f0bdc86c2fd34ebfa9b2b21cc9771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _storageSpaceInitializer: []
+  _scriptableStorage: {fileID: 11400000, guid: cedcbef183bee3e458735c984258d0d2, type: 2}
 --- !u!114 &3338542631124172208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f66eda809684a0469744d86297be55d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uid: 3182bab8-55be-4fa4-84f8-be5bee3390b3
+  _uid: 
 --- !u!114 &-1755977541014919654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,5 +152,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa570e33a3fb7c4899eb79e495503ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxWorkers: 1
+  _scriptableWorkplace: {fileID: 11400000, guid: 2cc4f8d935bbb70438505de6079469f7, type: 2}
   _workers: []

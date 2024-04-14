@@ -8,6 +8,15 @@ namespace antoinegleisberg.HOA
     {
         [field: SerializeField] public ScriptableBuilding ScriptableBuilding { get; private set; }
 
+        private void Awake()
+        {
+            if (ScriptableBuilding != null && !IsConstructionSite)
+            {
+                SpriteRenderer sr = GetComponent<SpriteRenderer>();
+                sr.sprite = ScriptableBuilding.Sprite;
+            }
+        }
+
         public void Initialize(ScriptableBuilding scriptableBuilding)
         {
             ScriptableBuilding = scriptableBuilding;

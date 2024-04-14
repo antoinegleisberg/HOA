@@ -29,14 +29,28 @@ namespace antoinegleisberg.HOA
         private void Awake()
         {
             Instance = this;
-            GenerateGraph();
             _pathfinder = Pathfinder<Node>.GetAStarPathfinder(
                 (Node n1, Node n2) => n1.HeuristicDistance(n2), (Node n) => n.GetDistancesToNeighbours());
+            GenerateGraph();
         }
 
-        private void Start()
+        public List<Vector3> GetPath(Vector3 startCoords, Vector3 destinationCoords)
         {
+            Vector2Int startNodeCoords = WorldToClosestNodeCoordinates(startCoords);
+            Vector2Int destinationNodeCoords = WorldToClosestNodeCoordinates(destinationCoords);
+            Node startNode = _nodes[startNodeCoords];
+            Node destinationNode = _nodes[destinationNodeCoords];
+            List<Node> path = _pathfinder.FindPath(startNode, destinationNode);
 
+            List<Vector3> result = new List<Vector3>(2 + path.Count);
+            result.Add(startCoords);
+            for (int i = 0; i < path.Count; i++)
+            {
+                result.Add(NodeCoordinatesToWorld(path[i].Coordinates));
+            }
+            result.Add(destinationCoords);
+
+            return result;
         }
 
         public void RemoveNodeRange(Pair<Pair<int, int>, Pair<int, int>> range)
@@ -62,6 +76,68 @@ namespace antoinegleisberg.HOA
             }
         }
 
+        private Node GetClosestExistingNode(Vector3 scaledInterpolatedCellPosition)
+        {
+            float radius = 1f;
+            Node closestNode = null;
+
+            while (closestNode == null)
+            {
+                List<Vector2Int> nodesInRadius = GetPotentialNodesInRadius(scaledInterpolatedCellPosition, radius);
+                closestNode = GetClosestExistingNodeTo(scaledInterpolatedCellPosition, nodesInRadius);
+                radius *= 2;
+            }
+
+            return closestNode;
+        }
+
+        private List<Vector2Int> GetPotentialNodesInRadius(Vector3 originInScaledCellCoordinates, float radius)
+        {
+            int minX = Mathf.FloorToInt(originInScaledCellCoordinates.x - radius);
+            int maxX = Mathf.FloorToInt(originInScaledCellCoordinates.x + radius);
+            int minY = Mathf.FloorToInt(originInScaledCellCoordinates.y - radius);
+            int maxY = Mathf.FloorToInt(originInScaledCellCoordinates.y + radius);
+            List<Vector2Int> potentialCoords = new List<Vector2Int>();
+
+            for (int x = minX; x <= maxX; ++x)
+            {
+                for (int y = minY; y <= maxY; ++y)
+                {
+                    if (IsInCircle(new Vector2(x, y), originInScaledCellCoordinates, radius))
+                    {
+                        potentialCoords.Add(new Vector2Int(x, y));
+                    }
+                }
+            }
+
+            return potentialCoords;
+        }
+
+        private bool IsInCircle(Vector2 point, Vector3 origin, float radius)
+        {
+            return Vector2.Distance(point, origin) <= radius;
+        }
+
+        private Node GetClosestExistingNodeTo(Vector3 originInScaledCellCoordinates, List<Vector2Int> potentialCoordinates)
+        {
+            float maxDist = float.MaxValue;
+            Node closestNode = null;
+            foreach (Vector2Int coords in potentialCoordinates)
+            {
+                if (!_nodes.ContainsKey(coords))
+                {
+                    continue;
+                }
+
+                if (Vector2.Distance(coords, originInScaledCellCoordinates) < maxDist)
+                {
+                    maxDist = Vector2.Distance(coords, originInScaledCellCoordinates);
+                    closestNode = _nodes[coords];
+                }
+            }
+            return closestNode;
+        }
+
         private Vector2Int WorldToClosestNodeCoordinates(Vector3 worldPosition)
         {
             Vector3 interpolatedCellPosition = GridManager.Instance.WorldToInterpolatedCellPosition(worldPosition);
@@ -69,6 +145,10 @@ namespace antoinegleisberg.HOA
             int nodeX = Mathf.RoundToInt(scaledInterpolatedCellPosition.x);
             int nodeY = Mathf.RoundToInt(scaledInterpolatedCellPosition.y);
             Vector2Int nodeCoords = new Vector2Int(nodeX, nodeY);
+            if (!_nodes.ContainsKey(nodeCoords))
+            {
+                nodeCoords = GetClosestExistingNode(scaledInterpolatedCellPosition).Coordinates;
+            }
             return nodeCoords;
         }
 
@@ -124,7 +204,6 @@ namespace antoinegleisberg.HOA
                         {
                             node.AddNeighbour(_nodes[neighbourCoords]);
                         }
-
                     }
                 }
             }

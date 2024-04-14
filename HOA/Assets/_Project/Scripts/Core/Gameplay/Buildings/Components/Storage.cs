@@ -1,5 +1,6 @@
 using antoinegleisberg.Inventory;
 using antoinegleisberg.Types;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,46 +10,27 @@ namespace antoinegleisberg.HOA
     public class Storage : MonoBehaviour, IInventory<ScriptableItem>
     {
         private IInventory<ScriptableItem> _inventory;
-        [Tooltip("Used only for production and resource gathering sites")]
-        [SerializeField] private List<Pair<ScriptableItem, int>> _itemCapacities;
-        [Tooltip("Used only for main storages")]
-        [SerializeField] private int _maxCapacity;
 
-        private void Awake()
-        {
-            Building building = GetComponent<Building>();
+        [SerializeField] private ScriptableStorage _scriptableStorage;
 
-            if (building.IsHouse)
+        private List<Pair<ScriptableItem, int>> _itemCapacities {
+            get
             {
-                _inventory = Inventory<ScriptableItem>.CreateBuilder().Build();
-            }
-            else if (building.IsConstructionSite)
-            {
-                Dictionary<ScriptableItem, int> constructionMaterials = building.ScriptableBuilding.BuildingMaterials.ToDictionary();
-                _inventory = Inventory<ScriptableItem>.CreateBuilder()
-                    .WithPredeterminedItemSet(constructionMaterials)
-                    .Build();
-            }
-            else if (building.IsProductionSite)
-            {
-                _inventory = Inventory<ScriptableItem>.CreateBuilder()
-                    .WithPredeterminedItemSet(_itemCapacities.ToDictionary())
-                    .Build();
-            }
-            else if (building.IsResourceGatheringSite)
-            {
-                _inventory = Inventory<ScriptableItem>.CreateBuilder()
-                    .WithPredeterminedItemSet(_itemCapacities.ToDictionary())
-                    .Build();
-            }
-            else if (building.IsMainStorage)
-            {
-                _inventory = Inventory<ScriptableItem>.CreateBuilder()
-                    .WithLimitedCapacity(_maxCapacity, (ScriptableItem item) => item.ItemSize)
-                    .Build();
+                return _scriptableStorage.ItemCapacities;
             }
         }
 
+        private int _maxCapacity {
+            get
+            {
+                return _scriptableStorage.MaxCapacity;
+            }
+        }
+
+        private void Awake()
+        {
+            StartCoroutine(InitialiseStorage());
+        }
 
         private void OnValidate()
         {
@@ -169,6 +151,43 @@ namespace antoinegleisberg.HOA
         public Dictionary<ScriptableItem, int> Items()
         {
             return _inventory.Items();
+        }
+
+        private IEnumerator InitialiseStorage()
+        {
+            Building building = GetComponent<Building>();
+
+            yield return new WaitUntil(() => building.ScriptableBuilding != null);
+
+            if (building.IsHouse)
+            {
+                _inventory = Inventory<ScriptableItem>.CreateBuilder().Build();
+            }
+            else if (building.IsConstructionSite)
+            {
+                Dictionary<ScriptableItem, int> constructionMaterials = building.ScriptableBuilding.BuildingMaterials.ToDictionary();
+                _inventory = Inventory<ScriptableItem>.CreateBuilder()
+                    .WithPredeterminedItemSet(constructionMaterials)
+                    .Build();
+            }
+            else if (building.IsProductionSite)
+            {
+                _inventory = Inventory<ScriptableItem>.CreateBuilder()
+                    .WithPredeterminedItemSet(_itemCapacities.ToDictionary())
+                    .Build();
+            }
+            else if (building.IsResourceGatheringSite)
+            {
+                _inventory = Inventory<ScriptableItem>.CreateBuilder()
+                    .WithPredeterminedItemSet(_itemCapacities.ToDictionary())
+                    .Build();
+            }
+            else if (building.IsMainStorage)
+            {
+                _inventory = Inventory<ScriptableItem>.CreateBuilder()
+                    .WithLimitedCapacity(_maxCapacity, (ScriptableItem item) => item.ItemSize)
+                    .Build();
+            }
         }
     }
 }

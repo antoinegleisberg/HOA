@@ -10,8 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b4e6d53ad393f0646a55cdcbb67057a4, type: 3}
-  m_Name: Warehouse
+  m_Name: House
   m_EditorClassIdentifier: 
-  Name: Warehouse
-  Size: {x: 3, y: 3}
-  BuildingPrefab: {fileID: 3917434282994887204, guid: aafd1dd39937bc24297ab02012de611d, type: 3}
+  Name: House
+  Sprite: {fileID: 21300000, guid: 66ae0441614a5ce418edcc57bc003f54, type: 3}
+  Size: {x: 2, y: 3}
+  BuildingPrefab: {fileID: 2716792528281252283, guid: 0a05c6f4b3123f6468b9ff51869a91bb, type: 3}
+  BuildingMaterials:
+  - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
+    Second: 10

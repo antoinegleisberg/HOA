@@ -8,9 +8,9 @@ namespace antoinegleisberg.HOA
     public class House : MonoBehaviour
     {
         [SerializeField] private List<Citizen> _residents;
-        [SerializeField] private int _maxResidents;
+        [SerializeField] private ScriptableHouse _scriptableHouse;
 
-        public bool IsFull => _residents.Count >= _maxResidents;
+        public bool IsFull => _residents.Count >= _scriptableHouse.MaxResidents;
 
         private void Awake()
         {

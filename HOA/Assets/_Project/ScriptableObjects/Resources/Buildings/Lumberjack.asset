@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: Lumberjack
   m_EditorClassIdentifier: 
   Name: Lumberjack
+  Sprite: {fileID: 21300000, guid: 69605e85b042af648b1cdd74ca630bae, type: 3}
   Size: {x: 2, y: 2}
   BuildingPrefab: {fileID: 3917434282994887204, guid: 1cb842d715bc91f488ae886e6e973774, type: 3}
+  BuildingMaterials:
+  - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
+    Second: 10
