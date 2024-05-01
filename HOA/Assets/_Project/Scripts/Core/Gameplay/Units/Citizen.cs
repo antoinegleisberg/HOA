@@ -5,20 +5,19 @@ using UnityEngine;
 
 namespace antoinegleisberg.HOA
 {
+    [RequireComponent(typeof(CitizenMovement), typeof(CitizenItemTransport))]
     public class Citizen : MonoBehaviour
     {
-        [SerializeField] private float _speed;
-
         [field: SerializeField] public float WanderingDistance { get; private set; }
 
         [field: SerializeField] public float TimeAtWork { get; private set; }
         [field: SerializeField] public float TimeAtHome { get; private set; }
         [field: SerializeField] public float TimeWandering { get; private set; }
 
-        [field:SerializeField] public House Home { get; private set; }
+        [field: SerializeField] public House Home { get; private set; }
         [field: SerializeField] public Workplace Workplace { get; private set; }
 
-        
+
         private StateMachine<Citizen> _stateMachine;
         public HomeState HomeState { get; private set; }
         public SearchWorksiteState SearchWorksiteState { get; private set; }
@@ -27,6 +26,8 @@ namespace antoinegleisberg.HOA
         public TakingFromStorageState TakingFromStorageState { get; private set; }
         public WanderingState WanderingState { get; private set; }
 
+        private CitizenMovement _citizenMovement => GetComponent<CitizenMovement>();
+        private CitizenItemTransport _citizenItemTransport => GetComponent<CitizenItemTransport>();
 
         private void Awake()
         {
@@ -60,34 +61,22 @@ namespace antoinegleisberg.HOA
 
         public IEnumerator MoveToPosition(Vector3 targetPosition)
         {
-            Transform t = transform;
-            List<Vector3> path = PathfindingGraph.Instance.GetPath(t.position, targetPosition);
-
-            for (int i = 0; i < path.Count; ++i)
-            {
-                yield return StartCoroutine(MoveStraightToPosition(t, path[i]));
-            }
+            yield return StartCoroutine(_citizenMovement.MoveToPosition(targetPosition));
         }
-        
+
         public IEnumerator MoveToBuilding(Building target)
         {
-            yield return StartCoroutine(MoveToPosition(target.transform.position));
+            yield return StartCoroutine(_citizenMovement.MoveToBuilding(target));
+        }
+        
+        public IEnumerator StoreLimitingItemsToMainStorage(IEnumerable<ScriptableItem> items, Storage storageToTakeFrom)
+        {
+            yield return StartCoroutine(_citizenItemTransport.StoreLimitingItemsToMainStorage(items, storageToTakeFrom));
         }
 
-        public IEnumerator TransportItems(ScriptableItem item, int amount, Storage target)
+        public IEnumerator GetItemsFromAvailableStorage(IReadOnlyDictionary<ScriptableItem, int> requiredItems, IReadOnlyDictionary<ScriptableItem, int> availableItems, Storage storageToTakeTo)
         {
-            yield return StartCoroutine(MoveToBuilding(target.GetComponent<Building>()));
-
-            
-        }
-
-        private IEnumerator MoveStraightToPosition(Transform t, Vector3 targetPosition)
-        {
-            while (Vector3.Distance(t.position, targetPosition) > Mathf.Epsilon)
-            {
-                t.position = Vector3.MoveTowards(t.position, targetPosition, _speed * Time.deltaTime);
-                yield return null;
-            }
+            yield return StartCoroutine(_citizenItemTransport.GetItemsFromAvailableStorage(requiredItems, availableItems, storageToTakeTo));
         }
     }
 }

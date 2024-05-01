@@ -1,18 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using antoinegleisberg.Types;
 
 namespace antoinegleisberg.HOA
 {
     public class ConstructionSiteWorkBehaviour : BaseWorkBehaviour
     {
-        public ConstructionSiteWorkBehaviour(Citizen citizen) : base(citizen)
-        {
-        }
+        private Storage _workplaceStorage { get => _citizen.Workplace.GetComponent<Storage>(); }
+
+        public ConstructionSiteWorkBehaviour(Citizen citizen) : base(citizen) { }
 
         public override IEnumerator ExecuteWork()
         {
-            throw new System.NotImplementedException();
+            ConstructionSite constructionSite = _citizen.Workplace.GetComponent<ConstructionSite>();
+
+            if (constructionSite.CanBuild())
+            {
+                constructionSite.FinishConstruction();
+                yield break;
+            }
+
+            Dictionary<ScriptableItem, int> requiredItems = constructionSite.GetComponent<Building>().ScriptableBuilding.BuildingMaterials.ToDictionary();
+            yield return _citizen.StartCoroutine(_citizen.GetItemsFromAvailableStorage(requiredItems, _workplaceStorage.Items(), _workplaceStorage));
         }
     }
 }

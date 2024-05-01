@@ -8,6 +8,8 @@ namespace antoinegleisberg.HOA
 {
     public class ResourceGatheringSiteWorkBehaviour : BaseWorkBehaviour
     {
+        private Storage _workplaceStorage { get => _citizen.Workplace.GetComponent<Storage>(); }
+
         public ResourceGatheringSiteWorkBehaviour(Citizen citizen) : base(citizen) {}
 
         public override IEnumerator ExecuteWork()
@@ -21,8 +23,7 @@ namespace antoinegleisberg.HOA
             }
 
             Dictionary<ScriptableItem, int> harvestableResources = resourceSite.ScriptableResourceSite.AvailableItemsPerHarvest.ToDictionary();
-            Storage workplaceStorage = _citizen.Workplace.GetComponent<Storage>();
-            if (workplaceStorage.CanAddItems(harvestableResources))
+            if (_workplaceStorage.CanAddItems(harvestableResources))
             {
                 yield return _citizen.StartCoroutine(HarvestResourceSite(resourceSite));
                 yield break;
@@ -33,42 +34,7 @@ namespace antoinegleisberg.HOA
 
         private IEnumerator StoreItemsToMainStorage()
         {
-            Pair<ScriptableItem, int> itemInfo = GetItemToStoreAway();
-            ScriptableItem item = itemInfo.First;
-            int amount = itemInfo.Second;
-            ItemStorageInfo storageInfo = BuildingsDB.Instance.GetAvailableMainStorage(item, amount);
-
-            Storage target = null;
-            int capacity;
-            foreach (KeyValuePair<Storage, int> kvp in storageInfo.Availability)
-            {
-                Debug.LogWarning("ToDo: choose the best possible storage instead");
-                target = kvp.Key;
-                capacity = kvp.Value;
-                break;
-            }
-            
-            if (target == null)
-            {
-                yield break;
-            }
-
-            _citizen.Workplace.GetComponent<Storage>().RemoveItems(item, amount);
-            yield return _citizen.StartCoroutine(_citizen.MoveToBuilding(target.GetComponent<Building>()));
-            int addedAmount = target.AddAsManyAsPossible(item, amount);
-            _citizen.Workplace.GetComponent<Storage>().AddItems(item, amount - addedAmount);
-        }
-
-        private Pair<ScriptableItem, int> GetItemToStoreAway()
-        {
-            foreach (KeyValuePair<ScriptableItem, int> kvp in _citizen.Workplace.GetComponent<Storage>().Items())
-            {
-                if (kvp.Value > 0)
-                {
-                    return new Pair<ScriptableItem, int>(kvp.Key, kvp.Value);
-                }
-            }
-            return new Pair<ScriptableItem, int>(null, 0);
+            yield return _citizen.StartCoroutine(_citizen.StoreLimitingItemsToMainStorage(_workplaceStorage.Items().Keys, _workplaceStorage));
         }
 
         private IEnumerator HarvestResourceSite(ResourceSite resourceSite)
@@ -86,12 +52,14 @@ namespace antoinegleisberg.HOA
 
             yield return _citizen.StartCoroutine(_citizen.MoveToBuilding(_citizen.Workplace.GetComponent<Building>()));
 
-            _citizen.Workplace.GetComponent<Storage>().AddItems(harvestedResources);
+            Debug.LogWarning("I believe this could fail if in the meantime, another worker produced items. Change this to add items to citizen inventory instead - also creates more realistic transport");
+            _workplaceStorage.AddItems(harvestedResources);
         }
 
         private ResourceSite GetRandomResourceSite()
         {
             ResourceSiteType searchedType = _citizen.Workplace.GetComponent<ResourceGatheringSite>().ResourceSiteType;
+            Debug.LogWarning("ToDo: implement a better way to find a resource site to harvest");
             foreach (ResourceSite resourceSite in Object.FindObjectsOfType<ResourceSite>())
             {
                 if (resourceSite.ScriptableResourceSite.ResourceSiteType == searchedType && !resourceSite.IsDepleted)
