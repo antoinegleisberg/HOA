@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using antoinegleisberg.HOA.EventSystem;
+using System;
 
 
 namespace antoinegleisberg.HOA.UI
@@ -12,11 +13,16 @@ namespace antoinegleisberg.HOA.UI
         [SerializeField] private Image _icon;
         [SerializeField] private TextMeshProUGUI _nameText;
 
+        public ScriptableBuilding ScriptableBuilding { get; private set; }
+
+        public event Action OnClick;
+
         public void Init(ScriptableBuilding building)
         {
             _icon.sprite = building.Sprite;
             _nameText.text = building.Name;
-            _onClickButton.onClick.AddListener(() => UIEvents.Instance.SelectBuildingToBuild(building.Name));
+            ScriptableBuilding = building;
+            _onClickButton.onClick.AddListener(() => OnClick?.Invoke());
         }
     }
 }

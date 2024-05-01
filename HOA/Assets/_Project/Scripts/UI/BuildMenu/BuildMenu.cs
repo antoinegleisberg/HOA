@@ -1,3 +1,4 @@
+using antoinegleisberg.HOA.EventSystem;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,8 +23,11 @@ namespace antoinegleisberg.HOA.UI
         [SerializeField] private Transform _buildMenuCategoriesContainer;
         [SerializeField] private BuildMenuCategoryButton _buildMenuCategoryButtonPrefab;
 
+        [SerializeField] private BuildMenuDetails _buildMenuDetails;
+
         private Dictionary<BuildMenuItem, BuildMenuCategory> _buildMenuItems;
-        [SerializeField] private BuildMenuCategory _activeCategory = BuildMenuCategory.Residential;
+        private BuildMenuCategory _activeCategory = BuildMenuCategory.Residential;
+        private BuildMenuItem _selectedBuilding;
 
         private void Awake()
         {
@@ -46,6 +50,17 @@ namespace antoinegleisberg.HOA.UI
             }
 
             UpdateBuildingsListDisplay();
+        }
+
+        public void SelectBuildOnCurrentBuilding()
+        {
+            UIEvents.Instance.SelectBuildingToBuild(_selectedBuilding.ScriptableBuilding.Name);
+        }
+
+        public void SwitchSelectedBuilding(BuildMenuItem item)
+        {
+            _selectedBuilding = item;
+            _buildMenuDetails.UpdateDetails(item.ScriptableBuilding);
         }
 
         public void SwitchCategory(BuildMenuCategory category)
@@ -73,17 +88,23 @@ namespace antoinegleisberg.HOA.UI
 
         private void UpdateBuildingsListDisplay()
         {
+            _selectedBuilding = null;
             foreach (BuildMenuItem item in _buildMenuItems.Keys)
             {
                 if (_buildMenuItems[item] == _activeCategory)
                 {
                     item.gameObject.SetActive(true);
+                    if (_selectedBuilding == null)
+                    {
+                        _selectedBuilding = item;
+                    }
                 }
                 else
                 {
                     item.gameObject.SetActive(false);
                 }
             }
+            SwitchSelectedBuilding(_selectedBuilding);
         }
 
         private void CreateBuildMenuCategoriesButtons()
@@ -111,6 +132,7 @@ namespace antoinegleisberg.HOA.UI
                 // Missing food category => ToDo later
                 BuildMenuItem item = Instantiate(_buildMenuItemPrefab, _buildMenuItemsContainer);
                 item.Init(building);
+                item.OnClick += () => SwitchSelectedBuilding(item);
                 _buildMenuItems[item] = category;
             }
         }
