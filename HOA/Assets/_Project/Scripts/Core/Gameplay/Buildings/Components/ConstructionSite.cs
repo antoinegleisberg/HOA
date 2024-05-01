@@ -29,12 +29,8 @@ namespace antoinegleisberg.HOA
         {
             Dictionary<ScriptableItem, int> requiredItems = GetComponent<Building>().ScriptableBuilding.BuildingMaterials.ToDictionary();
 
-            Dictionary<ScriptableItem, int> missingItems = new Dictionary<ScriptableItem, int>();
-            foreach (ScriptableItem item in requiredItems.Keys)
-            {
-                int missingAmount = requiredItems[item] - _storage.GetItemCount(item);
-                missingItems.Add(item, missingAmount);
-            }
+            Dictionary<ScriptableItem, int> missingItems = requiredItems.Diff(_storage.Items());
+
             return missingItems;
         }
     }

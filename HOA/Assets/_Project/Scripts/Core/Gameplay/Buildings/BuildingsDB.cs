@@ -80,7 +80,7 @@ namespace antoinegleisberg.HOA
                 }
 
                 Storage storage = building.GetComponent<Storage>();
-                Dictionary<ScriptableItem, int> availableItems = storage.AvailableItemsToTake();
+                IReadOnlyDictionary<ScriptableItem, int> availableItems = storage.AvailableItemsToTake();
                 if (availableItems.ContainsKey(item))
                 {
                     locations.Add(storage, availableItems[item]);
@@ -136,9 +136,9 @@ namespace antoinegleisberg.HOA
             return null;
         }
         
-        public List<Building> GetAllBuildings()
+        public IEnumerable<Building> GetAllBuildings()
         {
-            return new List<Building>(_buildings);
+            return _buildings;
         }
 
         public void LoadData(object data)

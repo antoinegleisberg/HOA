@@ -25,6 +25,21 @@ namespace antoinegleisberg.HOA
             return _buildings[name];
         }
 
+        public static IEnumerable<ScriptableBuilding> GetAllBuildings()
+        {
+            if (_buildings == null)
+            {
+                Init();
+            }
+
+            return _buildings.Values;
+        }
+
+        public static void Reload()
+        {
+            Init();
+        }
+
         private static void Init()
         {
             _buildings = new Dictionary<string, ScriptableBuilding>();

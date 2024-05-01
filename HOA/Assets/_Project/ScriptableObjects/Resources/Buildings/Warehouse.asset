@@ -21,3 +21,4 @@ MonoBehaviour:
     Second: 20
   - First: {fileID: 11400000, guid: 48bc2e2832501a94ba1f7a5abe061773, type: 2}
     Second: 20
+  <ScriptableBuildMenuCategory>k__BackingField: {fileID: 11400000, guid: deda1d372118a29489b7d864a5b9a9cd, type: 2}

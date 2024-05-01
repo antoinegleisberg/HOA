@@ -19,3 +19,4 @@ MonoBehaviour:
   BuildingMaterials:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
     Second: 10
+  <ScriptableBuildMenuCategory>k__BackingField: {fileID: 11400000, guid: 135898d0bbd48e84f85fafbe4209c888, type: 2}

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using antoinegleisberg.Pathfinding;
 using antoinegleisberg.Types;
+using System.Linq;
 
 namespace antoinegleisberg.HOA
 {
@@ -33,14 +34,20 @@ namespace antoinegleisberg.HOA
                 (Node n1, Node n2) => n1.HeuristicDistance(n2), (Node n) => n.GetDistancesToNeighbours());
             GenerateGraph();
         }
-
-        public List<Vector3> GetPath(Vector3 startCoords, Vector3 destinationCoords)
+        
+        public List<Vector3> GetPath(List<Vector3> possibleStartCoords, List<Vector3> possibleDestinationsCoords)
         {
-            Vector2Int startNodeCoords = WorldToClosestNodeCoordinates(startCoords);
-            Vector2Int destinationNodeCoords = WorldToClosestNodeCoordinates(destinationCoords);
-            Node startNode = _nodes[startNodeCoords];
-            Node destinationNode = _nodes[destinationNodeCoords];
-            List<Node> path = _pathfinder.FindPath(startNode, destinationNode);
+            List<Vector2Int> startNodesCoords = possibleStartCoords.Select((Vector3 coords) => WorldToClosestNodeCoordinates(coords)).ToList();
+            List<Vector2Int> destinationNodesCoords = possibleDestinationsCoords.Select((Vector3 coords) => WorldToClosestNodeCoordinates(coords)).ToList();
+            List<Node> startNodes = startNodesCoords.Select((Vector2Int coords) => _nodes[coords]).ToList();
+            List<Node> destinationNodes = destinationNodesCoords.Select((Vector2Int coords) => _nodes[coords]).ToList();
+            List<Node> path = _pathfinder.FindPath(startNodes, destinationNodes);
+
+            int selectedStartNodeIndex = startNodes.IndexOf(path[0]);
+            Vector3 startCoords = possibleStartCoords[selectedStartNodeIndex];
+
+            int selectedDestinationNodeIndex = destinationNodes.IndexOf(path[path.Count - 1]);
+            Vector3 destinationCoords = possibleDestinationsCoords[selectedDestinationNodeIndex];
 
             List<Vector3> result = new List<Vector3>(2 + path.Count);
             result.Add(startCoords);

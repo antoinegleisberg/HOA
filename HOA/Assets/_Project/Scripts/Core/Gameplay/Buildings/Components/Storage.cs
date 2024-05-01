@@ -40,7 +40,7 @@ namespace antoinegleisberg.HOA
         }
 
         
-        public Dictionary<ScriptableItem, int> AvailableItemsToTake()
+        public IReadOnlyDictionary<ScriptableItem, int> AvailableItemsToTake()
         {
             Building building = GetComponent<Building>();
 
@@ -51,7 +51,7 @@ namespace antoinegleisberg.HOA
 
             if (building.IsProductionSite)
             {
-                Dictionary<ScriptableItem, int> items = _inventory.Items();
+                Dictionary<ScriptableItem, int> items = new Dictionary<ScriptableItem, int>(_inventory.Items());
                 foreach (Recipe recipe in GetComponent<ProductionSite>().AvailableRecipes)
                 {
                     foreach (ScriptableItem item in recipe.RequiredItems.Keys)
@@ -148,7 +148,7 @@ namespace antoinegleisberg.HOA
             return _inventory.IsEmpty();
         }
 
-        public Dictionary<ScriptableItem, int> Items()
+        public IReadOnlyDictionary<ScriptableItem, int> Items()
         {
             return _inventory.Items();
         }
