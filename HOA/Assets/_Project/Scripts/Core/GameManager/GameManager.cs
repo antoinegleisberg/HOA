@@ -16,9 +16,9 @@ namespace antoinegleisberg.HOA
     {
         public static GameManager Instance { get; private set; }
 
-        private GameState _currentState;
+        public GameState CurrentState { get; private set; }
 
-        public GameState CurrentState => _currentState;
+        private bool _uiIsHovered;
 
         private void Awake()
         {
@@ -35,6 +35,7 @@ namespace antoinegleisberg.HOA
             UIEvents.Instance.OnCancelPreview += OnCancelPreview;
             UIEvents.Instance.OnSettingsMenuOpen += () => SwitchState(GameState.Paused);
             UIEvents.Instance.OnSettingsMenuClose += () => SwitchState(GameState.Gameplay);
+            UIEvents.Instance.OnHoverUi += OnHoverUi;
 
             InputManager.Instance.OnCancel += OnCancel;
             InputManager.Instance.OnMouseClick += OnMouseClick;
@@ -49,6 +50,7 @@ namespace antoinegleisberg.HOA
             UIEvents.Instance.OnCancelPreview -= OnCancelPreview;
             UIEvents.Instance.OnSettingsMenuOpen -= () => SwitchState(GameState.Paused);
             UIEvents.Instance.OnSettingsMenuClose -= () => SwitchState(GameState.Gameplay);
+            UIEvents.Instance.OnHoverUi -= OnHoverUi;
 
             InputManager.Instance.OnCancel -= OnCancel;
             InputManager.Instance.OnMouseClick -= OnMouseClick;
@@ -56,7 +58,7 @@ namespace antoinegleisberg.HOA
 
         private void SwitchState(GameState newState)
         {
-            switch (_currentState)
+            switch (CurrentState)
             {
                 case GameState.Gameplay:
                     GameEvents.Instance.ExitGameplayState();
@@ -72,9 +74,9 @@ namespace antoinegleisberg.HOA
                     break;
             }
 
-            _currentState = newState;
+            CurrentState = newState;
             
-            switch (_currentState)
+            switch (CurrentState)
             {
                 case GameState.Gameplay:
                     GameEvents.Instance.EnterGameplayState();
@@ -89,6 +91,11 @@ namespace antoinegleisberg.HOA
                     GameEvents.Instance.PauseGameplay();
                     break;
             }
+        }
+
+        private void OnHoverUi(bool isHovered)
+        {
+            _uiIsHovered = isHovered;
         }
 
         private void OnBuildingSelected(string name)
@@ -112,7 +119,7 @@ namespace antoinegleisberg.HOA
                     return;
                 }
 
-                if (UIManager.Instance.UiIsHovered)
+                if (_uiIsHovered)
                 {
                     return;
                 }
@@ -128,11 +135,11 @@ namespace antoinegleisberg.HOA
 
         private void OnCancel()
         {
-            if (_currentState == GameState.Gameplay)
+            if (CurrentState == GameState.Gameplay)
             {
                 UIEvents.Instance.OpenSettingsMenu();
             }
-            else if (_currentState == GameState.Paused)
+            else if (CurrentState == GameState.Paused)
             {
                 UIEvents.Instance.CloseSettingsMenu();
             }

@@ -61,5 +61,12 @@ namespace antoinegleisberg.HOA.Editor
                 }
             }
         }
+
+        [MenuItem("HOA Scripts/Reload Static Classes")]
+        public static void ReloadStaticClasses()
+        {
+            ScriptableBuildingsDB.Reload();
+            ScriptableItemsDB.Reload();
+        }
     }
 }

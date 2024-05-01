@@ -3,7 +3,7 @@ using antoinegleisberg.UI;
 using antoinegleisberg.HOA.EventSystem;
 
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.UI
 {
     public class UIManager : MonoBehaviour
     {

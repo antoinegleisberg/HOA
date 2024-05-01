@@ -43,7 +43,12 @@ namespace antoinegleisberg.HOA
 
             return _itemStackSizesLCM;
         }
-            
+        
+        public static void Reload()
+        {
+            Init();
+        }
+
         private static void Init()
         {
             __items = new Dictionary<string, ScriptableItem>();

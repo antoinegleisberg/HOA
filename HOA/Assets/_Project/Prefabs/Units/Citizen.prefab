@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3865256337580902408}
   - component: {fileID: 3865256337580902409}
   - component: {fileID: 3865256337580902414}
+  - component: {fileID: 5833974943175854499}
   m_Layer: 0
   m_Name: Citizen
   m_TagString: Untagged
@@ -97,8 +98,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61800e293a7b7cb49bef1b4f0b70d86a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 0.5
   <WanderingDistance>k__BackingField: 2
   <TimeAtWork>k__BackingField: 20
   <TimeAtHome>k__BackingField: 5
   <TimeWandering>k__BackingField: 5
+  <Home>k__BackingField: {fileID: 0}
+  <Workplace>k__BackingField: {fileID: 0}
+--- !u!114 &5833974943175854499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3865256337580902411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b706d55d0ad5ba4a9f08ccd30a99e96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 0.5

@@ -1,7 +1,7 @@
 using antoinegleisberg.HOA.EventSystems.SceneManagement;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.UI
 {
     public class SaveAndQuitButton : MonoBehaviour
     {
