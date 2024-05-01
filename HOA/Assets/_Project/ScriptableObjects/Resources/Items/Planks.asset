@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Planks
   m_EditorClassIdentifier: 
   Name: Planks
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: b01a623ed61dcd94e9a0fff9da2d5b03, type: 3}
   Description: Used to build stuff
   StackSize: 64

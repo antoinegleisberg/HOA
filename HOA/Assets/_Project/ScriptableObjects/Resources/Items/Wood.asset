@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Wood
   m_EditorClassIdentifier: 
   Name: Wood
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 508a3bce963e9bf4cad16017728f67bb, type: 3}
   Description: A very essential resource obtained by cutting down trees
   StackSize: 64

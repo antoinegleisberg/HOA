@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Warehouse
   m_EditorClassIdentifier: 
   Name: Warehouse
+  Description: A warehouse can store more items once your other storages are full
   Sprite: {fileID: 21300000, guid: faada0d483ab0824a952795ff8f60036, type: 3}
   Size: {x: 3, y: 3}
   BuildingPrefab: {fileID: 3917434282994887204, guid: aafd1dd39937bc24297ab02012de611d, type: 3}
@@ -21,4 +22,3 @@ MonoBehaviour:
     Second: 20
   - First: {fileID: 11400000, guid: 48bc2e2832501a94ba1f7a5abe061773, type: 2}
     Second: 20
-  <ScriptableBuildMenuCategory>k__BackingField: {fileID: 11400000, guid: deda1d372118a29489b7d864a5b9a9cd, type: 2}

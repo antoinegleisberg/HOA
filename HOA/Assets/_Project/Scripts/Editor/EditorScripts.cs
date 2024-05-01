@@ -3,6 +3,8 @@ using UnityEditor;
 using UnityEngine;
 using antoinegleisberg.Saving;
 using System.Reflection;
+using System.Linq;
+using System.Collections.Generic;
 
 
 namespace antoinegleisberg.HOA.Editor
@@ -53,12 +55,14 @@ namespace antoinegleisberg.HOA.Editor
             if (obj == null) return;
             if (!Application.IsPlaying(obj)) return;
 
-            foreach (Building building in BuildingsDB.Instance.GetAllBuildings())
+            List<ConstructionSite> constructionSites = BuildingsDB.Instance.GetAllBuildings()
+                .Where(b => b.IsConstructionSite)
+                .Select(b => b.GetComponent<ConstructionSite>())
+                .ToList();
+
+            foreach (ConstructionSite constructionSite in constructionSites)
             {
-                if (building.IsConstructionSite)
-                {
-                    BuildingsBuilder.Instance.BuildBuilding(building.GetComponent<ConstructionSite>());
-                }
+                BuildingsBuilder.Instance.BuildBuilding(constructionSite);
             }
         }
 

@@ -73,6 +73,10 @@ namespace antoinegleisberg.HOA
                 for (int y = yMin; y < yMax; ++y)
                 {
                     Vector2Int coords = new Vector2Int(x, y);
+                    if (!_nodes.ContainsKey(coords))
+                    {
+                        continue;
+                    }
                     Node node = _nodes[coords];
                     foreach (Node neighbour in node.Neighbours())
                     {

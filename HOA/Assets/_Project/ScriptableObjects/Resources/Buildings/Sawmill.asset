@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Sawmill
   m_EditorClassIdentifier: 
   Name: Sawmill
-  Sprite: {fileID: 21300000, guid: 69605e85b042af648b1cdd74ca630bae, type: 3}
+  Description: A sawmill will cut wook into planks
+  Sprite: {fileID: 21300000, guid: 881a2802460ae924898a0358d86d6536, type: 3}
   Size: {x: 2, y: 2}
   BuildingPrefab: {fileID: 3917434282994887204, guid: 6ef1739f715f7ab43b4a5da53a051283, type: 3}
   BuildingMaterials:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
     Second: 20
-  <ScriptableBuildMenuCategory>k__BackingField: {fileID: 11400000, guid: 29cd7cd007dda804b8f1ccf3868d4792, type: 2}

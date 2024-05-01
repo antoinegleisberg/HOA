@@ -45,7 +45,7 @@ namespace antoinegleisberg.HOA
             CurrentPositionIsValid = false;
 
             PreviewBuilding = ScriptableBuildingsDB.GetBuildingByName(name);
-            _previewBuildingSR.sprite = PreviewBuilding.BuildingPrefab.GetComponent<SpriteRenderer>().sprite;
+            _previewBuildingSR.sprite = PreviewBuilding.BuildingPrefab.ScriptableBuilding.Sprite;
 
             UpdatePreview();
         }
