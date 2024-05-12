@@ -2,14 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using antoinegleisberg.HOA.Input;
+using antoinegleisberg.HOA.Core;
+using System.Collections;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Preview
 {
     public class PreviewManager : MonoBehaviour
     {
         public static PreviewManager Instance { get; private set; }
-
-        [SerializeField] private Camera _camera;
+        
         [SerializeField] private Tilemap _floorTilemap;
         [SerializeField] private Tilemap _greenHighlightTilemap;
         [SerializeField] private Tilemap _redHighlightTilemap;
@@ -28,16 +29,6 @@ namespace antoinegleisberg.HOA
             _previewBuildingSR.enabled = false;
         }
 
-        private void Update()
-        {
-            if (!_isPreviewing)
-            {
-                return;
-            }
-
-            UpdatePreview();
-        }
-
         public void StartPreview(string name)
         {
             _isPreviewing = true;
@@ -47,7 +38,7 @@ namespace antoinegleisberg.HOA
             PreviewBuilding = ScriptableBuildingsDB.GetBuildingByName(name);
             _previewBuildingSR.sprite = PreviewBuilding.BuildingPrefab.ScriptableBuilding.Sprite;
 
-            UpdatePreview();
+            StartCoroutine(UpdatePreviewCoroutine());
         }
 
         public void CancelPreview()
@@ -61,14 +52,20 @@ namespace antoinegleisberg.HOA
             _redHighlightTilemap.ClearAllTiles();
         }
 
+        private IEnumerator UpdatePreviewCoroutine()
+        {
+            while (_isPreviewing)
+            {
+                UpdatePreview();
+                yield return null;
+            }
+        }
+        
         private void UpdatePreview()
         {
             Vector2 mousePos = InputManager.Instance.MouseScreenPosition;
 
-            Vector3 worldPosition = GridManager.Instance.MouseToWorldPosition(mousePos); // _camera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10));
-
-            // Vector3 localPos = GridManager.Instance.Grid.WorldToLocal(worldPosition);
-            // Vector3 localInterpolated = GridManager.Instance.Grid.LocalToCellInterpolated(localPos);
+            Vector3 worldPosition = GridManager.Instance.MouseToWorldPosition(mousePos);
 
             _previewBuildingSR.transform.position = worldPosition;
 

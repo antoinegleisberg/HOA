@@ -7,13 +7,17 @@ namespace antoinegleisberg.HOA.Camera
     public class CameraMover : MonoBehaviour
     {
         private Transform _cameraTransform;
+        
         [SerializeField] private float _cameraSpeed;
+        
         [Range(0, 1)]
         [SerializeField] private float _detectionRange;
 
         private bool _uiIsHovered;
         private bool _isInGameplayState;
         private bool _isInPreviewState;
+
+        private bool CanMove() => !_uiIsHovered && (_isInGameplayState || _isInPreviewState);
 
         private void Awake()
         {
@@ -50,11 +54,6 @@ namespace antoinegleisberg.HOA.Camera
             GameEvents.Instance.OnExitPreviewState -= () => _isInPreviewState = false;
 
             UIEvents.Instance.OnHoverUi -= (bool isHovered) => _uiIsHovered = isHovered;
-        }
-
-        private bool CanMove()
-        {
-            return !_uiIsHovered && (_isInGameplayState || _isInPreviewState);
         }
 
         private void MoveCamera()

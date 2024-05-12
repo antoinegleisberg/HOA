@@ -1,7 +1,7 @@
 ﻿using antoinegleisberg.Saving;
 using System.Collections.Generic;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public partial class UnitManager
     {

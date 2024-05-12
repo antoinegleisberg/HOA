@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public static class ScriptableBuildingsDB
     {

@@ -1,7 +1,7 @@
 using System.Collections;
 
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class MainStorageWorkBehaviour : BaseWorkBehaviour
     {

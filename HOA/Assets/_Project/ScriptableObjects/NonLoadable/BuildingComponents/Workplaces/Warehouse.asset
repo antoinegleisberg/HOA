@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9256afb81fcbeaa4aa48d00ac2fd35d5, type: 3}
   m_Name: Warehouse
   m_EditorClassIdentifier: 
-  MaxWorkers: 4
+  <MaxWorkers>k__BackingField: 3

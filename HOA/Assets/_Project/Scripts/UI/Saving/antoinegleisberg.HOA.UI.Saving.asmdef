@@ -1,0 +1,16 @@
+{
+    "name": "antoinegleisberg.HOA.UI.Saving",
+    "rootNamespace": "antoinegleisberg.HOA.UI.Saving",
+    "references": [
+        "GUID:9610a55fa6028dc429ea4e2a2c6da485"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

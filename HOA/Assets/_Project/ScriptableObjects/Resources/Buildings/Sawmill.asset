@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e6d53ad393f0646a55cdcbb67057a4, type: 3}
   m_Name: Sawmill
   m_EditorClassIdentifier: 
-  Name: Sawmill
-  Description: A sawmill will cut wook into planks
-  Sprite: {fileID: 21300000, guid: 881a2802460ae924898a0358d86d6536, type: 3}
-  Size: {x: 2, y: 2}
-  BuildingPrefab: {fileID: 3917434282994887204, guid: 6ef1739f715f7ab43b4a5da53a051283, type: 3}
-  BuildingMaterials:
+  <Name>k__BackingField: Sawmill
+  _description: Cuts wood into planks
+  <Sprite>k__BackingField: {fileID: 21300000, guid: 881a2802460ae924898a0358d86d6536, type: 3}
+  <Size>k__BackingField: {x: 2, y: 2}
+  <BuildingPrefab>k__BackingField: {fileID: 3377915655352993059, guid: c72252e69242b5241b71e3940cbeaf4b, type: 3}
+  <BuildingMaterials>k__BackingField:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
     Second: 20

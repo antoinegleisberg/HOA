@@ -1,6 +1,9 @@
 using UnityEngine;
 using antoinegleisberg.HOA.Input;
 using antoinegleisberg.HOA.EventSystem;
+using antoinegleisberg.HOA.Core;
+using antoinegleisberg.HOA.Preview;
+using antoinegleisberg.HOA.UI;
 
 namespace antoinegleisberg.HOA
 {
@@ -36,6 +39,7 @@ namespace antoinegleisberg.HOA
             UIEvents.Instance.OnSettingsMenuOpen += () => SwitchState(GameState.Paused);
             UIEvents.Instance.OnSettingsMenuClose += () => SwitchState(GameState.Gameplay);
             UIEvents.Instance.OnHoverUi += OnHoverUi;
+            UIEvents.Instance.OnCloseObjectInfo += () => SwitchState(GameState.Gameplay);
 
             InputManager.Instance.OnCancel += OnCancel;
             InputManager.Instance.OnMouseClick += OnMouseClick;
@@ -51,6 +55,7 @@ namespace antoinegleisberg.HOA
             UIEvents.Instance.OnSettingsMenuOpen -= () => SwitchState(GameState.Paused);
             UIEvents.Instance.OnSettingsMenuClose -= () => SwitchState(GameState.Gameplay);
             UIEvents.Instance.OnHoverUi -= OnHoverUi;
+            UIEvents.Instance.OnCloseObjectInfo -= () => SwitchState(GameState.Gameplay);
 
             InputManager.Instance.OnCancel -= OnCancel;
             InputManager.Instance.OnMouseClick -= OnMouseClick;
@@ -131,6 +136,17 @@ namespace antoinegleisberg.HOA
                 PreviewManager.Instance.CancelPreview();
                 SwitchState(GameState.Gameplay);
             }
+
+            else if (CurrentState == GameState.Gameplay || CurrentState == GameState.UI)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.MouseScreenPosition);
+                RaycastHit2D raycastHit = Physics2D.GetRayIntersection(ray);
+                if (raycastHit.collider != null && CurrentState == GameState.Gameplay)
+                {
+                    SwitchState(GameState.UI);
+                }
+                UIManager.Instance.OnColliderClicked(raycastHit.collider);
+            }
         }
 
         private void OnCancel()
@@ -142,6 +158,10 @@ namespace antoinegleisberg.HOA
             else if (CurrentState == GameState.Paused)
             {
                 UIEvents.Instance.CloseSettingsMenu();
+            }
+            else if (CurrentState == GameState.UI)
+            {
+                UIManager.Instance.OnCancel();
             }
         }
     }

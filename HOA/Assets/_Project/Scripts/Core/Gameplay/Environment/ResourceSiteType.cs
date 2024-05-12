@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public enum ResourceSiteType
     {
         Tree,
         Rock,
-        Wild
+        Wild,
+        Water
     }
 }

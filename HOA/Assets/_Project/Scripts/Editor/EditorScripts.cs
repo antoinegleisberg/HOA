@@ -5,6 +5,7 @@ using antoinegleisberg.Saving;
 using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
+using antoinegleisberg.HOA.Core;
 
 
 namespace antoinegleisberg.HOA.Editor

@@ -12,7 +12,7 @@ namespace antoinegleisberg.HOA.UI
         {
             ScriptableBuildMenuCategory scriptableCategory = ScriptableBuildMenuCategory.GetByCategory(category);
             _image.sprite = scriptableCategory.Icon;
-            _button.onClick.AddListener(() => { Debug.Log(category); buildMenu.SwitchCategory(category); });
+            _button.onClick.AddListener(() => buildMenu.SwitchCategory(category));
         }
     }
 }

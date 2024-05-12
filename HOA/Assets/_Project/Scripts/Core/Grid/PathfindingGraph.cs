@@ -4,7 +4,7 @@ using antoinegleisberg.Pathfinding;
 using antoinegleisberg.Types;
 using System.Linq;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public partial class PathfindingGraph : MonoBehaviour
     {

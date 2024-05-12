@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using antoinegleisberg.Types;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public static class BuildingsPlacer
     {

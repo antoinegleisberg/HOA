@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public struct ItemStorageInfo
     {

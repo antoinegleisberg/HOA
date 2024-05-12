@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public enum Season
     {

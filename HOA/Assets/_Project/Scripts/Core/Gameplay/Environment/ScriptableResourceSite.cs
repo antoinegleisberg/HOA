@@ -2,14 +2,14 @@ using antoinegleisberg.Types;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     [CreateAssetMenu(fileName = "Resource Site", menuName = "ScriptableObjects/Resource Site")]
     public class ScriptableResourceSite : ScriptableObject
     {
-        public List<Pair<ScriptableItem, int>> AvailableItemsPerHarvest;
-        public int MaxHarvests;
-        public ResourceSiteType ResourceSiteType;
-        public float HarvestTime;
+        [field:SerializeField] public List<Pair<ScriptableItem, int>> AvailableItemsPerHarvest {get; private set; }
+        [field:SerializeField] public int MaxHarvests {get; private set; }
+        [field:SerializeField] public ResourceSiteType ResourceSiteType {get; private set; }
+        [field: SerializeField] public float HarvestTime { get; private set; }
     }
 }

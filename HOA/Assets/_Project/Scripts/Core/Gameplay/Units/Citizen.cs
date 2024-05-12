@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
-    [RequireComponent(typeof(CitizenMovement), typeof(CitizenItemTransport))]
+    [RequireComponent(typeof(CitizenMovement), typeof(CitizenItemTransport), typeof(CitizenNeeds))]
     public class Citizen : MonoBehaviour
     {
         [field: SerializeField] public float WanderingDistance { get; private set; }
@@ -17,6 +17,7 @@ namespace antoinegleisberg.HOA
         [field: SerializeField] public House Home { get; private set; }
         [field: SerializeField] public Workplace Workplace { get; private set; }
 
+        [field: SerializeField] public float ProbabilityToSpawnBaby { get; private set; } = 0.1f;
 
         private StateMachine<Citizen> _stateMachine;
         public HomeState HomeState { get; private set; }
@@ -28,6 +29,11 @@ namespace antoinegleisberg.HOA
 
         private CitizenMovement _citizenMovement => GetComponent<CitizenMovement>();
         private CitizenItemTransport _citizenItemTransport => GetComponent<CitizenItemTransport>();
+        private CitizenNeeds _citizenNeeds => GetComponent<CitizenNeeds>();
+
+        public bool IsThirsty => _citizenNeeds.Thirst < 20;
+        public bool IsHungry => _citizenNeeds.Hunger < 20;
+
 
         private void Awake()
         {
@@ -41,15 +47,51 @@ namespace antoinegleisberg.HOA
             _stateMachine = new StateMachine<Citizen>(this, HomeState);
         }
 
+        private void Start()
+        {
+            TimeManager.Instance.OnDayChanged += () => _citizenNeeds.Thirst -= 5;
+            TimeManager.Instance.OnDayChanged += () => _citizenNeeds.Hunger -= 5;
+        }
+
+        private void OnDestroy()
+        {
+            TimeManager.Instance.OnDayChanged -= () => _citizenNeeds.Thirst -= 5;
+            TimeManager.Instance.OnDayChanged -= () => _citizenNeeds.Hunger -= 5;
+        }
+
+        public void ReplenishThirst(ScriptableItem replenisher)
+        {
+            _citizenNeeds.Thirst += replenisher.ThirstReplenish;
+        }
+
+        public void ReplenishHunger(ScriptableItem replenisher)
+        {
+            _citizenNeeds.Hunger += replenisher.HungerReplenish;
+        }
+
         public void ClaimHouse(House house)
         {
+            if (Home != null)
+            {
+                Home.RemoveResident(this);
+            }
             Home = house;
+            Debug.Log("Claiming house");
             house.AddResident(this);
         }
 
         public void ClaimWorkplace(Workplace workplace)
         {
+            if (Workplace != null)
+            {
+                StopAllCoroutines();
+                _citizenMovement.StopAllCoroutines();
+                _citizenItemTransport.StopAllCoroutines();
+                SwitchState(HomeState);
+                Workplace.RemoveWorker(this);
+            }
             Workplace = workplace;
+            Debug.Log("Claiming workplace");
             workplace.AddWorker(this);
         }
 

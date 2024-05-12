@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17d343f65d4a91b4ba2343e36c95f57f, type: 3}
   m_Name: Wood
   m_EditorClassIdentifier: 
-  Name: Wood
-  Icon: {fileID: 21300000, guid: 508a3bce963e9bf4cad16017728f67bb, type: 3}
-  Description: A very essential resource obtained by cutting down trees
-  StackSize: 64
+  <Name>k__BackingField: Wood
+  <Icon>k__BackingField: {fileID: 21300000, guid: 508a3bce963e9bf4cad16017728f67bb, type: 3}
+  _description: You can get it by cutting down trees
+  <StackSize>k__BackingField: 64
+  HungerReplenish: 0
+  ThirstReplenish: 0

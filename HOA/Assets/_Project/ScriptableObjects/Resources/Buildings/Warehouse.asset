@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e6d53ad393f0646a55cdcbb67057a4, type: 3}
   m_Name: Warehouse
   m_EditorClassIdentifier: 
-  Name: Warehouse
-  Description: A warehouse can store more items once your other storages are full
-  Sprite: {fileID: 21300000, guid: faada0d483ab0824a952795ff8f60036, type: 3}
-  Size: {x: 3, y: 3}
-  BuildingPrefab: {fileID: 3917434282994887204, guid: aafd1dd39937bc24297ab02012de611d, type: 3}
-  BuildingMaterials:
+  <Name>k__BackingField: Warehouse
+  _description: Used to store goods
+  <Sprite>k__BackingField: {fileID: 21300000, guid: faada0d483ab0824a952795ff8f60036, type: 3}
+  <Size>k__BackingField: {x: 3, y: 3}
+  <BuildingPrefab>k__BackingField: {fileID: 5439445000531911759, guid: f2e71758efe056249a3207c7a48aa46f, type: 3}
+  <BuildingMaterials>k__BackingField:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
     Second: 20
   - First: {fileID: 11400000, guid: 48bc2e2832501a94ba1f7a5abe061773, type: 2}
-    Second: 20
+    Second: 10

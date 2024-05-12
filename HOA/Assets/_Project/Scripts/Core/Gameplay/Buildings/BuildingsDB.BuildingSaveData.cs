@@ -1,15 +1,17 @@
-﻿namespace antoinegleisberg.HOA
+﻿using System;
+
+namespace antoinegleisberg.HOA.Core
 {
     public partial class BuildingsDB
     {
-        [System.Serializable]
+        [Serializable]
         private struct BuildingsDBSaveData
         {
             public BuildingSaveData[] Buildings;
         }
         
         
-        [System.Serializable]
+        [Serializable]
         private struct BuildingSaveData
         {
             public string BuildingName;

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class ResourceSite : MonoBehaviour
     {
-        [field:SerializeField] public ScriptableResourceSite ScriptableResourceSite;
+        [field: SerializeField] public ScriptableResourceSite ScriptableResourceSite { get; private set; }
+        
         private int _remainingHarvests;
 
         public bool IsDepleted => _remainingHarvests <= 0;

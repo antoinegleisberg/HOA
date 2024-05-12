@@ -1,10 +1,10 @@
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     [CreateAssetMenu(fileName = "NewResourceGatheringSite", menuName = "ScriptableObjects/Buildings/Resource Gathering Site")]
     public class ScriptableResourceGatheringSite : ScriptableObject
     {
-        public ResourceSiteType ResourceSiteType;
+        [field: SerializeField] public ResourceSiteType ResourceSiteType { get; private set; }
     }
 }

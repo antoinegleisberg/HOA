@@ -1,0 +1,17 @@
+{
+    "name": "antoinegleisberg.HOA.Preview",
+    "rootNamespace": "antoinegleisberg.HOA.Preview",
+    "references": [
+        "GUID:4088c12f75dd5474ea03321480da311d",
+        "GUID:051591775543c2e40b97279308927024"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

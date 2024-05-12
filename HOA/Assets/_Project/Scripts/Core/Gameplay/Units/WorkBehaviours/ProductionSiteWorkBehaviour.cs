@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class ProductionSiteWorkBehaviour : BaseWorkBehaviour
     {
@@ -13,7 +13,7 @@ namespace antoinegleisberg.HOA
         public override IEnumerator ExecuteWork()
         {
             ProductionSite productionSite = _citizen.Workplace.GetComponent<ProductionSite>();
-            Recipe recipe = productionSite.GetRecipe();
+            Recipe recipe = productionSite.GetRecipe(_citizen);
 
             if (!_workplaceStorage.ContainsItems(recipe.RequiredItems))
             {

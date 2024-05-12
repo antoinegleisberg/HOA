@@ -2,7 +2,7 @@ using antoinegleisberg.StateMachine;
 using System.Collections;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class WorkingState : BaseState<Citizen>
     {
@@ -21,7 +21,7 @@ namespace antoinegleisberg.HOA
 
         public override void ExitState(Citizen citizen)
         {
-
+            
         }
 
         public override void UpdateState(Citizen citizen)

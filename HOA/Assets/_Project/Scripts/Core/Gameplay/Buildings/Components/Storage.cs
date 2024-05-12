@@ -1,10 +1,11 @@
 using antoinegleisberg.Inventory;
 using antoinegleisberg.Types;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     [RequireComponent(typeof(Building))]
     public class Storage : MonoBehaviour, IInventory<ScriptableItem>
@@ -13,19 +14,8 @@ namespace antoinegleisberg.HOA
 
         [SerializeField] private ScriptableStorage _scriptableStorage;
 
-        private List<Pair<ScriptableItem, int>> _itemCapacities {
-            get
-            {
-                return _scriptableStorage.ItemCapacities;
-            }
-        }
-
-        private int _maxCapacity {
-            get
-            {
-                return _scriptableStorage.MaxCapacity;
-            }
-        }
+        private Dictionary<ScriptableItem, int> _itemCapacities => _scriptableStorage.ItemCapacities;
+        private int _maxCapacity => _scriptableStorage.MaxCapacity;
 
         private void Awake()
         {
@@ -34,12 +24,71 @@ namespace antoinegleisberg.HOA
 
         private void OnValidate()
         {
-            // ToDo:
-            // Edit inventory parameters for production sites and resource gathering site to contain exactly
-            // the set of items needed and produced
+            Building building = GetComponent<Building>();
+
+            if (building.IsHouse || building.IsConstructionSite)
+            {
+                if (_scriptableStorage != null)
+                {
+                    Debug.LogWarning("A House or Construction Site should not have a ScriptableStorage attached to it. The ScriptableStorage will be ignored");
+                }
+            }
+            else if (building.IsMainStorage)
+            {
+                if (_scriptableStorage == null)
+                {
+                    throw new Exception("A Main Storage must have a ScriptableStorage attached to it.");
+                }
+                if (_maxCapacity <= 0)
+                {
+                    Debug.LogWarning("Main Storage capacity is set to 0. Is this intended?");
+                }
+                if (_itemCapacities.Count > 0)
+                {
+                    throw new Exception("Main Storage has item capacities set. These will be ignored.");
+                }
+            }
+            else if (building.IsProductionSite || building.IsResourceGatheringSite)
+            {
+                if (_scriptableStorage == null)
+                {
+                    throw new Exception("A Production Site or Resource Gathering Site must have a ScriptableStorage attached to it.");
+                }
+                if (_maxCapacity != 0)
+                {
+                    throw new Exception("Production Site or Resource Gathering Site max storage capacity is set to a value.");
+                }
+            }
+            else
+            {
+                throw new Exception("Building type not recognised");
+            }
         }
 
+        public ScriptableItem GetDrink()
+        {
+            foreach (ScriptableItem item in _inventory.Items().Keys)
+            {
+                if (item.ThirstReplenish > 0)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
         
+        public ScriptableItem GetFood()
+        {
+            foreach (ScriptableItem item in _inventory.Items().Keys)
+            {
+                if (item.HungerReplenish > 0)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
         public IReadOnlyDictionary<ScriptableItem, int> AvailableItemsToTake()
         {
             Building building = GetComponent<Building>();
@@ -113,45 +162,24 @@ namespace antoinegleisberg.HOA
             return minAmount;
         }
 
-        public bool CanAddItems(Dictionary<ScriptableItem, int> items)
-        {
-            return _inventory.CanAddItems(items);
-        }
+        public bool CanAddItems(Dictionary<ScriptableItem, int> items) => _inventory.CanAddItems(items);
         public bool CanAddItems(ScriptableItem item, int count) => CanAddItems(new Dictionary<ScriptableItem, int>() { { item, count } });
         public bool CanAddItem(ScriptableItem item) => CanAddItems(item, 1);
 
-        public void AddItems(Dictionary<ScriptableItem, int> items)
-        {
-            _inventory.AddItems(items);
-        }
+        public void AddItems(Dictionary<ScriptableItem, int> items) => _inventory.AddItems(items);
         public void AddItems(ScriptableItem item, int count) => AddItems(new Dictionary<ScriptableItem, int>() { { item, count } });
         public void AddItem(ScriptableItem item) => AddItems(item, 1);
 
-        public bool ContainsItems(Dictionary<ScriptableItem, int> items)
-        {
-            return _inventory.ContainsItems(items);
-        }
+        public bool ContainsItems(Dictionary<ScriptableItem, int> items) => _inventory.ContainsItems(items);
 
-        public void RemoveItems(Dictionary<ScriptableItem, int> items)
-        {
-            _inventory.RemoveItems(items);
-        }
+        public void RemoveItems(Dictionary<ScriptableItem, int> items) => _inventory.RemoveItems(items);
         public void RemoveItems(ScriptableItem item, int count) => RemoveItems(new Dictionary<ScriptableItem, int>() { { item, count } });
 
-        public int GetItemCount(ScriptableItem item)
-        {
-            return _inventory.GetItemCount(item);
-        }
+        public int GetItemCount(ScriptableItem item) => _inventory.GetItemCount(item);
 
-        public bool IsEmpty()
-        {
-            return _inventory.IsEmpty();
-        }
+        public bool IsEmpty() => _inventory.IsEmpty();
 
-        public IReadOnlyDictionary<ScriptableItem, int> Items()
-        {
-            return _inventory.Items();
-        }
+        public IReadOnlyDictionary<ScriptableItem, int> Items() => _inventory.Items();
 
         private IEnumerator InitialiseStorage()
         {
@@ -173,13 +201,13 @@ namespace antoinegleisberg.HOA
             else if (building.IsProductionSite)
             {
                 _inventory = Inventory<ScriptableItem>.CreateBuilder()
-                    .WithPredeterminedItemSet(_itemCapacities.ToDictionary())
+                    .WithPredeterminedItemSet(_itemCapacities)
                     .Build();
             }
             else if (building.IsResourceGatheringSite)
             {
                 _inventory = Inventory<ScriptableItem>.CreateBuilder()
-                    .WithPredeterminedItemSet(_itemCapacities.ToDictionary())
+                    .WithPredeterminedItemSet(_itemCapacities)
                     .Build();
             }
             else if (building.IsMainStorage)

@@ -1,6 +1,8 @@
 using UnityEngine;
 using antoinegleisberg.UI;
 using antoinegleisberg.HOA.EventSystem;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace antoinegleisberg.HOA.UI
@@ -9,23 +11,28 @@ namespace antoinegleisberg.HOA.UI
     {
         public static UIManager Instance { get; private set; }
 
-        [SerializeField] private UIHoverDetector _menuButtons;
-        [SerializeField] private UIHoverDetector _cancelPreviewButton;
-        [SerializeField] private UIHoverDetector _settingsButton;
         [SerializeField] private Canvas _gameplayUI;
         [SerializeField] private Canvas _buildMenu;
         [SerializeField] private Canvas _previewCanvas;
         [SerializeField] private Canvas _settingsCanvas;
+        [SerializeField] private Canvas _objectInfoCanvas;
 
-        public bool UiIsHovered => _menuButtons.IsHovered || _cancelPreviewButton.IsHovered || _settingsButton.IsHovered;
+        [SerializeField] private ObjectInfoManager _objectInfoManager;
+
+        private List<Canvas> _canvases;
+
+        public bool UiIsHovered => _canvases.Any(canvas => canvas.GetComponent<UIHoverDetector>().IsHovered);
 
         private void Awake()
         {
             Instance = this;
-            _gameplayUI.gameObject.SetActive(true);
-            _buildMenu.gameObject.SetActive(true);
-            _previewCanvas.gameObject.SetActive(true);
-            _settingsCanvas.gameObject.SetActive(true);
+
+            _canvases = new List<Canvas> { _gameplayUI, _buildMenu, _previewCanvas, _settingsCanvas, _objectInfoCanvas };
+            foreach (Canvas canvas in _canvases)
+            {
+                canvas.gameObject.SetActive(true);
+            }
+
             SetActiveCanvas(_gameplayUI);
         }
 
@@ -33,38 +40,76 @@ namespace antoinegleisberg.HOA.UI
         {
             GameEvents.Instance.OnEnterGameplayState += () => SetActiveCanvas(_gameplayUI);
             GameEvents.Instance.OnResumeGameplay += () => SetActiveCanvas(_gameplayUI);
-            GameEvents.Instance.OnEnterUIState += () => SetActiveCanvas(_buildMenu);
             GameEvents.Instance.OnEnterPreviewState += () => SetActiveCanvas(_previewCanvas);
 
+            UIEvents.Instance.OnBuildMenuOpen += () => SetActiveCanvas(_buildMenu);
+            UIEvents.Instance.OnBuildMenuClose += () => SetActiveCanvas(_gameplayUI);
             UIEvents.Instance.OnSettingsMenuOpen += () => SetActiveCanvas(_settingsCanvas);
             UIEvents.Instance.OnSettingsMenuClose += () => SetActiveCanvas(_gameplayUI);
+            UIEvents.Instance.OnCloseObjectInfo += () => SetActiveCanvas(_gameplayUI);
 
-            _menuButtons.OnHover += (bool _hover) => RaiseHoverUiEvent();
-            _cancelPreviewButton.OnHover += (bool _hover) => RaiseHoverUiEvent();
-            _settingsButton.OnHover += (bool _hover) => RaiseHoverUiEvent();
+            foreach (Canvas canvas in _canvases)
+            {
+                canvas.GetComponent<UIHoverDetector>().OnHover += (bool _hover) => RaiseHoverUiEvent();
+            }
         }
 
         private void OnDestroy()
         {
             GameEvents.Instance.OnEnterGameplayState -= () => SetActiveCanvas(_gameplayUI);
             GameEvents.Instance.OnResumeGameplay -= () => SetActiveCanvas(_gameplayUI);
-            GameEvents.Instance.OnEnterUIState -= () => SetActiveCanvas(_buildMenu);
             GameEvents.Instance.OnEnterPreviewState -= () => SetActiveCanvas(_previewCanvas);
 
+            UIEvents.Instance.OnBuildMenuOpen -= () => SetActiveCanvas(_buildMenu);
+            UIEvents.Instance.OnBuildMenuClose -= () => SetActiveCanvas(_gameplayUI);
             UIEvents.Instance.OnSettingsMenuOpen -= () => SetActiveCanvas(_settingsCanvas);
             UIEvents.Instance.OnSettingsMenuClose -= () => SetActiveCanvas(_gameplayUI);
+            UIEvents.Instance.OnCloseObjectInfo -= () => SetActiveCanvas(_gameplayUI);
 
-            _menuButtons.OnHover -= (bool _hover) => RaiseHoverUiEvent();
-            _cancelPreviewButton.OnHover -= (bool _hover) => RaiseHoverUiEvent();
-            _settingsButton.OnHover -= (bool _hover) => RaiseHoverUiEvent();
+            foreach (Canvas canvas in _canvases)
+            {
+                if (canvas == null)
+                {
+                    continue;
+                }
+                if (canvas.TryGetComponent(out UIHoverDetector hoverDetector))
+                {
+                    hoverDetector.OnHover -= (bool _hover) => RaiseHoverUiEvent();
+                }
+            }
+        }
+
+        public void OnCancel()
+        {
+            Debug.LogWarning("On cancel UI: not implemented");
+        }
+        
+        public void OnColliderClicked(Collider2D collider)
+        {
+            if (UiIsHovered)
+            {
+                return;
+            }
+
+            if (_objectInfoCanvas.enabled)
+            {
+                _objectInfoManager.OnColliderClicked(collider);
+            }
+            else if (collider != null)
+            {
+                SetActiveCanvas(_objectInfoCanvas);
+                _objectInfoManager.OnColliderClicked(collider);
+            }
         }
 
         private void SetActiveCanvas(Canvas canvas)
         {
+            Debug.Log("Setting active UI canvas: " + canvas.name);
             _gameplayUI.enabled = false;
             _buildMenu.enabled = false;
             _previewCanvas.enabled = false;
             _settingsCanvas.enabled = false;
+            _objectInfoCanvas.enabled = false;
             canvas.enabled = true;
         }
 

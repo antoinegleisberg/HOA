@@ -1,7 +1,7 @@
-
+using UnityEngine;
 using System.Collections;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public abstract class BaseWorkBehaviour
     {

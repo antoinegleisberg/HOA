@@ -2,6 +2,7 @@ using antoinegleisberg.HOA.EventSystem;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using antoinegleisberg.HOA.Core;
 
 
 namespace antoinegleisberg.HOA.UI

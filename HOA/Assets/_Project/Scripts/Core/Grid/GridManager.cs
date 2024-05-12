@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class GridManager : MonoBehaviour
     {

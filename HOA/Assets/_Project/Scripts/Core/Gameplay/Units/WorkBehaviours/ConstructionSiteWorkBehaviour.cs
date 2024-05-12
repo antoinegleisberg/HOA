@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using antoinegleisberg.Types;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class ConstructionSiteWorkBehaviour : BaseWorkBehaviour
     {
-        private Storage _workplaceStorage { get => _citizen.Workplace.GetComponent<Storage>(); }
+        private Storage _workplaceStorage => _citizen.Workplace.GetComponent<Storage>();
 
         public ConstructionSiteWorkBehaviour(Citizen citizen) : base(citizen) { }
 

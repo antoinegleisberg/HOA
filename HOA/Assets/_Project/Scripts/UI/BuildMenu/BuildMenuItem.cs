@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using antoinegleisberg.HOA.EventSystem;
 using System;
+using antoinegleisberg.HOA.Core;
 
 
 namespace antoinegleisberg.HOA.UI

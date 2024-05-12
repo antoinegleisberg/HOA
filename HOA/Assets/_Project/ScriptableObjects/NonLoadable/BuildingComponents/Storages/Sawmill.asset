@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b8a91910e013ef4499e476fd4027f20, type: 3}
   m_Name: Sawmill
   m_EditorClassIdentifier: 
-  ItemCapacities:
+  _itemCapacities:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
     Second: 20
   - First: {fileID: 11400000, guid: 48bc2e2832501a94ba1f7a5abe061773, type: 2}
     Second: 20
-  MaxCapacity: 0
+  <MaxCapacity>k__BackingField: 0

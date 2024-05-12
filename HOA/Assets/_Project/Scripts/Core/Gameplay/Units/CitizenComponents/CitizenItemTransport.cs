@@ -4,7 +4,7 @@ using System.Linq;
 using antoinegleisberg.Types;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     [RequireComponent(typeof(Citizen))]
     public class CitizenItemTransport : MonoBehaviour
@@ -19,16 +19,8 @@ namespace antoinegleisberg.HOA
             }
 
             // Finds the item that limits the capacity the most
-            ScriptableItem itemToStore = null;
-            int minRemainingCapacity = int.MaxValue;
-            foreach (ScriptableItem item in items)
-            {
-                if (storageToTakeFrom.GetCapacityForItem(item, storageToTakeFrom.GetItemCount(item)) < minRemainingCapacity)
-                {
-                    itemToStore = item;
-                    minRemainingCapacity = storageToTakeFrom.GetCapacityForItem(item, storageToTakeFrom.GetItemCount(item));
-                }
-            }
+            ScriptableItem itemToStore = items
+                .MinBy(item => storageToTakeFrom.GetCapacityForItem(item, storageToTakeFrom.GetItemCount(item)));
 
             yield return StartCoroutine(StoreItemsToMainStorage(itemToStore, storageToTakeFrom.GetItemCount(itemToStore), storageToTakeFrom));
         }
@@ -46,18 +38,7 @@ namespace antoinegleisberg.HOA
             ScriptableItem neededItem = neededItemKvp.Key;
             int neededAmount = neededItemKvp.Value;
 
-            ItemStorageInfo storageInfo = BuildingsDB.Instance.GetLocationOfResource(neededItem);
-
-            Storage storageWithAvailableItem = null;
-            int availableAmount = 0;
-
-            foreach (KeyValuePair<Storage, int> kvp in storageInfo.Availability)
-            {
-                Debug.LogWarning("ToDo: Replace this by actual best/closest storage");
-                storageWithAvailableItem = kvp.Key;
-                availableAmount = kvp.Value;
-                break;
-            }
+            Storage storageWithAvailableItem = GetOptimalStorageToGetItemsFromStorage(neededItem, neededAmount);
 
             if (storageWithAvailableItem == null)
             {
@@ -78,17 +59,7 @@ namespace antoinegleisberg.HOA
 
         private IEnumerator StoreItemsToMainStorage(ScriptableItem itemToStore, int amount, Storage storageToTakeFrom)
         {
-            ItemStorageInfo storageInfo = BuildingsDB.Instance.GetAvailableMainStorage(itemToStore, amount);
-
-            Storage target = null;
-            int capacity;
-            foreach (KeyValuePair<Storage, int> kvp in storageInfo.Availability)
-            {
-                Debug.LogWarning("ToDo: choose the best possible/closest storage instead");
-                target = kvp.Key;
-                capacity = kvp.Value;
-                break;
-            }
+            Storage target = GetOptimalStorageToTakeItemsToStorage(itemToStore, amount, storageToTakeFrom);
 
             if (target == null)
             {
@@ -100,6 +71,73 @@ namespace antoinegleisberg.HOA
             int addedAmount = target.AddAsManyAsPossible(itemToStore, amount);
             Debug.LogWarning("I believe this could fail if in the meantime, another worker produced items. Change this to add items to citizen inventory instead - also creates more realistic transport");
             storageToTakeFrom.AddItems(itemToStore, amount - addedAmount);
+        }
+    
+        private Storage GetOptimalStorageToGetItemsFromStorage(ScriptableItem neededItem, int neededAmount)
+        {
+            ItemStorageInfo storageInfo = BuildingsDB.Instance.GetLocationOfResource(neededItem);
+
+            if (storageInfo.Availability.Count == 0)
+            {
+                return null;
+            }
+
+            // Phase 1: consider only storages that hold enough items, and take the closest one
+            IEnumerable<Storage> potentialStorages = storageInfo.Availability
+                .Where(kvp => (kvp.Key == neededItem && kvp.Value >= neededAmount))
+                .Select(kvp => kvp.Key);
+            if (potentialStorages.Count() >= 1)
+            {
+                Vector3 closestStoragePosition = potentialStorages
+                    .Select(storage => storage.transform.position)
+                    .ClosestTo(_citizen.Workplace.transform.position);
+                Storage bestStorage = potentialStorages
+                    .Where(storage => storage.transform.position == closestStoragePosition)
+                    .First();
+                return bestStorage;
+            }
+
+            // Phase 2: take the storage with the largest amount of the searched item
+            Storage bestAlternateStorage = storageInfo.Availability
+                .Where(kvp => (kvp.Key == neededItem))
+                .Select(kvp => kvp.Key)
+                .MaxBy(storage => storageInfo.Availability[storage]);
+
+            return bestAlternateStorage;
+        }
+    
+        private Storage GetOptimalStorageToTakeItemsToStorage(ScriptableItem itemToStore, int amount, Storage storageToTakeFrom)
+        {
+            ItemStorageInfo storageInfo = BuildingsDB.Instance.GetAvailableMainStorage(itemToStore, amount);
+
+            if (storageInfo.Availability.Count() == 0)
+            {
+                return null;
+            }
+
+            // Phase 1: consider only storages that have capacity for all items
+            IEnumerable<Storage> potentialStorages = storageInfo.Availability
+                .Where(kvp => (kvp.Key == itemToStore && kvp.Value >= amount))
+                .Select(kvp => kvp.Key);
+
+            if (potentialStorages.Count() >= 1)
+            {
+                Vector3 closestStoragePosition = potentialStorages
+                    .Select(storage => storage.transform.position)
+                    .ClosestTo(storageToTakeFrom.transform.position);
+                Storage bestStorage = potentialStorages
+                    .Where(storage => storage.transform.position == closestStoragePosition)
+                    .First();
+                return bestStorage;
+            }
+
+            // Phase 2: take the storage with the largest amount of the searched item
+            Storage bestAlternateStorage = storageInfo.Availability
+                .Where(kvp => (kvp.Key == itemToStore))
+                .Select(kvp => kvp.Key)
+                .MaxBy(storage => storageInfo.Availability[storage]);
+
+            return bestAlternateStorage;
         }
     }
 }

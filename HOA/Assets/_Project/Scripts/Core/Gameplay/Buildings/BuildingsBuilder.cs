@@ -2,7 +2,7 @@ using antoinegleisberg.Types;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class BuildingsBuilder : MonoBehaviour
     {

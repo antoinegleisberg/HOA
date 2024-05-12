@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     [RequireComponent(typeof(Building), typeof(Storage), typeof(Workplace))]
     public class ConstructionSite : MonoBehaviour

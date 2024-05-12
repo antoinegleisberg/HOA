@@ -1,10 +1,10 @@
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     [CreateAssetMenu(fileName = "NewHouse", menuName = "ScriptableObjects/Buildings/House")]
     public class ScriptableHouse : ScriptableObject
     {
-        public int MaxResidents;
+        [field: SerializeField] public int MaxResidents { get; private set; }
     }
 }

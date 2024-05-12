@@ -1,24 +1,35 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
-    [RequireComponent(typeof(Building), typeof(Storage))]
+    [RequireComponent(typeof(Building), typeof(Storage), typeof(Workplace))]
     public class ProductionSite : MonoBehaviour
     {
         [SerializeField] private ScriptableProductionSite _scriptableProductionSite;
 
-        public IReadOnlyList<Recipe> AvailableRecipes
+        private Dictionary<Citizen, Recipe> _workersRecipes = new Dictionary<Citizen, Recipe>();
+
+        public IReadOnlyList<Recipe> AvailableRecipes => _scriptableProductionSite.AvailableRecipes;
+
+        public Recipe GetRecipe(Citizen worker)
         {
-            get
+            if (!_workersRecipes.ContainsKey(worker))
             {
-                return _scriptableProductionSite.AvailableRecipes;
+                throw new Exception("This worker is not assigned to this workplace !");
             }
+            return _workersRecipes[worker];
         }
 
-        public Recipe GetRecipe()
+        public void SetRecipe(Citizen worker, Recipe recipe)
         {
-            return AvailableRecipes[0];
+            if (!AvailableRecipes.Contains(recipe))
+            {
+                throw new Exception("This recipe is not available at this workplace !");
+            }
+            _workersRecipes[worker] = recipe;
         }
     }
 }

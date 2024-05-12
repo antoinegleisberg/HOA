@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f6f91809ca4a7b41aa3d0b7e5159b65, type: 3}
   m_Name: GrownTree
   m_EditorClassIdentifier: 
-  AvailableItemsPerHarvest:
+  <AvailableItemsPerHarvest>k__BackingField:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
     Second: 5
-  MaxHarvests: 4
-  ResourceSiteType: 0
-  HarvestTime: 2
+  <MaxHarvests>k__BackingField: 5
+  <ResourceSiteType>k__BackingField: 0
+  <HarvestTime>k__BackingField: 2

@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using antoinegleisberg.Types;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class ResourceGatheringSiteWorkBehaviour : BaseWorkBehaviour
     {

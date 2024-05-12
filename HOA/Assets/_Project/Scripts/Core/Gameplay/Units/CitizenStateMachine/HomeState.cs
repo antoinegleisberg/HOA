@@ -1,9 +1,10 @@
 using antoinegleisberg.StateMachine;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class HomeState : BaseState<Citizen>
     {
@@ -42,7 +43,13 @@ namespace antoinegleisberg.HOA
         {
             yield return citizen.MoveToBuilding(citizen.Home.GetComponent<Building>());
 
-            yield return new WaitForSeconds(citizen.TimeAtHome);
+            TryToSpawnBaby(citizen);
+
+            float startTime = Time.time;
+            while (Time.time - startTime < citizen.TimeAtHome)
+            {
+                yield return citizen.StartCoroutine(GetBeverageAndDrink(citizen));
+            }
 
             if (citizen.Workplace == null)
             {
@@ -52,6 +59,46 @@ namespace antoinegleisberg.HOA
             {
                 citizen.SwitchState(citizen.WorkingState);
             }
+        }
+
+        private void TryToSpawnBaby(Citizen citizen)
+        {
+            if (citizen.Home.ResidentsCount >= 2)
+            {
+                UnitManager.Instance.SpawnCitizen(citizen.Home.transform.position);
+            }
+        }
+
+        private IEnumerator GetBeverageAndDrink(Citizen citizen)
+        {
+            ScriptableItem item = citizen.Home.GetComponent<Storage>().GetDrink();
+            if (item == null)
+            {
+                yield return citizen.StartCoroutine(GetWater(citizen));
+                yield break;
+            }
+            citizen.Home.GetComponent<Storage>().RemoveItems(item, 1);
+            citizen.ReplenishThirst(item);
+        }
+
+        private IEnumerator GetWater(Citizen citizen)
+        {
+            ResourceSite well = Object.FindObjectsOfType<ResourceSite>()
+                .Where(rs => rs.ScriptableResourceSite.ResourceSiteType == ResourceSiteType.Water)
+                .FirstOrDefault();
+
+            if (well == null)
+            {
+                yield return new WaitForSeconds(1.0f);
+                yield break;
+            }
+                
+
+            yield return citizen.StartCoroutine(citizen.MoveToBuilding(well.GetComponent<Building>()));
+
+            yield return citizen.StartCoroutine(citizen.MoveToBuilding(citizen.Home.GetComponent<Building>()));
+
+            citizen.Home.GetComponent<Storage>().AddItems(ScriptableItemsDB.GetItemByName("Water"), 10);
         }
     }
 }

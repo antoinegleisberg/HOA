@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     [RequireComponent(typeof(Building))]
     public class Workplace : MonoBehaviour
@@ -9,12 +10,9 @@ namespace antoinegleisberg.HOA
         [SerializeField] private ScriptableWorkplace _scriptableWorkplace;
         [SerializeField] private List<Citizen> _workers;
 
-        private int _maxWorkers {
-            get
-            {
-                return _scriptableWorkplace.MaxWorkers;
-            }
-        }
+        public IReadOnlyList<Citizen> Workers => _workers;
+
+        private int _maxWorkers => _scriptableWorkplace.MaxWorkers;
 
         private void Awake()
         {
@@ -25,9 +23,22 @@ namespace antoinegleisberg.HOA
         {
             if (RemainingWorkersSpace() <= 0)
             {
-                throw new System.Exception("Workplace is full");
+                throw new Exception("Workplace is full");
             }
             _workers.Add(worker);
+            if (TryGetComponent(out ProductionSite productionSite))
+            {
+                productionSite.SetRecipe(worker, productionSite.AvailableRecipes[0]);
+            }
+        }
+
+        public void RemoveWorker(Citizen worker)
+        {
+            if (!_workers.Contains(worker))
+            {
+                throw new Exception("Citizen is not a worker of this workplace");
+            }
+            _workers.Remove(worker);
         }
 
         public int RemainingWorkersSpace()

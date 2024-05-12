@@ -2,7 +2,7 @@ using antoinegleisberg.StateMachine;
 using System.Collections;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class WanderingState : BaseState<Citizen>
     {

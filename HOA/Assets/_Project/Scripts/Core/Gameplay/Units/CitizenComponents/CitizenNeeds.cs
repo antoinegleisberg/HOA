@@ -1,15 +1,26 @@
 using UnityEngine;
 
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class CitizenNeeds : MonoBehaviour
     {
+        // For all needs, a higher value describes a high satisfaction of that need
+        
         // Basic needs
-        public int Hunger { get { return Hunger; } set { Hunger = value; if (value < 0) Hunger = 0; } }
-        public int Thirst { get { return Thirst; } set { Thirst = value; if (value < 0) Thirst = 0; } }
-        public int Rest { get { return Rest; } set { Rest = value; if (value < 0) Rest = 0; } }  // Describes how well rested the citizen is
-        public int HousingSatisfaction { get { return HousingSatisfaction; } set { HousingSatisfaction = value; if (value < 0) HousingSatisfaction = 0; } }  // Both access to housing and quality of housing - link to houses that can crumble / catch fire
+        private int _hunger;
+        public int Hunger { get { return _hunger; } set { _hunger = value; if (value < 0) _hunger = 0; } }
+        
+        private int _thirst;
+        public int Thirst { get { return _thirst; } set { _thirst = value; if (value < 0) _thirst = 0; } }
+        
+        private int _rest;
+        public int Rest { get { return _rest; } set { _rest = value; if (value < 0) _rest = 0; } }
+
+        // Describes both access to housing and quality of housing - link to houses that can crumble / catch fire
+        private int _housingSatisfaction;
+        public int HousingSatisfaction { get { return _housingSatisfaction; } set { _housingSatisfaction = value; if (value < 0) _housingSatisfaction = 0; } }
+        
 
         // Community needs
         public int MarketplaceAccess { get; private set; }

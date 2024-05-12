@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e6d53ad393f0646a55cdcbb67057a4, type: 3}
   m_Name: Lumberjack
   m_EditorClassIdentifier: 
-  Name: Lumberjack
-  Description: A lumberjack will collect wood from nearby trees
-  Sprite: {fileID: 21300000, guid: 69605e85b042af648b1cdd74ca630bae, type: 3}
-  Size: {x: 2, y: 2}
-  BuildingPrefab: {fileID: 3917434282994887204, guid: 1cb842d715bc91f488ae886e6e973774, type: 3}
-  BuildingMaterials:
+  <Name>k__BackingField: Lumberjack
+  _description: Gathers wood
+  <Sprite>k__BackingField: {fileID: 21300000, guid: 69605e85b042af648b1cdd74ca630bae, type: 3}
+  <Size>k__BackingField: {x: 2, y: 2}
+  <BuildingPrefab>k__BackingField: {fileID: 5679347772114763887, guid: 06749b7fd0a8bbf418a21bc79f72cd9c, type: 3}
+  <BuildingMaterials>k__BackingField:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
     Second: 10

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b8a91910e013ef4499e476fd4027f20, type: 3}
   m_Name: Warehouse
   m_EditorClassIdentifier: 
-  ItemCapacities: []
-  MaxCapacity: 200
+  _itemCapacities: []
+  _maxCapacity: 200

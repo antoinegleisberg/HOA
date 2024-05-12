@@ -2,9 +2,8 @@
     "name": "antoinegleisberg.HOA.UI",
     "rootNamespace": "antoinegleisberg.HOA.UI",
     "references": [
-        "GUID:b1dbff4675d0a5442914bb6368ff5a86",
+        "GUID:4088c12f75dd5474ea03321480da311d",
         "GUID:e94c7155cde17c541899409cc1af81bd",
-        "GUID:9610a55fa6028dc429ea4e2a2c6da485",
         "GUID:9e231bd6491211440b930c6a47b0e255",
         "GUID:fc139f6affff7e942ba600dd9a7e4386",
         "GUID:6055be8ebefd69e48b49212b09b47b2f"

@@ -1,7 +1,7 @@
 using antoinegleisberg.StateMachine;
 using System.Collections.Generic;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class SearchWorksiteState : BaseState<Citizen>
     {

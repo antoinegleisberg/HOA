@@ -2,6 +2,7 @@ using UnityEngine;
 using antoinegleisberg.Types;
 using TMPro;
 using UnityEngine.UI;
+using antoinegleisberg.HOA.Core;
 
 
 namespace antoinegleisberg.HOA.UI

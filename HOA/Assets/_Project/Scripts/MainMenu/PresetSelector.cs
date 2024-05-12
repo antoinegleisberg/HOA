@@ -15,14 +15,12 @@ namespace antoinegleisberg.HOA.MainMenu
         
         private int _currentPresetIndex;
 
-        public string PresetName {
-            get { return _presetNameText.text; }
-        }
-
+        public string PresetName => _presetNameText.text;
+        
         private void Awake()
         {
             _leftChangePresetButton.onClick.AddListener(() => ChangePreset(-1));
-            _rightChangePresetButton.onClick.AddListener(() => ChangePreset(-1));
+            _rightChangePresetButton.onClick.AddListener(() => ChangePreset(1));
             _currentPresetIndex = 0;
         }
 

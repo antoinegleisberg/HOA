@@ -2,7 +2,7 @@ using antoinegleisberg.Saving;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     [RequireComponent(typeof(SaveableEntity))]
     public partial class BuildingsDB : MonoBehaviour, ISaveable

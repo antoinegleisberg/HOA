@@ -1,6 +1,6 @@
 using antoinegleisberg.StateMachine;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public class StoringState : BaseState<Citizen>
     {

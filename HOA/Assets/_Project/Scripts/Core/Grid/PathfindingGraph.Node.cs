@@ -3,7 +3,7 @@ using antoinegleisberg.Types;
 using System.Collections.Generic;
 using System.Collections;
 
-namespace antoinegleisberg.HOA
+namespace antoinegleisberg.HOA.Core
 {
     public partial class PathfindingGraph
     {

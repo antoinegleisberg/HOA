@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45cc4d71bb099f2458bb84f09daf1d8e, type: 3}
   m_Name: House
   m_EditorClassIdentifier: 
-  MaxResidents: 2
+  <MaxResidents>k__BackingField: 2
