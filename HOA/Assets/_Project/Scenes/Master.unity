@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <CurrentSaveName>k__BackingField: 
-  _defaultSaveName: test
+  _defaultSaveName: procgen test
 --- !u!1 &1059192599
 GameObject:
   m_ObjectHideFlags: 0

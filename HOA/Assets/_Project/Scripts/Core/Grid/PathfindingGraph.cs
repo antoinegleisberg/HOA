@@ -22,6 +22,7 @@ namespace antoinegleisberg.HOA.Core
         [SerializeField] private int _nodesPerUnit = 2;
 
         [Header("Gizmos testing")]
+        [SerializeField] private bool _drawGizmos;
         [SerializeField] private Vector2Int _startPos;
         [SerializeField] private Vector2Int _destPos;
 
@@ -222,6 +223,11 @@ namespace antoinegleisberg.HOA.Core
 
         private void OnDrawGizmos()
         {
+            if (!_drawGizmos)
+            {
+                return;
+            }
+
             if (_nodes == null)
             {
                 return;
