@@ -12,19 +12,39 @@ namespace antoinegleisberg.HOA.Core
     {
         [SerializeField] private float _speed;
 
-        private bool _isInBuilding = false;
-        private Building _currentBuilding;
+        public bool IsInBuilding { get; set; } = false;
+        public Building CurrentBuilding { get; set; }
+
+        // public bool IsInBuilding
 
         // ToDo: Move fading to another class handling citizen UI
         private SpriteRenderer _spriteRenderer => GetComponent<SpriteRenderer>();
 
         public IEnumerator MoveToPosition(Vector3 targetPosition)
         {
+            if (Vector3.Distance(transform.position, targetPosition) < Mathf.Epsilon)
+            {
+                // Sanity check: do nothing if the citizen already is at the target position
+                yield break;
+            }
+
             yield return StartCoroutine(MoveToClosestPosition(new List<Vector3> { targetPosition }));
         }
 
         public IEnumerator MoveToBuilding(Building target)
         {
+            Debug.Log("Starting to move to building: ", target);
+
+            if (CurrentBuilding != null && CurrentBuilding == target)
+            {
+                Debug.Log("Cancelling moving to building");
+                // Sanity check: if the citizen is already in the building, return immediately
+                // This is especially useful when loading a save and the citizen is already in a building
+                // because we then reset the movement behaviour
+                _spriteRenderer.color = new Color(1, 1, 1, 0);
+                yield break;
+            }
+
             List<RoadConnection> roadConnections = target.GetComponentsInChildren<RoadConnection>().ToList();
             List<Vector3> roadConnectionsPositions = roadConnections.Select((RoadConnection rc) => rc.transform.position).ToList();
             if (roadConnectionsPositions.Count == 0)
@@ -34,6 +54,12 @@ namespace antoinegleisberg.HOA.Core
             }
 
             yield return StartCoroutine(MoveToClosestPosition(roadConnectionsPositions));
+
+            if (target == null)
+            {
+                // If the building was destroyed in the time the citizen was moving there, stop
+                yield break;
+            }
 
             Vector3 selectedPosition = roadConnectionsPositions.ClosestTo(transform.position);
             int index = roadConnectionsPositions.IndexOf(selectedPosition);
@@ -54,10 +80,18 @@ namespace antoinegleisberg.HOA.Core
             yield return StartCoroutine(MoveStraightToPosition(transform, entryPointPosition));
 
             StopCoroutine(fadingOutCoroutine);
+
+            if (target == null)
+            {
+                // If the building was destroyed in the time the citizen was moving there, stop
+                _spriteRenderer.color = Color.white;
+                yield break;
+            }
+
             _spriteRenderer.color = new Color(1, 1, 1, 0);
 
-            _isInBuilding = true;
-            _currentBuilding = target;
+            IsInBuilding = true;
+            CurrentBuilding = target;
         }
 
         private IEnumerator MoveToClosestPosition(List<Vector3> targetPositions)
@@ -65,9 +99,9 @@ namespace antoinegleisberg.HOA.Core
             Transform t = transform;
 
             List<Vector3> startCoords = new List<Vector3> { t.position };
-            if (_isInBuilding)
+            if (IsInBuilding)
             {
-                List<RoadConnection> roadConnections = _currentBuilding.GetComponentsInChildren<RoadConnection>().ToList();
+                List<RoadConnection> roadConnections = CurrentBuilding.GetComponentsInChildren<RoadConnection>().ToList();
                 List<Vector3> roadConnectionsPositions = roadConnections.Select((RoadConnection rc) => rc.transform.position).ToList();
                 startCoords = roadConnectionsPositions;
                 if (startCoords.Count == 0)
@@ -78,11 +112,11 @@ namespace antoinegleisberg.HOA.Core
 
             List<Vector3> path = PathfindingGraph.Instance.GetPath(startCoords, targetPositions);
 
-            if (_isInBuilding)
+            if (IsInBuilding)
             {
                 Vector3 selectedStart = path[0];
                 int index = startCoords.IndexOf(selectedStart);
-                RoadConnection[] roadConnections = _currentBuilding.GetComponentsInChildren<RoadConnection>();
+                RoadConnection[] roadConnections = CurrentBuilding.GetComponentsInChildren<RoadConnection>();
                 if (roadConnections.Count() > 0)
                 {
                     RoadConnection selectedRoadConnection = roadConnections[index];
@@ -96,8 +130,8 @@ namespace antoinegleisberg.HOA.Core
                 
                 StartCoroutine(_spriteRenderer.FadeIn(1.0f));
 
-                _isInBuilding = false;
-                _currentBuilding = null;
+                IsInBuilding = false;
+                CurrentBuilding = null;
             }
 
             for (int i = 0; i < path.Count; ++i)

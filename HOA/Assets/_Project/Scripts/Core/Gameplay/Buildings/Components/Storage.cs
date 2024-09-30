@@ -10,15 +10,20 @@ namespace antoinegleisberg.HOA.Core
     [RequireComponent(typeof(Building))]
     public class Storage : MonoBehaviour, IInventory<ScriptableItem>
     {
+        public bool InitializedStorage { get; private set; }
+        
         private IInventory<ScriptableItem> _inventory;
 
         [SerializeField] private ScriptableStorage _scriptableStorage;
 
-        private Dictionary<ScriptableItem, int> _itemCapacities => _scriptableStorage.ItemCapacities;
+        private IReadOnlyDictionary<ScriptableItem, int> _itemCapacities => _scriptableStorage.ItemCapacities;
         private int _maxCapacity => _scriptableStorage.MaxCapacity;
 
         private void Awake()
         {
+            InitializedStorage = false;
+            // Temporary, fake inventory with 0 capacity while the actual one is not initialized yet
+            _inventory = Inventory<ScriptableItem>.CreateBuilder().WithLimitedCapacity(0, (ScriptableItem item) => 1).Build();
             StartCoroutine(InitialiseStorage());
         }
 
@@ -162,17 +167,17 @@ namespace antoinegleisberg.HOA.Core
             return minAmount;
         }
 
-        public bool CanAddItems(Dictionary<ScriptableItem, int> items) => _inventory.CanAddItems(items);
+        public bool CanAddItems(IReadOnlyDictionary<ScriptableItem, int> items) => _inventory.CanAddItems(items);
         public bool CanAddItems(ScriptableItem item, int count) => CanAddItems(new Dictionary<ScriptableItem, int>() { { item, count } });
         public bool CanAddItem(ScriptableItem item) => CanAddItems(item, 1);
 
-        public void AddItems(Dictionary<ScriptableItem, int> items) => _inventory.AddItems(items);
+        public void AddItems(IReadOnlyDictionary<ScriptableItem, int> items) => _inventory.AddItems(items);
         public void AddItems(ScriptableItem item, int count) => AddItems(new Dictionary<ScriptableItem, int>() { { item, count } });
         public void AddItem(ScriptableItem item) => AddItems(item, 1);
 
-        public bool ContainsItems(Dictionary<ScriptableItem, int> items) => _inventory.ContainsItems(items);
+        public bool ContainsItems(IReadOnlyDictionary<ScriptableItem, int> items) => _inventory.ContainsItems(items);
 
-        public void RemoveItems(Dictionary<ScriptableItem, int> items) => _inventory.RemoveItems(items);
+        public void RemoveItems(IReadOnlyDictionary<ScriptableItem, int> items) => _inventory.RemoveItems(items);
         public void RemoveItems(ScriptableItem item, int count) => RemoveItems(new Dictionary<ScriptableItem, int>() { { item, count } });
 
         public int GetItemCount(ScriptableItem item) => _inventory.GetItemCount(item);
@@ -184,9 +189,9 @@ namespace antoinegleisberg.HOA.Core
         private IEnumerator InitialiseStorage()
         {
             Building building = GetComponent<Building>();
-
+            
             yield return new WaitUntil(() => building.ScriptableBuilding != null);
-
+            
             if (building.IsHouse)
             {
                 _inventory = Inventory<ScriptableItem>.CreateBuilder().Build();
@@ -216,6 +221,12 @@ namespace antoinegleisberg.HOA.Core
                     .WithLimitedCapacity(_maxCapacity, (ScriptableItem item) => item.ItemSize)
                     .Build();
             }
+            else
+            {
+                Debug.LogError("Building type not recognized");
+            }
+
+            InitializedStorage = true;
         }
     }
 }

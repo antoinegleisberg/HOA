@@ -1,4 +1,5 @@
 using antoinegleisberg.StateMachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,11 @@ namespace antoinegleisberg.HOA.Core
         private CitizenItemTransport _citizenItemTransport => GetComponent<CitizenItemTransport>();
         private CitizenNeeds _citizenNeeds => GetComponent<CitizenNeeds>();
 
+        private IEnumerable<BaseState<Citizen>> _states;
+
+        public bool IsInBuilding => _citizenMovement.IsInBuilding;
+        public Building CurrentBuilding => _citizenMovement.CurrentBuilding;
+
         public bool IsThirsty => _citizenNeeds.Thirst < 20;
         public bool IsHungry => _citizenNeeds.Hunger < 20;
 
@@ -45,6 +51,16 @@ namespace antoinegleisberg.HOA.Core
             WorkingState = new WorkingState();
 
             _stateMachine = new StateMachine<Citizen>(this, HomeState);
+
+            _states = new BaseState<Citizen>[]
+            {
+                HomeState,
+                SearchWorksiteState,
+                StoringState,
+                TakingFromStorageState,
+                WanderingState,
+                WorkingState
+            };
         }
 
         private void Start()
@@ -57,6 +73,16 @@ namespace antoinegleisberg.HOA.Core
         {
             TimeManager.Instance.OnDayChanged -= () => _citizenNeeds.Thirst -= 5;
             TimeManager.Instance.OnDayChanged -= () => _citizenNeeds.Hunger -= 5;
+        }
+
+        public void SetCurrentBuilding(Building building)
+        {
+            if (building == null)
+            {
+                return;
+            }
+            _citizenMovement.IsInBuilding = true;
+            _citizenMovement.CurrentBuilding = building;
         }
 
         public void ReplenishThirst(ScriptableItem replenisher)
@@ -84,21 +110,42 @@ namespace antoinegleisberg.HOA.Core
         {
             if (Workplace != null)
             {
-                StopAllCoroutines();
-                _citizenMovement.StopAllCoroutines();
-                _citizenItemTransport.StopAllCoroutines();
                 SwitchState(HomeState);
                 Workplace.RemoveWorker(this);
             }
             Workplace = workplace;
             Debug.Log("Claiming workplace");
-            workplace.AddWorker(this);
+            workplace?.AddWorker(this);
         }
 
         public void SwitchState(BaseState<Citizen> newState)
         {
+            // I'm not 100% sure about stopping all coroutines here, I believe this could break some stuff
+            // However, I think it may be necessary in order to allow the citizen to reset behaviour when we
+            // forcefully set his state when loading a save file from memory
+            StopAllCoroutines();
+            _citizenMovement.StopAllCoroutines();
+            _citizenItemTransport.StopAllCoroutines();
             Debug.Log("Switching to state " + newState.GetType().ToString());
             _stateMachine.SwitchState(newState);
+        }
+
+        public string GetCurrentStateAsString()
+        {
+            return _stateMachine.GetCurrentState().GetType().ToString();
+        }
+
+        public void SetStateFromString(string stateName)
+        {
+            foreach (BaseState<Citizen> possibleState in _states)
+            {
+                if (stateName == possibleState.GetType().ToString())
+                {
+                    SwitchState(possibleState);
+                    return;
+                }
+            }
+            throw new ArgumentException($"The state {stateName} could not be identified !");
         }
 
         public IEnumerator MoveToPosition(Vector3 targetPosition)

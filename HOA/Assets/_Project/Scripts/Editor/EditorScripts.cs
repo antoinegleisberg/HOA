@@ -72,6 +72,7 @@ namespace antoinegleisberg.HOA.Editor
         {
             ScriptableBuildingsDB.Reload();
             ScriptableItemsDB.Reload();
+            RecipesDB.Reload();
         }
     }
 }

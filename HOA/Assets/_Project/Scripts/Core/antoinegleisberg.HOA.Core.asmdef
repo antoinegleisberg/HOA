@@ -2,6 +2,7 @@
     "name": "antoinegleisberg.HOA.Core",
     "rootNamespace": "antoinegleisberg.HOA.Core",
     "references": [
+        "GUID:ff93e16a6ca00804dab9061c0d5604f7",
         "GUID:e94c7155cde17c541899409cc1af81bd",
         "GUID:bbf44500a039e1046ba767116555b0f2",
         "GUID:150a9dc9db5bf5f49aad08b824212ad5",

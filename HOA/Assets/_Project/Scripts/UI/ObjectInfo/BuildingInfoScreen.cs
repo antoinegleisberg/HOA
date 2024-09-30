@@ -2,6 +2,9 @@ using UnityEngine;
 using antoinegleisberg.HOA.Core;
 using TMPro;
 using UnityEngine.UI;
+using antoinegleisberg.HOA.EventSystem;
+using antoinegleisberg.Types;
+using System.Collections.Generic;
 
 namespace antoinegleisberg.HOA.UI
 {
@@ -15,6 +18,9 @@ namespace antoinegleisberg.HOA.UI
 
         [SerializeField] private Transform _workerInfoContainer;
         [SerializeField] private WorkerInfo _workerInfoPrefab;
+
+        [SerializeField] private Transform _storageInfoContainer;
+        [SerializeField] private StorageElement _storageElementPrefab;
 
         [SerializeField] private Button _seeCitizensButton;
         [SerializeField] private Button _cancelSeeCitizensButton;
@@ -34,6 +40,7 @@ namespace antoinegleisberg.HOA.UI
             _buildingNameText.text = building.ScriptableBuilding.Name;
 
             SetWorkersInfo(building);
+            SetStorageInfo(building);
 
             _buildingInfoFrame.SetActive(true);
 
@@ -51,6 +58,12 @@ namespace antoinegleisberg.HOA.UI
             {
                 _nCitizens = building.GetComponent<House>().ResidentsCount;
             }
+        }
+
+        public void DestroyBuildingAction()
+        {
+            BuildingsBuilder.Instance.DestroyBuilding(_building);
+            UIEvents.Instance.CloseObjectInfo();
         }
 
         public void SeeCitizensAction()
@@ -97,10 +110,7 @@ namespace antoinegleisberg.HOA.UI
 
         private void SetWorkersInfo(Building building)
         {
-            foreach (Transform child in _workerInfoContainer.transform)
-            {
-                Destroy(child.gameObject);
-            }
+            _workerInfoContainer.DestroyChildren();
 
             if (!building.IsWorkplace)
             {
@@ -109,8 +119,24 @@ namespace antoinegleisberg.HOA.UI
          
             foreach (Citizen citizen in building.GetComponent<Workplace>().Workers)
             {
-                WorkerInfo workerInfo = Instantiate(_workerInfoPrefab, _workerInfoContainer.transform);
+                WorkerInfo workerInfo = Instantiate(_workerInfoPrefab, _workerInfoContainer);
                 workerInfo.SetData(building.GetComponent<Workplace>(), citizen);
+            }
+        }
+
+        private void SetStorageInfo(Building building)
+        {
+            _storageInfoContainer.DestroyChildren();
+
+            if (!building.IsStorage)
+            {
+                return;
+            }
+
+            foreach (KeyValuePair<ScriptableItem, int> kvp in building.GetComponent<Storage>().Items())
+            {
+                StorageElement storageElement = Instantiate(_storageElementPrefab, _storageInfoContainer);
+                storageElement.SetData(kvp.Key, kvp.Value);
             }
         }
     }

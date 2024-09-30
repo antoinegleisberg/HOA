@@ -1,4 +1,5 @@
 using antoinegleisberg.Saving;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -148,8 +149,25 @@ namespace antoinegleisberg.HOA.Core
             {
                 BuildingSaveData buildingSaveData = buildingsDBSaveData.Buildings[i];
                 Vector3 position = new Vector3(buildingSaveData.WorldPosition[0], buildingSaveData.WorldPosition[1], buildingSaveData.WorldPosition[2]);
-                Building building = BuildingsBuilder.Instance.SpawnBuilding(buildingSaveData.BuildingName, position);
+                Building building;
+                if (buildingSaveData.IsConstructionSite)
+                {
+                    building = BuildingsBuilder.Instance.BuildBuildingBuildsite(buildingSaveData.BuildingName, position);
+                }
+                else
+                {
+                    building = BuildingsBuilder.Instance.SpawnBuilding(buildingSaveData.BuildingName, position);
+                }
                 building.GetComponent<GuidHolder>().UniqueId = buildingSaveData.Guid;
+
+                Dictionary<ScriptableItem, int> items = new Dictionary<ScriptableItem, int>();
+                foreach (string itemName in buildingSaveData.Items.Keys)
+                {
+                    ScriptableItem item = ScriptableItemsDB.GetItemByName(itemName);
+                    int amount = buildingSaveData.Items[itemName];
+                    items.Add(item, amount);
+                }
+                StartCoroutine(LoadBuildingStorageData(building, items));
             }
         }
 
@@ -159,16 +177,22 @@ namespace antoinegleisberg.HOA.Core
             buildingsDBSaveData.Buildings = new BuildingSaveData[_buildings.Count];
             for (int i = 0; i < _buildings.Count; i++)
             {
-                float[] position = new float[3] { _buildings[i].transform.position.x, _buildings[i].transform.position.y, _buildings[i].transform.position.z };
-                BuildingSaveData buildingSaveData = new BuildingSaveData()
-                {
-                    BuildingName = _buildings[i].ScriptableBuilding.Name,
-                    WorldPosition = position,
-                    Guid = _buildings[i].GetComponent<GuidHolder>().UniqueId
-                };
-                buildingsDBSaveData.Buildings[_buildings.IndexOf(_buildings[i])] = buildingSaveData;
+                buildingsDBSaveData.Buildings[i] = new BuildingSaveData(_buildings[i]);
             }
             return buildingsDBSaveData;
+        }
+
+        private IEnumerator LoadBuildingStorageData(Building building, Dictionary<ScriptableItem, int> items)
+        {
+            if (building.IsStorage)
+            {
+                yield return new WaitUntil(() => building.GetComponent<Storage>().InitializedStorage);
+                building.GetComponent<Storage>().AddItems(items);
+            }
+            else if (items.Count > 0)
+            {
+                Debug.LogError("Unable to find building storage");
+            }
         }
     }
 }

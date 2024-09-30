@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemCapacities:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
-    Second: 10
-  <MaxCapacity>k__BackingField: 0
+    Second: 200
+  _maxCapacity: 0

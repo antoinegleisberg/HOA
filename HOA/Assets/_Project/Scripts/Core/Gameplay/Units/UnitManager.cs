@@ -28,6 +28,30 @@ namespace antoinegleisberg.HOA.Core
             return citizen;
         }
 
+        public void LoadData(object data)
+        {
+            CitizensSaveData citizensSaveData = (CitizensSaveData)data;
+
+            foreach (CitizenSaveData citizenSaveData in citizensSaveData.Citizens)
+            {
+                StartCoroutine(SpawnCitizenCoroutine(citizenSaveData));
+            }
+        }
+
+        public object GetSaveData()
+        {
+            CitizensSaveData saveData = new CitizensSaveData()
+            {
+                Citizens = new List<CitizenSaveData>(_citizens.Count)
+            };
+            foreach (Citizen citizen in _citizens)
+            {
+                saveData.Citizens.Add(new CitizenSaveData(citizen));
+            }
+
+            return saveData;
+        }
+
         private IEnumerator SpawnCitizenCoroutine(CitizenSaveData citizenSaveData)
         {
             Workplace workplace = null;
@@ -44,9 +68,22 @@ namespace antoinegleisberg.HOA.Core
                 workplace = FindObjectsOfType<GuidHolder>().Where(t => t.UniqueId == citizenSaveData.WorkplaceGuid).First().GetComponent<Workplace>();
             }
 
-            Vector3 spawnPosition = house == null ? Vector3.zero : house.transform.position;
+            Vector3 spawnPosition = new Vector3(citizenSaveData.Position[0], citizenSaveData.Position[1], citizenSaveData.Position[2]);
 
-            Citizen citizen = Instantiate(_citizenPrefab, spawnPosition, Quaternion.identity, _citizensContainer);
+            Building currentBuilding = null;
+            if (citizenSaveData.IsInBuilding && !string.IsNullOrEmpty(citizenSaveData.CurrentBuildingGuid))
+            {
+                yield return new WaitUntil(() => FindObjectsOfType<GuidHolder>().Where(t => t.UniqueId == citizenSaveData.CurrentBuildingGuid).First() != null);
+                currentBuilding = FindObjectsOfType<GuidHolder>().Where(t => t.UniqueId == citizenSaveData.CurrentBuildingGuid).First().GetComponent<Building>();
+                Debug.Log("Setting current building");
+            }
+            else
+            {
+                // If the citizen is not in a building, snap its position to the closest node
+                spawnPosition = PathfindingGraph.Instance.GetClosestNodeCoordinates(spawnPosition);
+            }
+
+            Citizen citizen = SpawnCitizen(spawnPosition);
             if (house != null)
             {
                 citizen.ClaimHouse(house);
@@ -55,30 +92,16 @@ namespace antoinegleisberg.HOA.Core
             {
                 citizen.ClaimWorkplace(workplace);
             }
-        }
-
-        public void LoadData(object data)
-        {
-            CitizensSaveData citizensSaveData = (CitizensSaveData)data;
-
-            foreach (CitizenSaveData citizenSaveData in citizensSaveData.Citizens)
+            if (currentBuilding != null)
             {
-                StartCoroutine(SpawnCitizenCoroutine(citizenSaveData));
+                citizen.SetCurrentBuilding(currentBuilding);
             }
-        }
-
-        public object GetSaveData()
-        {
-            CitizensSaveData saveData = new CitizensSaveData()
+            if (!string.IsNullOrEmpty(citizenSaveData.CurrentRecipeName))
             {
-                Citizens = new List<CitizenSaveData>(),
-            };
-            foreach (Citizen citizen in _citizens)
-            {
-                saveData.Citizens.Add(new CitizenSaveData(citizen));
+                citizen.Workplace.GetComponent<ProductionSite>().SetRecipe(citizen, RecipesDB.GetRecipeByName(citizenSaveData.CurrentRecipeName));
             }
 
-            return saveData;
+            citizen.SetStateFromString(citizenSaveData.CurrentState);
         }
     }
 }

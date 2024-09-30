@@ -48,6 +48,12 @@ namespace antoinegleisberg.HOA.Core
 
             yield return StartCoroutine(_citizen.MoveToBuilding(storageWithAvailableItem.GetComponent<Building>()));
 
+            if (storageWithAvailableItem == null || storageToTakeTo == null)
+            {
+                // If the buildings were destroyed since we last checked, cancel transport
+                yield break;
+            }
+
             int actualAvailableAmount = storageWithAvailableItem.GetItemCount(neededItem);
             int amountToGet = Mathf.Min(neededAmount, actualAvailableAmount);
             storageWithAvailableItem.RemoveItems(neededItem, amountToGet);
@@ -68,6 +74,13 @@ namespace antoinegleisberg.HOA.Core
 
             storageToTakeFrom.RemoveItems(itemToStore, amount);
             yield return StartCoroutine(_citizen.MoveToBuilding(target.GetComponent<Building>()));
+
+            if (target == null || storageToTakeFrom == null)
+            {
+                // If one of the storages was destroyed, cancel the transfer
+                yield break;
+            }
+
             int addedAmount = target.AddAsManyAsPossible(itemToStore, amount);
             Debug.LogWarning("I believe this could fail if in the meantime, another worker produced items. Change this to add items to citizen inventory instead - also creates more realistic transport");
             storageToTakeFrom.AddItems(itemToStore, amount - addedAmount);
@@ -99,7 +112,6 @@ namespace antoinegleisberg.HOA.Core
 
             // Phase 2: take the storage with the largest amount of the searched item
             Storage bestAlternateStorage = storageInfo.Availability
-                .Where(kvp => (kvp.Key == neededItem))
                 .Select(kvp => kvp.Key)
                 .MaxBy(storage => storageInfo.Availability[storage]);
 
@@ -117,7 +129,7 @@ namespace antoinegleisberg.HOA.Core
 
             // Phase 1: consider only storages that have capacity for all items
             IEnumerable<Storage> potentialStorages = storageInfo.Availability
-                .Where(kvp => (kvp.Key == itemToStore && kvp.Value >= amount))
+                .Where(kvp => (kvp.Value >= amount))
                 .Select(kvp => kvp.Key);
 
             if (potentialStorages.Count() >= 1)
@@ -133,7 +145,6 @@ namespace antoinegleisberg.HOA.Core
 
             // Phase 2: take the storage with the largest amount of the searched item
             Storage bestAlternateStorage = storageInfo.Availability
-                .Where(kvp => (kvp.Key == itemToStore))
                 .Select(kvp => kvp.Key)
                 .MaxBy(storage => storageInfo.Availability[storage]);
 

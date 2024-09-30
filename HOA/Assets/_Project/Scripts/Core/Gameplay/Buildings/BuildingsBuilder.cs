@@ -1,4 +1,5 @@
 using antoinegleisberg.Types;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,23 +18,30 @@ namespace antoinegleisberg.HOA.Core
             Instance = this;
         }
 
-        public Building SpawnBuilding(string name, Vector3 worldPosition)
+        public Building SpawnBuilding(string buildingName, Vector3 worldPosition)
         {
-            ScriptableBuilding scriptableBuilding = ScriptableBuildingsDB.GetBuildingByName(name);
+            ScriptableBuilding scriptableBuilding = ScriptableBuildingsDB.GetBuildingByName(buildingName);
             if (scriptableBuilding != null)
             {
                 return SpawnBuilding(scriptableBuilding, worldPosition);
             }
             else
             {
-                Debug.LogError($"No building with name {name} found in the database.");
-                return null;
+                throw new Exception($"No building with name {buildingName} found in the database.");
             }
         }
 
-        public Building SpawnBuilding(ScriptableBuilding scriptableBuilding, Vector3 worldPosition)
+        public Building BuildBuildingBuildsite(string buildingName, Vector3 worldPosition)
         {
-            return InstantiateBuilding(scriptableBuilding.BuildingPrefab, scriptableBuilding.Size, worldPosition, scriptableBuilding.Name);
+            ScriptableBuilding scriptableBuilding = ScriptableBuildingsDB.GetBuildingByName(buildingName);
+            if (scriptableBuilding != null)
+            {
+                return BuildBuildingBuildsite(scriptableBuilding, worldPosition);
+            }
+            else
+            {
+                throw new Exception($"No building with name {buildingName} found in the database.");
+            }
         }
 
         public Building BuildBuildingBuildsite(ScriptableBuilding scriptableBuilding, Vector3 worldPosition)
@@ -45,14 +53,23 @@ namespace antoinegleisberg.HOA.Core
 
         public Building BuildBuilding(ConstructionSite buildsite)
         {
-            BuildingsDB.Instance.RemoveBuilding(buildsite.GetComponent<Building>());
-            
             Vector3 position = buildsite.transform.position;
             ScriptableBuilding scriptableBuilding = buildsite.GetComponent<Building>().ScriptableBuilding;
             
-            Destroy(buildsite.gameObject);
+            DestroyBuilding(buildsite.GetComponent<Building>());
 
             return SpawnBuilding(scriptableBuilding, position);
+        }
+
+        public Building SpawnBuilding(ScriptableBuilding scriptableBuilding, Vector3 worldPosition)
+        {
+            return InstantiateBuilding(scriptableBuilding.BuildingPrefab, scriptableBuilding.Size, worldPosition, scriptableBuilding.Name);
+        }
+
+        public void DestroyBuilding(Building building)
+        {
+            BuildingsDB.Instance.RemoveBuilding(building);
+            Destroy(building.gameObject);
         }
 
         private Building InstantiateBuilding(Building prefab, Vector2Int buildingSize, Vector3 worldPosition, string name)

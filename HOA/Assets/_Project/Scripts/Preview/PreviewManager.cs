@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 using antoinegleisberg.HOA.Input;
 using antoinegleisberg.HOA.Core;
 using System.Collections;
+using antoinegleisberg.Types;
 
 namespace antoinegleisberg.HOA.Preview
 {
@@ -78,7 +79,7 @@ namespace antoinegleisberg.HOA.Preview
             CurrentPositionIsValid = true;
             foreach (Vector2Int tilePos in occupiedTiles)
             {
-                if (GridManager.Instance.TileIsOccupied(tilePos))
+                if (GridManager.Instance.TileIsOccupied(tilePos) || !MapGenerator.Instance.TileAt(tilePos.ToVector3Int()).TileType.IsBuildable)
                 {
                     _redHighlightTilemap.SetTile(new Vector3Int(tilePos.x, tilePos.y), _tile);
                     CurrentPositionIsValid = false;

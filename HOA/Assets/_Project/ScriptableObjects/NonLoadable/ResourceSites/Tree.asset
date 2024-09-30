@@ -10,11 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f6f91809ca4a7b41aa3d0b7e5159b65, type: 3}
-  m_Name: GrownTree
+  m_Name: Tree
   m_EditorClassIdentifier: 
-  <AvailableItemsPerHarvest>k__BackingField:
+  _availableItemsPerHarvest:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
     Second: 5
-  <MaxHarvests>k__BackingField: 5
+  _harvestStageInfos:
+  - NumberOfHarvests: 2
+    Sprite: {fileID: 21300000, guid: 0f999ef20be57554896cb45cf18bc77a, type: 3}
+  - NumberOfHarvests: 3
+    Sprite: {fileID: 21300000, guid: a12f0987734e32844a6fabd14da7ac9a, type: 3}
+  - NumberOfHarvests: 1
+    Sprite: {fileID: 21300000, guid: 0bd211ebbd08ed74eba6693527eafdb0, type: 3}
+  <Replenishes>k__BackingField: 1
+  _growthStages:
+  - GrowthTime: 10
+    Sprite: {fileID: 21300000, guid: 9af6cf231d2801847aa0121a5d77821f, type: 3}
   <ResourceSiteType>k__BackingField: 0
   <HarvestTime>k__BackingField: 2

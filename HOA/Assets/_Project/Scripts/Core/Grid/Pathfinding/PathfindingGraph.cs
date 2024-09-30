@@ -88,6 +88,11 @@ namespace antoinegleisberg.HOA.Core
             }
         }
 
+        public Vector3 GetClosestNodeCoordinates(Vector3 worldPosition)
+        {
+            return NodeCoordinatesToWorld(WorldToClosestNodeCoordinates(worldPosition));
+        }
+
         private Node GetClosestExistingNode(Vector3 scaledInterpolatedCellPosition)
         {
             float radius = 1f;

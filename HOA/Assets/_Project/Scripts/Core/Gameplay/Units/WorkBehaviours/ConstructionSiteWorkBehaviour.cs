@@ -17,6 +17,9 @@ namespace antoinegleisberg.HOA.Core
 
             if (constructionSite.CanBuild())
             {
+                // Unassign the citizen from the construction site which is about to be constructed
+                // He will not work there anymore once it is built
+                _citizen.ClaimWorkplace(null);
                 constructionSite.FinishConstruction();
                 yield break;
             }

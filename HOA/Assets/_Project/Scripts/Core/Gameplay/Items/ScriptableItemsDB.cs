@@ -57,6 +57,11 @@ namespace antoinegleisberg.HOA.Core
 
             foreach (ScriptableItem item in items)
             {
+                if (_items.ContainsKey(item.Name))
+                {
+                    Debug.LogError("ItemsDB already contains an item with the name " + item.Name);
+                    continue;
+                }
                 _items.Add(item.Name, item);
             }
         }
