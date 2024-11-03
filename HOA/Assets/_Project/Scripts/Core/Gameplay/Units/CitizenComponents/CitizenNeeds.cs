@@ -6,7 +6,10 @@ namespace antoinegleisberg.HOA.Core
     public class CitizenNeeds : MonoBehaviour
     {
         // For all needs, a higher value describes a high satisfaction of that need
-        
+
+        // ToDo: NOTHING OF THIS IS IMPLEMENTED YET / WORKS SO FAR
+        // Change this to a need being a ScriptableObject, and the citizen class just stores a list of needs
+
         // Basic needs
         private int _hunger;
         public int Hunger { get { return _hunger; } set { _hunger = value; if (value < 0) _hunger = 0; } }

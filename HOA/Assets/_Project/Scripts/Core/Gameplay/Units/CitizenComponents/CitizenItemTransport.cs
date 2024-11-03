@@ -33,16 +33,26 @@ namespace antoinegleisberg.HOA.Core
             {
                 yield break;
             }
+            
+            ScriptableItem neededItem = null;
+            int neededAmount = 0;
+            Storage storageWithAvailableItem = null;
 
-            KeyValuePair<ScriptableItem, int> neededItemKvp = neededItems.First();
-            ScriptableItem neededItem = neededItemKvp.Key;
-            int neededAmount = neededItemKvp.Value;
+            foreach (KeyValuePair<ScriptableItem, int> kvp in neededItems)
+            {
+                neededItem = kvp.Key;
+                neededAmount = kvp.Value;
+                storageWithAvailableItem = GetOptimalStorageToGetItemsFromStorage(neededItem, neededAmount);
 
-            Storage storageWithAvailableItem = GetOptimalStorageToGetItemsFromStorage(neededItem, neededAmount);
+                if (storageWithAvailableItem != null)
+                {
+                    break;
+                }
+            }
 
             if (storageWithAvailableItem == null)
             {
-                Debug.Log("No items available !");
+                Debug.Log("None of the items are available anywhere !");
                 yield break;
             }
 
@@ -57,10 +67,23 @@ namespace antoinegleisberg.HOA.Core
             int actualAvailableAmount = storageWithAvailableItem.GetItemCount(neededItem);
             int amountToGet = Mathf.Min(neededAmount, actualAvailableAmount);
             storageWithAvailableItem.RemoveItems(neededItem, amountToGet);
-            Debug.LogWarning("This could not be possible in case other items were added in the meantime: add citizen inventory");
-            storageToTakeTo.AddItems(neededItem, amountToGet);
+            _citizen.PickUpItem(neededItem, amountToGet);
 
             yield return StartCoroutine(_citizen.MoveToBuilding(storageToTakeTo.GetComponent<Building>()));
+
+            if (storageToTakeTo == null)
+            {
+                // If the buildings were destroyed since we last checked, cancel transport
+                yield break;
+            }
+
+            int addedAmount = storageToTakeTo.AddAsManyAsPossible(neededItem, amountToGet);
+            _citizen.DepositItem(neededItem, addedAmount);
+            
+            if (_citizen.CarriesItems)
+            {
+                _citizen.SwitchState(_citizen.GetRidOfInventoryState);
+            }
         }
 
         private IEnumerator StoreItemsToMainStorage(ScriptableItem itemToStore, int amount, Storage storageToTakeFrom)
@@ -73,6 +96,8 @@ namespace antoinegleisberg.HOA.Core
             }
 
             storageToTakeFrom.RemoveItems(itemToStore, amount);
+            _citizen.PickUpItem(itemToStore, amount);
+            
             yield return StartCoroutine(_citizen.MoveToBuilding(target.GetComponent<Building>()));
 
             if (target == null || storageToTakeFrom == null)
@@ -82,8 +107,12 @@ namespace antoinegleisberg.HOA.Core
             }
 
             int addedAmount = target.AddAsManyAsPossible(itemToStore, amount);
-            Debug.LogWarning("I believe this could fail if in the meantime, another worker produced items. Change this to add items to citizen inventory instead - also creates more realistic transport");
-            storageToTakeFrom.AddItems(itemToStore, amount - addedAmount);
+            _citizen.DepositItem(itemToStore, addedAmount);
+
+            if (_citizen.CarriesItems)
+            {
+                _citizen.SwitchState(_citizen.GetRidOfInventoryState);
+            }
         }
     
         private Storage GetOptimalStorageToGetItemsFromStorage(ScriptableItem neededItem, int neededAmount)

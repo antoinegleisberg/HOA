@@ -83,6 +83,28 @@ namespace antoinegleisberg.HOA.Core
             return _carriedItems == null || _carriedItems.Count == 0;
         }
 
+        public void PickUpItem(ScriptableItem item, int amount)
+        {
+            if (!CanPickUpItems())
+            {
+                throw new InvalidOperationException("Cannot pick up items, already carrying items");
+            }
+
+            if (_carriedItems == null)
+            {
+                _carriedItems = new Dictionary<ScriptableItem, int>();
+            }
+
+            if (_carriedItems.ContainsKey(item))
+            {
+                _carriedItems[item] += amount;
+            }
+            else
+            {
+                _carriedItems.Add(item, amount);
+            }
+        }
+
         public void PickUpItems(IReadOnlyDictionary<ScriptableItem, int> items)
         {
             if (!CanPickUpItems())
