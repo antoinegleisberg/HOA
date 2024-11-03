@@ -22,6 +22,7 @@ namespace antoinegleisberg.HOA.UI
         [SerializeField] private Transform _storageInfoContainer;
         [SerializeField] private StorageElement _storageElementPrefab;
 
+        [SerializeField] private Button _destroyBuildingButton;
         [SerializeField] private Button _seeCitizensButton;
         [SerializeField] private Button _cancelSeeCitizensButton;
         [SerializeField] private Button _previousCitizenButton;
@@ -44,6 +45,7 @@ namespace antoinegleisberg.HOA.UI
 
             _buildingInfoFrame.SetActive(true);
 
+            _destroyBuildingButton.gameObject.SetActive(true);
             _seeCitizensButton.gameObject.SetActive(true);
             _cancelSeeCitizensButton.gameObject.SetActive(false);
             _previousCitizenButton.gameObject.SetActive(false);
@@ -70,6 +72,7 @@ namespace antoinegleisberg.HOA.UI
         {
             _buildingInfoFrame.SetActive(false);
 
+            _destroyBuildingButton.gameObject.SetActive(false);
             _seeCitizensButton.gameObject.SetActive(false);
             _cancelSeeCitizensButton.gameObject.SetActive(true);
             _previousCitizenButton.gameObject.SetActive(true);
@@ -81,6 +84,7 @@ namespace antoinegleisberg.HOA.UI
         {
             _buildingInfoFrame.SetActive(true);
 
+            _destroyBuildingButton.gameObject.SetActive(true);
             _seeCitizensButton.gameObject.SetActive(true);
             _cancelSeeCitizensButton.gameObject.SetActive(false);
             _previousCitizenButton.gameObject.SetActive(false);

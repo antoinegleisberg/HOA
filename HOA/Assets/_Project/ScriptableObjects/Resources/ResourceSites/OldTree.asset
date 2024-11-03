@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f6f91809ca4a7b41aa3d0b7e5159b65, type: 3}
+  m_Name: OldTree
+  m_EditorClassIdentifier: 
+  _availableItemsPerHarvest:
+  - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
+    Second: 5
+  _harvestStageInfos:
+  - NumberOfHarvests: 2
+    Sprite: {fileID: 21300000, guid: d9a460cd4ba0a3c419f20a9b719d81a8, type: 3}
+  - NumberOfHarvests: 3
+    Sprite: {fileID: 21300000, guid: 13e7f419dfa7e9b47815c76b71442349, type: 3}
+  - NumberOfHarvests: 1
+    Sprite: {fileID: 21300000, guid: 71fb3186ef308d74db9d30c027a692fc, type: 3}
+  <Replenishes>k__BackingField: 1
+  <SustainabilityCategory>k__BackingField: 1
+  _growthStages:
+  - GrowthTime: 10
+    Sprite: {fileID: 21300000, guid: f98704791368ad948b2b2e4d6e1a5510, type: 3}
+  - GrowthTime: 10
+    Sprite: {fileID: 21300000, guid: 620a41becda9a3b48af7ed0692f55afe, type: 3}
+  - GrowthTime: 10
+    Sprite: {fileID: 21300000, guid: 18e4712dc82e6864ba70bdd2b8fc56a5, type: 3}
+  - GrowthTime: 10
+    Sprite: {fileID: 21300000, guid: 14f8c5f4329aab14aad692ea20474ad5, type: 3}
+  - GrowthTime: 10
+    Sprite: {fileID: 21300000, guid: d9a460cd4ba0a3c419f20a9b719d81a8, type: 3}
+  <ResourceSiteType>k__BackingField: 0
+  <HarvestTime>k__BackingField: 2

@@ -93,4 +93,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7018a58508cd94c4b8323fe194d31cfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScriptableResourceSite: {fileID: 11400000, guid: f19cd52201f46994c881bd73129065f5, type: 2}
+  <ScriptableResourceSite>k__BackingField: {fileID: 11400000, guid: f19cd52201f46994c881bd73129065f5, type: 2}
+  <SpriteRenderer>k__BackingField: {fileID: 0}

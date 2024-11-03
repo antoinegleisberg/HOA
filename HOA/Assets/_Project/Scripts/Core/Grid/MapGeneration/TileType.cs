@@ -11,6 +11,8 @@ namespace antoinegleisberg.HOA.Core
 
         [field: SerializeField] public bool IsBuildable { get; private set; }
 
+        [field: SerializeField] public bool CanSpawnResourceSite { get; private set; }
+
         public static bool operator ==(TileType a, TileType b) => a.Name == b.Name;
         public static bool operator !=(TileType a, TileType b) => a.Name != b.Name;
         public override bool Equals(object obj) => obj is TileType data && data.Name == Name;

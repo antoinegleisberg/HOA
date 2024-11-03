@@ -62,6 +62,11 @@ namespace antoinegleisberg.HOA.Preview
             }
         }
         
+        private bool CanBuildOnTile(Vector2Int tilePos)
+        {
+            return !GridManager.Instance.TileIsOccupied(tilePos) && MapManager.Instance.GetTileAt(tilePos.ToVector3Int()).TileType.IsBuildable;
+        }
+
         private void UpdatePreview()
         {
             Vector2 mousePos = InputManager.Instance.MouseScreenPosition;
@@ -79,7 +84,7 @@ namespace antoinegleisberg.HOA.Preview
             CurrentPositionIsValid = true;
             foreach (Vector2Int tilePos in occupiedTiles)
             {
-                if (GridManager.Instance.TileIsOccupied(tilePos) || !MapGenerator.Instance.TileAt(tilePos.ToVector3Int()).TileType.IsBuildable)
+                if (!CanBuildOnTile(tilePos))
                 {
                     _redHighlightTilemap.SetTile(new Vector3Int(tilePos.x, tilePos.y), _tile);
                     CurrentPositionIsValid = false;

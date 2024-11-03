@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace antoinegleisberg.HOA.Core
@@ -49,7 +48,8 @@ namespace antoinegleisberg.HOA.Core
 
         public bool TileIsOccupied(Vector2Int gridPos)
         {
-            return BuildingsDB.Instance.TileIsOccupied(gridPos);
+            Vector3Int position = new Vector3Int(gridPos.x, gridPos.y, 0);
+            return BuildingsDB.Instance.TileIsOccupied(gridPos) || MapManager.Instance.GetResourceSiteAt(position) != null;
         }
 
         public Vector3 GetRandomWalkablePosition(Vector3 origin, float maxRange)

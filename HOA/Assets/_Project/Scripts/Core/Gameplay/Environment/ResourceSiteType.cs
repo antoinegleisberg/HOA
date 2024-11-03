@@ -6,6 +6,7 @@ namespace antoinegleisberg.HOA.Core
         Tree,
         Rock,
         Wild,
-        Water
+        Water,
+        Berry
     }
 }

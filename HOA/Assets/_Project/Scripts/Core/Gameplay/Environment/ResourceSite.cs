@@ -14,12 +14,19 @@ namespace antoinegleisberg.HOA.Core
         private int _remainingHarvestsAtCurrentStage;
         private int _currentStageIndex;
 
-        public bool IsDepleted => _remainingHarvestsAtCurrentStage <= 0;
+        public bool IsDepleted => ScriptableResourceSite.SustainabilityCategory != ResourceSiteSustainabilityCategory.Infinite && _remainingHarvestsAtCurrentStage <= 0;
 
-        private void Awake()
+        private IEnumerator Start()
         {
             _currentStageIndex = 0;
+            yield return new WaitUntil(() => ScriptableResourceSite != null);
             _remainingHarvestsAtCurrentStage = ScriptableResourceSite.HarvestStageInfos[_currentStageIndex].NumberOfHarvests;
+            SpriteRenderer.sprite = ScriptableResourceSite.HarvestStageInfos[_currentStageIndex].Sprite;
+        }
+
+        public void Initialize(ScriptableResourceSite scriptableResourceSite)
+        {
+            ScriptableResourceSite = scriptableResourceSite;
         }
 
         public IReadOnlyDictionary<ScriptableItem, int> Harvest()
@@ -29,10 +36,13 @@ namespace antoinegleisberg.HOA.Core
                 throw new Exception("Resource site is depleted");
             }
 
-            _remainingHarvestsAtCurrentStage--;
-            if (_remainingHarvestsAtCurrentStage <= 0)
+            if (ScriptableResourceSite.SustainabilityCategory != ResourceSiteSustainabilityCategory.Infinite)
             {
-                UpdateHarvestInfo(_currentStageIndex + 1);
+                _remainingHarvestsAtCurrentStage--;
+                if (_remainingHarvestsAtCurrentStage <= 0)
+                {
+                    UpdateHarvestInfo(_currentStageIndex + 1);
+                }
             }
 
             return ScriptableResourceSite.AvailableItemsPerHarvest;
@@ -55,7 +65,7 @@ namespace antoinegleisberg.HOA.Core
 
         private IEnumerator Replenish()
         {
-            if (!ScriptableResourceSite.Replenishes)
+            if (ScriptableResourceSite.SustainabilityCategory == ResourceSiteSustainabilityCategory.Depletable)
             {
                 Destroy(gameObject);
                 yield break;
