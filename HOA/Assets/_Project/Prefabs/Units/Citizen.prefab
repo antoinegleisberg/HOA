@@ -101,13 +101,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61800e293a7b7cb49bef1b4f0b70d86a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <WanderingDistance>k__BackingField: 2
-  <TimeAtWork>k__BackingField: 20
-  <TimeAtHome>k__BackingField: 5
-  <TimeWandering>k__BackingField: 5
+  <StaticData>k__BackingField: {fileID: 11400000, guid: b27c99bccc905dd4ba6308bf58cfe0bc, type: 2}
   <Home>k__BackingField: {fileID: 0}
   <Workplace>k__BackingField: {fileID: 0}
-  <ProbabilityToSpawnBaby>k__BackingField: 0
 --- !u!114 &5833974943175854499
 MonoBehaviour:
   m_ObjectHideFlags: 0

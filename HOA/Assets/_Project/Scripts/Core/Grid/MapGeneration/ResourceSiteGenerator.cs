@@ -14,20 +14,21 @@ namespace antoinegleisberg.HOA.Core
         [SerializeField] private Transform _resourceSitesContainer;
         [SerializeField] private ResourceSite _resourceSitePrefab;
 
-        private Dictionary<Vector3Int, ResourceSite> _generatedResourceSites;
+        private Dictionary<Vector3Int, ResourceSite> _resourceSites;
+        public IReadOnlyDictionary<Vector3Int, ResourceSite> ResourceSites => _resourceSites;
 
         [SerializeField] private float _resourceSiteFreeRange = 5f;
 
         private void Awake()
         {
-            _generatedResourceSites = new Dictionary<Vector3Int, ResourceSite>();
+            _resourceSites = new Dictionary<Vector3Int, ResourceSite>();
         }
 
         public ResourceSite GetResourceSiteAt(Vector3Int position)
         {
-            if (_generatedResourceSites.ContainsKey(position))
+            if (_resourceSites.ContainsKey(position))
             {
-                return _generatedResourceSites[position];
+                return _resourceSites[position];
             }
             return null;
         }
@@ -54,7 +55,7 @@ namespace antoinegleisberg.HOA.Core
             }
             ResourceSite resourceSite = Instantiate(_resourceSitePrefab, worldPosition, Quaternion.identity, _resourceSitesContainer);
             resourceSite.Initialize(scriptableResourceSite);
-            _generatedResourceSites[position] = resourceSite;
+            _resourceSites[position] = resourceSite;
         }
 
         private ScriptableResourceSite SampleRandomResourceSite()

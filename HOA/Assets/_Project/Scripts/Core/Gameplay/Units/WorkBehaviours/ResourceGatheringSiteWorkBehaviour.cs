@@ -17,7 +17,7 @@ namespace antoinegleisberg.HOA.Core
             ResourceSite resourceSite = GetClosestResourceSite();
             if (resourceSite == null)
             {
-                Debug.LogWarning("Didn't find a resource site to harvest !");
+                Debug.Log("Didn't find a resource site to harvest !");
                 yield return new WaitForSeconds(1.0f);
                 yield break;
             }
@@ -43,6 +43,7 @@ namespace antoinegleisberg.HOA.Core
             yield return _citizen.StartCoroutine(_citizen.MoveToPosition(resourceSite.transform.position));
 
             IReadOnlyDictionary<ScriptableItem, int> harvestedResources = resourceSite.Harvest();
+            _citizen.PickUpItems(harvestedResources);
             yield return new WaitForSeconds(resourceSite.ScriptableResourceSite.HarvestTime);
             
             foreach (ScriptableItem sItem in harvestedResources.Keys)
@@ -51,16 +52,24 @@ namespace antoinegleisberg.HOA.Core
             }
 
             yield return _citizen.StartCoroutine(_citizen.MoveToBuilding(_citizen.Workplace.GetComponent<Building>()));
-
-            Debug.LogWarning("I believe this could fail if in the meantime, another worker produced items. Change this to add items to citizen inventory instead - also creates more realistic transport");
-            _workplaceStorage.AddItems(harvestedResources);
+            
+            IReadOnlyDictionary<ScriptableItem, int> addedItems = _workplaceStorage.AddAsManyAsPossible(_citizen.CarriedItems);
+            _citizen.DepositItems(addedItems);
+            
+            if (_citizen.CarriesItems)
+            {
+                _citizen.SwitchState(_citizen.GetRidOfInventoryState);
+            }
         }
 
         private ResourceSite GetClosestResourceSite()
         {
             ResourceSiteType searchedType = _citizen.Workplace.GetComponent<ResourceGatheringSite>().ResourceSiteType;
-            Debug.LogWarning("ToDo: implement a better way to reference the list of all existing resource sites -> map generator ?");
-            List<ResourceSite> viableResourceSites = Object.FindObjectsOfType<ResourceSite>()
+            
+            // Maybe this can be done more efficiently in case the map is huge with lots of resource sites
+            // => use a quadtree instead ??
+            List<ResourceSite> viableResourceSites = 
+                MapManager.Instance.ResourceSites.Select((KeyValuePair<Vector3Int, ResourceSite> kvp) => kvp.Value)
                 .Where((ResourceSite rs) => rs.ScriptableResourceSite.ResourceSiteType == searchedType && !rs.IsDepleted)
                 .ToList();
             if (viableResourceSites.Count == 0)

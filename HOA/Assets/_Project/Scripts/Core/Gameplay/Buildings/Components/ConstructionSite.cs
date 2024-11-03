@@ -16,13 +16,13 @@ namespace antoinegleisberg.HOA.Core
             return MissingItems().Count == 0;
         }
 
-        public void FinishConstruction()
+        public Building FinishConstruction()
         {
             if (!CanBuild())
             {
                 throw new Exception("Missing building materials !");
             }
-            BuildingsBuilder.Instance.BuildBuilding(this);
+            return BuildingsBuilder.Instance.BuildBuilding(this);
         }
 
         public Dictionary<ScriptableItem, int> MissingItems()

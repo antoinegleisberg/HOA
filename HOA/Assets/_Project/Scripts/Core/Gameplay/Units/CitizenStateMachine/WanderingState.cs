@@ -24,10 +24,12 @@ namespace antoinegleisberg.HOA.Core
         private IEnumerator Wander(Citizen citizen)
         {
             float startTime = Time.time;
-
-            while (Time.time - startTime < citizen.TimeWandering)
+            float timeWandering = citizen.StaticData.TimeWandering;
+            
+            while (Time.time - startTime < timeWandering)
             {
-                Vector3 targetPosition = GridManager.Instance.GetRandomWalkablePosition(citizen.transform.position, citizen.WanderingDistance);
+                float wanderingDistance = citizen.StaticData.WanderingDistance;
+                Vector3 targetPosition = GridManager.Instance.GetRandomWalkablePosition(citizen.transform.position, wanderingDistance);
                 yield return citizen.StartCoroutine(citizen.MoveToPosition(targetPosition));
 
                 yield return new WaitForSeconds(1f);

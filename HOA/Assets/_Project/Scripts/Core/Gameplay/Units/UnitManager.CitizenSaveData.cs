@@ -1,6 +1,5 @@
 ﻿using antoinegleisberg.Saving;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace antoinegleisberg.HOA.Core
 {

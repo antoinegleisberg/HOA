@@ -20,7 +20,13 @@ namespace antoinegleisberg.HOA.Core
                 // Unassign the citizen from the construction site which is about to be constructed
                 // He will not work there anymore once it is built
                 _citizen.ClaimWorkplace(null);
-                constructionSite.FinishConstruction();
+                Building newBuilding = constructionSite.FinishConstruction();
+                if (newBuilding.IsWorkplace)
+                {
+                    // Change to do this only if we define that a citizen should take a job at the building he
+                    // just built => add a setting for that
+                    _citizen.ClaimWorkplace(newBuilding.GetComponent<Workplace>());
+                }
                 yield break;
             }
 

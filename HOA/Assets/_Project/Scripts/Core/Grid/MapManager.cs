@@ -23,6 +23,8 @@ namespace antoinegleisberg.HOA.Core
         // Controls the initial generation range
         [SerializeField] private int _generationRange = 50;
 
+        public IReadOnlyDictionary<Vector3Int, ResourceSite> ResourceSites => _resourceSiteGenerator.ResourceSites;
+
         private void Awake()
         {
             Instance = this;

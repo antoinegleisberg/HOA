@@ -10,12 +10,10 @@ namespace antoinegleisberg.HOA.Core
     [RequireComponent(typeof(Citizen))]
     public class CitizenMovement : MonoBehaviour
     {
-        [SerializeField] private float _speed;
+        private float _speed => GetComponent<Citizen>().StaticData.Speed;
 
         public bool IsInBuilding { get; set; } = false;
         public Building CurrentBuilding { get; set; }
-
-        // public bool IsInBuilding
 
         // ToDo: Move fading to another class handling citizen UI
         private SpriteRenderer _spriteRenderer => GetComponent<SpriteRenderer>();

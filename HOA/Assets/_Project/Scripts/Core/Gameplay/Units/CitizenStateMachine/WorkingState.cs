@@ -34,7 +34,8 @@ namespace antoinegleisberg.HOA.Core
             yield return _citizen.MoveToBuilding(_citizen.Workplace.GetComponent<Building>());
 
             float startTime = Time.time;
-            while (Time.time - startTime < _citizen.TimeAtWork)
+            float timeAtWork = _citizen.StaticData.TimeAtWork;
+            while (Time.time - startTime < timeAtWork)
             {
                 yield return _citizen.StartCoroutine(_workBehaviour.ExecuteWork());
             }
@@ -46,6 +47,7 @@ namespace antoinegleisberg.HOA.Core
         {
             Building workplaceBuilding = _citizen.Workplace.GetComponent<Building>();
             
+            // Implement a visitor pattern here !!??
             if (workplaceBuilding.IsProductionSite)
             {
                 return new ProductionSiteWorkBehaviour(_citizen);

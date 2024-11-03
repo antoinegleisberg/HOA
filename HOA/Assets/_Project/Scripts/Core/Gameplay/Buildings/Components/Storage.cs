@@ -146,6 +146,23 @@ namespace antoinegleisberg.HOA.Core
             return addedQuantity;
         }
 
+        /// <summary>
+        /// Adds as many items as possible to the storage, up to the given quantity or until storage is full.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public IReadOnlyDictionary<ScriptableItem, int> AddAsManyAsPossible(IReadOnlyDictionary<ScriptableItem, int> items)
+        {
+            Dictionary<ScriptableItem, int> addedItems = new Dictionary<ScriptableItem, int>();
+
+            foreach (KeyValuePair<ScriptableItem, int> item in items)
+            {
+                addedItems.Add(item.Key, AddAsManyAsPossible(item.Key, item.Value));
+            }
+
+            return addedItems;
+        }
+
         public int GetCapacityForItem(ScriptableItem item, int maxAmount)
         {
             int minAmount = 0;

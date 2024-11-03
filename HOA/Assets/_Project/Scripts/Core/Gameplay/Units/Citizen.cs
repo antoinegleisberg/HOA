@@ -9,24 +9,23 @@ namespace antoinegleisberg.HOA.Core
     [RequireComponent(typeof(CitizenMovement), typeof(CitizenItemTransport), typeof(CitizenNeeds))]
     public class Citizen : MonoBehaviour
     {
-        [field: SerializeField] public float WanderingDistance { get; private set; }
+        [field: SerializeField] public ScriptableStaticCitizenData StaticData { get; private set; }
+        
+        private int _daysSinceLastBaby = 0;
 
-        [field: SerializeField] public float TimeAtWork { get; private set; }
-        [field: SerializeField] public float TimeAtHome { get; private set; }
-        [field: SerializeField] public float TimeWandering { get; private set; }
+        private Dictionary<ScriptableItem, int> _carriedItems;
+        public IReadOnlyDictionary<ScriptableItem, int> CarriedItems => _carriedItems;
 
         [field: SerializeField] public House Home { get; private set; }
         [field: SerializeField] public Workplace Workplace { get; private set; }
 
-        [field: SerializeField] public float ProbabilityToSpawnBaby { get; private set; } = 0.1f;
 
         private StateMachine<Citizen> _stateMachine;
         public HomeState HomeState { get; private set; }
         public SearchWorksiteState SearchWorksiteState { get; private set; }
         public WorkingState WorkingState { get; private set; }
-        public StoringState StoringState { get; private set; }
-        public TakingFromStorageState TakingFromStorageState { get; private set; }
         public WanderingState WanderingState { get; private set; }
+        public GetRidOfInventoryState GetRidOfInventoryState { get; private set; }
 
         private CitizenMovement _citizenMovement => GetComponent<CitizenMovement>();
         private CitizenItemTransport _citizenItemTransport => GetComponent<CitizenItemTransport>();
@@ -36,19 +35,18 @@ namespace antoinegleisberg.HOA.Core
 
         public bool IsInBuilding => _citizenMovement.IsInBuilding;
         public Building CurrentBuilding => _citizenMovement.CurrentBuilding;
-
         public bool IsThirsty => _citizenNeeds.Thirst < 20;
         public bool IsHungry => _citizenNeeds.Hunger < 20;
-
+        public bool CanSpawnBaby => _daysSinceLastBaby >= StaticData.CooldownInDaysBeforeNextBaby;
+        public bool CarriesItems => _carriedItems != null && _carriedItems.Count > 0;
 
         private void Awake()
         {
             HomeState = new HomeState();
             SearchWorksiteState = new SearchWorksiteState();
-            StoringState = new StoringState();
-            TakingFromStorageState = new TakingFromStorageState();
             WanderingState = new WanderingState();
             WorkingState = new WorkingState();
+            GetRidOfInventoryState = new GetRidOfInventoryState();
 
             _stateMachine = new StateMachine<Citizen>(this, HomeState);
 
@@ -56,10 +54,9 @@ namespace antoinegleisberg.HOA.Core
             {
                 HomeState,
                 SearchWorksiteState,
-                StoringState,
-                TakingFromStorageState,
                 WanderingState,
-                WorkingState
+                WorkingState,
+                GetRidOfInventoryState
             };
         }
 
@@ -67,12 +64,77 @@ namespace antoinegleisberg.HOA.Core
         {
             TimeManager.Instance.OnDayChanged += () => _citizenNeeds.Thirst -= 5;
             TimeManager.Instance.OnDayChanged += () => _citizenNeeds.Hunger -= 5;
+            TimeManager.Instance.OnDayChanged += () => _daysSinceLastBaby = Mathf.Min(_daysSinceLastBaby + 1, StaticData.CooldownInDaysBeforeNextBaby);
         }
 
         private void OnDestroy()
         {
             TimeManager.Instance.OnDayChanged -= () => _citizenNeeds.Thirst -= 5;
             TimeManager.Instance.OnDayChanged -= () => _citizenNeeds.Hunger -= 5;
+            TimeManager.Instance.OnDayChanged -= () => _daysSinceLastBaby = Mathf.Min(_daysSinceLastBaby + 1, StaticData.CooldownInDaysBeforeNextBaby);
+        }
+        public void StartCooldownForNextBaby()
+        {
+            _daysSinceLastBaby = 0;
+        }
+
+        public bool CanPickUpItems()
+        {
+            return _carriedItems == null || _carriedItems.Count == 0;
+        }
+
+        public void PickUpItems(IReadOnlyDictionary<ScriptableItem, int> items)
+        {
+            if (!CanPickUpItems())
+            {
+                throw new InvalidOperationException("Cannot pick up items, already carrying items");
+            }
+
+            if (_carriedItems == null)
+            {
+                _carriedItems = new Dictionary<ScriptableItem, int>();
+            }
+
+            foreach (KeyValuePair<ScriptableItem, int> item in items)
+            {
+                if (_carriedItems.ContainsKey(item.Key))
+                {
+                    _carriedItems[item.Key] += item.Value;
+                }
+                else
+                {
+                    _carriedItems.Add(item.Key, item.Value);
+                }
+            }
+        }
+
+        public void DepositItem(ScriptableItem item, int amount)
+        {
+            if (_carriedItems.ContainsKey(item))
+            {
+                _carriedItems[item] -= amount;
+                if (_carriedItems[item] == 0)
+                {
+                    _carriedItems.Remove(item);
+                }
+            }
+        }
+
+        public void DepositItems(IReadOnlyDictionary<ScriptableItem, int> items)
+        {
+            foreach (KeyValuePair<ScriptableItem, int> item in items)
+            {
+                _carriedItems[item.Key] -= item.Value;
+                if (_carriedItems[item.Key] == 0)
+                {
+                    _carriedItems.Remove(item.Key);
+                }
+            }
+        }
+
+        public void DropAllItems()
+        {
+            _carriedItems.Clear();
         }
 
         public void SetCurrentBuilding(Building building)
@@ -127,7 +189,19 @@ namespace antoinegleisberg.HOA.Core
             _citizenMovement.StopAllCoroutines();
             _citizenItemTransport.StopAllCoroutines();
             Debug.Log("Switching to state " + newState.GetType().ToString());
-            _stateMachine.SwitchState(newState);
+            if (newState == GetRidOfInventoryState)
+            {
+                _stateMachine.PushState(newState);
+            }
+            else if (_stateMachine.GetCurrentState() == GetRidOfInventoryState)
+            {
+                Debug.Log("Ignoring new state and switching back to previous state (before GetRidOfInventory)");
+                _stateMachine.PopState();
+            }
+            else
+            {
+                _stateMachine.SwitchState(newState);
+            }
         }
 
         public string GetCurrentStateAsString()
