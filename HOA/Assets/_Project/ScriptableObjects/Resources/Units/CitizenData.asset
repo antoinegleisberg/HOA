@@ -18,3 +18,5 @@ MonoBehaviour:
   <TimeWandering>k__BackingField: 10
   <ProbabilityToSpawnBaby>k__BackingField: 0.1
   <CooldownInDaysBeforeNextBaby>k__BackingField: 5
+  <Speed>k__BackingField: 0.5
+  <InventorySize>k__BackingField: 200
