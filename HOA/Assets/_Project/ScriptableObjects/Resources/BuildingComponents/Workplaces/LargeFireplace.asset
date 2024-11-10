@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08c2e2ef16b826145ba93d8feb0ad00b, type: 3}
+  m_Script: {fileID: 11500000, guid: 9256afb81fcbeaa4aa48d00ac2fd35d5, type: 3}
   m_Name: LargeFireplace
   m_EditorClassIdentifier: 
-  _availableRecipes:
-  - {fileID: 11400000, guid: 0a5fc33d76636d64396e75b8889217c3, type: 2}
+  <MaxWorkers>k__BackingField: 5

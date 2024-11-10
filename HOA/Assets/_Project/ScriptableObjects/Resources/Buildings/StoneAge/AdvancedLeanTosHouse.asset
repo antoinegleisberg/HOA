@@ -16,7 +16,7 @@ MonoBehaviour:
   _description: A shelter from the paleolithic era
   <Sprite>k__BackingField: {fileID: 21300000, guid: 3f1e5a80aaa874e4788dc53af4d00b6c, type: 3}
   <Size>k__BackingField: {x: 2, y: 2}
-  <BuildingPrefab>k__BackingField: {fileID: 0}
+  <BuildingPrefab>k__BackingField: {fileID: 5269039170906655236, guid: b7a102f5997b0fe4f901fc949b6e992f, type: 3}
   <BuildingMaterials>k__BackingField:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
     Second: 20

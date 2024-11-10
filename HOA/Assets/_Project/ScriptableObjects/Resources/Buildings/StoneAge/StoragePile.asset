@@ -16,5 +16,5 @@ MonoBehaviour:
   _description: The storage pile stores the community's resources
   <Sprite>k__BackingField: {fileID: 21300000, guid: f4586471d73e9bc4fa5627c9a5c133f7, type: 3}
   <Size>k__BackingField: {x: 1, y: 1}
-  <BuildingPrefab>k__BackingField: {fileID: 0}
+  <BuildingPrefab>k__BackingField: {fileID: 5439445000531911759, guid: f9c7fe7409338d9418f397706052bc88, type: 3}
   <BuildingMaterials>k__BackingField: []

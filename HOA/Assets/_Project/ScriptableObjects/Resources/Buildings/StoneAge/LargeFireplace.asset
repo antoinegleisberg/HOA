@@ -17,7 +17,7 @@ MonoBehaviour:
     age
   <Sprite>k__BackingField: {fileID: 21300000, guid: d7e5f152809694f40be2736a7c1c4892, type: 3}
   <Size>k__BackingField: {x: 4, y: 4}
-  <BuildingPrefab>k__BackingField: {fileID: 0}
+  <BuildingPrefab>k__BackingField: {fileID: 3377915655352993059, guid: 63ea70ee4608ff447ae77d5a6c3e020d, type: 3}
   <BuildingMaterials>k__BackingField:
   - First: {fileID: 11400000, guid: be2e945de729b4a4fb1c6fbbdb8adc94, type: 2}
     Second: 15
