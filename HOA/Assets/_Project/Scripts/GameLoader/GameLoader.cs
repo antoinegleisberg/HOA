@@ -14,16 +14,13 @@ namespace antoinegleisberg.HOA.GameLoader
 
         [SerializeField] private SceneField _mainMenuScene;
         [SerializeField] private SceneField _gameplayScene;
-        private static readonly string GAMEPLAY_SCENE_NAME = "Gameplay";
-        private static readonly string MAIN_MENU_SCENE_NAME = "MainMenu";
-
         
         private void Start()
         {
             SceneManagementEvents.Instance.OnStartGame += LoadGame;
             SceneManagementEvents.Instance.OnSaveAndQuit += SaveAndQuitGame;
             
-            if (UnityEngine.SceneManagement.SceneManager.GetSceneByName(GAMEPLAY_SCENE_NAME).isLoaded)
+            if (UnityEngine.SceneManagement.SceneManager.GetSceneByName(_gameplayScene).isLoaded)
             {
                 // In the editor, we may open the gameplay scene without going through the main menu first
                 CurrentSaveName = _defaultSaveName;
@@ -32,7 +29,7 @@ namespace antoinegleisberg.HOA.GameLoader
                 return;
             }
 
-            SceneManager.Instance.LoadScene(MAIN_MENU_SCENE_NAME);
+            SceneManager.Instance.LoadScene(_mainMenuScene);
         }
 
         private void OnDestroy()
@@ -45,16 +42,16 @@ namespace antoinegleisberg.HOA.GameLoader
         {
             CurrentSaveName = saveName;
             string gameDataPath = SaveManager.GetRelativeGameDataPath(CurrentSaveName);
-            SceneManager.Instance.UnloadScenes(MAIN_MENU_SCENE_NAME);
-            SceneManager.Instance.LoadScene(GAMEPLAY_SCENE_NAME, () => SaveSystem.LoadSave(gameDataPath));
+            SceneManager.Instance.UnloadScenes(_mainMenuScene);
+            SceneManager.Instance.LoadScene(_gameplayScene, () => SaveSystem.LoadSave(gameDataPath));
         }
 
         private void SaveAndQuitGame()
         {
             string gameDataPath = SaveManager.GetRelativeGameDataPath(CurrentSaveName);
             SaveSystem.SaveGame(gameDataPath);
-            SceneManager.Instance.UnloadScenes(GAMEPLAY_SCENE_NAME);
-            SceneManager.Instance.LoadScene(MAIN_MENU_SCENE_NAME);
+            SceneManager.Instance.UnloadScenes(_gameplayScene);
+            SceneManager.Instance.LoadScene(_mainMenuScene);
         }
     }
 }

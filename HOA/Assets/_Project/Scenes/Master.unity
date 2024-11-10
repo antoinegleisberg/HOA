@@ -169,6 +169,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <CurrentSaveName>k__BackingField: 
   _defaultSaveName: procgen test
+  _mainMenuScene:
+    _sceneAsset: {fileID: 102900000, guid: 1a88637601636cf4ea4641005c6b68c3, type: 3}
+    _sceneName: MainMenu
+  _gameplayScene:
+    _sceneAsset: {fileID: 102900000, guid: b6e661bb5298caa479f5518bef462d4d, type: 3}
+    _sceneName: Gameplay
 --- !u!1 &1059192599
 GameObject:
   m_ObjectHideFlags: 0
