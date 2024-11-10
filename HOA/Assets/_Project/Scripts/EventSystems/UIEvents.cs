@@ -14,6 +14,7 @@ namespace antoinegleisberg.HOA.EventSystem
         public event Action<string> OnBuildBuildingSelected;
         public event Action OnCancelPreview;
         public event Action<bool> OnHoverUi;
+        public event Action OnOpenObjectInfo;
         public event Action OnCloseObjectInfo;
 
         private void Awake()
@@ -54,6 +55,11 @@ namespace antoinegleisberg.HOA.EventSystem
         public void HoverUi(bool isHovered)
         {
             OnHoverUi?.Invoke(isHovered);
+        }
+
+        public void OpenObjectInfo()
+        {
+            OnOpenObjectInfo?.Invoke();
         }
 
         public void CloseObjectInfo()

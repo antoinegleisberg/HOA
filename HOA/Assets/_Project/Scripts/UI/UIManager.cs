@@ -1,6 +1,7 @@
 using UnityEngine;
 using antoinegleisberg.UI;
 using antoinegleisberg.HOA.EventSystem;
+using antoinegleisberg.HOA.Input;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,9 +45,10 @@ namespace antoinegleisberg.HOA.UI
 
             UIEvents.Instance.OnBuildMenuOpen += () => SetActiveCanvas(_buildMenu);
             UIEvents.Instance.OnBuildMenuClose += () => SetActiveCanvas(_gameplayUI);
-            UIEvents.Instance.OnSettingsMenuOpen += () => SetActiveCanvas(_settingsCanvas);
-            UIEvents.Instance.OnSettingsMenuClose += () => SetActiveCanvas(_gameplayUI);
             UIEvents.Instance.OnCloseObjectInfo += () => SetActiveCanvas(_gameplayUI);
+
+            InputManager.Instance.OnCancel += OnCancel;
+            InputManager.Instance.OnMouseClick += OnMouseClick;
 
             foreach (Canvas canvas in _canvases)
             {
@@ -62,9 +64,10 @@ namespace antoinegleisberg.HOA.UI
 
             UIEvents.Instance.OnBuildMenuOpen -= () => SetActiveCanvas(_buildMenu);
             UIEvents.Instance.OnBuildMenuClose -= () => SetActiveCanvas(_gameplayUI);
-            UIEvents.Instance.OnSettingsMenuOpen -= () => SetActiveCanvas(_settingsCanvas);
-            UIEvents.Instance.OnSettingsMenuClose -= () => SetActiveCanvas(_gameplayUI);
             UIEvents.Instance.OnCloseObjectInfo -= () => SetActiveCanvas(_gameplayUI);
+
+            InputManager.Instance.OnCancel -= OnCancel;
+            InputManager.Instance.OnMouseClick -= OnMouseClick;
 
             foreach (Canvas canvas in _canvases)
             {
@@ -79,12 +82,39 @@ namespace antoinegleisberg.HOA.UI
             }
         }
 
-        public void OnCancel()
+        private void OnCancel()
         {
-            Debug.LogWarning("On cancel UI: not implemented");
+            if (_gameplayUI.enabled)
+            {
+                SetActiveCanvas(_settingsCanvas);
+                UIEvents.Instance.OpenSettingsMenu();
+            }
+            else if (_settingsCanvas.enabled)
+            {
+                SetActiveCanvas(_gameplayUI);
+                UIEvents.Instance.CloseSettingsMenu();
+            }
+            else
+            {
+                // Is this enough or do we need to raise events ?
+                // SetActiveCanvas(_gameplayUI);
+                Debug.Log("Cancel not implemented yet");
+            }
         }
         
-        public void OnColliderClicked(Collider2D collider)
+        private void OnMouseClick()
+        {
+            if (!(_gameplayUI.enabled || _objectInfoCanvas.enabled))
+            {
+                return;
+            }
+
+            Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.MouseScreenPosition);
+            RaycastHit2D raycastHit = Physics2D.GetRayIntersection(ray);
+            OnColliderClicked(raycastHit.collider);
+        }
+
+        private void OnColliderClicked(Collider2D collider)
         {
             if (UiIsHovered)
             {
@@ -99,6 +129,7 @@ namespace antoinegleisberg.HOA.UI
             {
                 SetActiveCanvas(_objectInfoCanvas);
                 _objectInfoManager.OnColliderClicked(collider);
+                UIEvents.Instance.OpenObjectInfo();
             }
         }
 

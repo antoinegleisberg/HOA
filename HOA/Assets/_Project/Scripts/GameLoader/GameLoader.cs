@@ -19,15 +19,28 @@ namespace antoinegleisberg.HOA.GameLoader
         {
             SceneManagementEvents.Instance.OnStartGame += LoadGame;
             SceneManagementEvents.Instance.OnSaveAndQuit += SaveAndQuitGame;
-            
-            if (UnityEngine.SceneManagement.SceneManager.GetSceneByName(_gameplayScene).isLoaded)
+
+#if UNITY_EDITOR
+
+            bool isGameplaySceneLoaded = UnityEngine.SceneManagement.SceneManager.GetSceneByName(_gameplayScene).isLoaded;
+            bool isMainMenuSceneLoaded = UnityEngine.SceneManagement.SceneManager.GetSceneByName(_mainMenuScene).isLoaded;
+            if (isGameplaySceneLoaded && isMainMenuSceneLoaded)
             {
-                // In the editor, we may open the gameplay scene without going through the main menu first
+                // If both are loaded for debugging purposes, unload gameplay scene
+                // So we go to the main menu
+                SceneManager.Instance.UnloadScenes(_gameplayScene);
+                return;
+            }
+            if (isGameplaySceneLoaded)
+            {
+                // If only the gameplay scene is loaded, we skip the main menu
+                // And immediately go to gameplay
                 CurrentSaveName = _defaultSaveName;
                 string gameDataPath = SaveManager.GetRelativeGameDataPath(CurrentSaveName);
                 SaveSystem.LoadSave(gameDataPath);
                 return;
             }
+#endif
 
             SceneManager.Instance.LoadScene(_mainMenuScene);
         }

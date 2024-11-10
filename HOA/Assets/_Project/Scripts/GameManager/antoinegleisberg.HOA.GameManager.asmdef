@@ -2,11 +2,7 @@
     "name": "antoinegleisberg.HOA.GameManager",
     "rootNamespace": "",
     "references": [
-        "GUID:4088c12f75dd5474ea03321480da311d",
-        "GUID:051591775543c2e40b97279308927024",
-        "GUID:024f02ef149c50443b0b98cea9b4c894",
-        "GUID:e94c7155cde17c541899409cc1af81bd",
-        "GUID:3c3b89b6f4bb0be459a7e008e9cb56cc"
+        "GUID:e94c7155cde17c541899409cc1af81bd"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
