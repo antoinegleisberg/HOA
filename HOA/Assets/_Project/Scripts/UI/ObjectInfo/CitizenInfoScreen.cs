@@ -14,8 +14,9 @@ namespace antoinegleisberg.HOA.UI
 
         public void SetData(Citizen citizen)
         {
-            _hungerText.text = $"Is {(citizen.IsHungry ? "" : "not")} hungry";
-            _thirstText.text = $"Is {(citizen.IsThirsty ? "" : "not")} thirsty";
+            // Update to reflect all needs
+            // _hungerText.text = $"Is {(citizen.IsHungry ? "" : "not")} hungry";
+            // _thirstText.text = $"Is {(citizen.IsThirsty ? "" : "not")} thirsty";
 
             _workplaceText.text = $"Works at {citizen.Workplace?.GetComponent<Building>().ScriptableBuilding.Name ?? "nowhere"}";
         }

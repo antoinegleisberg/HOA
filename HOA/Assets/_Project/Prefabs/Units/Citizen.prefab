@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3865256337580902414}
   - component: {fileID: 5833974943175854499}
   - component: {fileID: 4880814900909454136}
-  - component: {fileID: 8614034146776448412}
   - component: {fileID: -4998431987116565252}
   m_Layer: 0
   m_Name: Citizen
@@ -116,7 +115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b706d55d0ad5ba4a9f08ccd30a99e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 0.5
 --- !u!114 &4880814900909454136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,18 +125,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d6e30a2ed6146c4197bebafb8e5b95c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8614034146776448412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3865256337580902411}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 911b263d5a4a5714991e7b158b924bf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!61 &-4998431987116565252

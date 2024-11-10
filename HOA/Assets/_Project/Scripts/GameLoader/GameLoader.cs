@@ -12,6 +12,8 @@ namespace antoinegleisberg.HOA.GameLoader
 
         [SerializeField] private string _defaultSaveName;
 
+        [SerializeField] private SceneField _mainMenuScene;
+        [SerializeField] private SceneField _gameplayScene;
         private static readonly string GAMEPLAY_SCENE_NAME = "Gameplay";
         private static readonly string MAIN_MENU_SCENE_NAME = "MainMenu";
 

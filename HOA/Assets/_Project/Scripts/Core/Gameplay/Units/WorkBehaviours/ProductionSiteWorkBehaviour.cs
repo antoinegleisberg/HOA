@@ -36,7 +36,7 @@ namespace antoinegleisberg.HOA.Core
 
         private IEnumerator StoreItemsToMainStorage(IEnumerable<ScriptableItem> items)
         {
-            yield return _citizen.StartCoroutine(_citizen.StoreLimitingItemsToMainStorage(items, _workplaceStorage));
+            yield return _citizen.StartCoroutine(_citizen.StoreHighestCapacityItemToMainStorage(items, _workplaceStorage));
 
             yield return _citizen.StartCoroutine(_citizen.MoveToBuilding(_citizen.Workplace.GetComponent<Building>()));
         }

@@ -14,5 +14,7 @@ namespace antoinegleisberg.HOA.Core
         [field: SerializeField] public int CooldownInDaysBeforeNextBaby { get; private set; } = 5;
 
         [field: SerializeField] public float Speed { get; private set; } = 0.5f;
+
+        [field: SerializeField] public int InventorySize { get; private set; } = 25;
     }
 }

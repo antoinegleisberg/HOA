@@ -1,3 +1,5 @@
+using antoinegleisberg.Types;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -15,8 +17,8 @@ namespace antoinegleisberg.HOA.Core
         
         [field: SerializeField] public int StackSize { get; private set; }
 
-        [field: SerializeField] public int HungerReplenish;
-        [field: SerializeField] public int ThirstReplenish;
+        [field: SerializeField] private List<Pair<ScriptableCitizenNeed, int>> _needReplenish;
+        public Dictionary<ScriptableCitizenNeed, int> NeedsReplenish => _needReplenish.ToDictionary();
 
         public int ItemSize => ScriptableItemsDB.ItemStackSizesLCM() / StackSize;
     }

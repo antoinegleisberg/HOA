@@ -70,23 +70,11 @@ namespace antoinegleisberg.HOA.Core
             }
         }
 
-        public ScriptableItem GetDrink()
+        public ScriptableItem GetNeedReplenishingItem(ScriptableCitizenNeed need)
         {
             foreach (ScriptableItem item in _inventory.Items().Keys)
             {
-                if (item.ThirstReplenish > 0)
-                {
-                    return item;
-                }
-            }
-            return null;
-        }
-        
-        public ScriptableItem GetFood()
-        {
-            foreach (ScriptableItem item in _inventory.Items().Keys)
-            {
-                if (item.HungerReplenish > 0)
+                if (item.NeedsReplenish.ContainsKey(need))
                 {
                     return item;
                 }

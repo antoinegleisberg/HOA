@@ -11,7 +11,7 @@ namespace antoinegleisberg.HOA.Core
     {
         private Citizen _citizen => GetComponent<Citizen>();
 
-        public IEnumerator StoreLimitingItemsToMainStorage(IEnumerable<ScriptableItem> items, Storage storageToTakeFrom)
+        public IEnumerator StoreHighestCapacityItemToMainStorage(IEnumerable<ScriptableItem> items, Storage storageToTakeFrom)
         {
             if (!items.Any())
             {

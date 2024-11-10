@@ -34,7 +34,7 @@ namespace antoinegleisberg.HOA.Core
 
         private IEnumerator StoreItemsToMainStorage()
         {
-            yield return _citizen.StartCoroutine(_citizen.StoreLimitingItemsToMainStorage(_workplaceStorage.Items().Keys, _workplaceStorage));
+            yield return _citizen.StartCoroutine(_citizen.StoreHighestCapacityItemToMainStorage(_workplaceStorage.Items().Keys, _workplaceStorage));
         }
 
         private IEnumerator HarvestResourceSite(ResourceSite resourceSite)

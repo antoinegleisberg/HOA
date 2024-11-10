@@ -55,7 +55,7 @@ namespace antoinegleisberg.HOA.Core
             float timeAtHome = citizen.StaticData.TimeAtHome;
             while (Time.time - startTime < timeAtHome)
             {
-                yield return citizen.StartCoroutine(GetBeverageAndDrink(citizen));
+                yield return citizen.StartCoroutine(ReplenishNeeds(citizen));
                 yield return new WaitForSeconds(1);
 
                 if (citizen.CarriesItems)
@@ -116,21 +116,35 @@ namespace antoinegleisberg.HOA.Core
         // Replace this with GetItemThatFulfillsNeed(Citizen citizen, Need need)
         // and also create the Need class accordingly (scriptable object ?) => yes?
         // This allows generic behaviour
-        private IEnumerator GetBeverageAndDrink(Citizen citizen)
+        private IEnumerator ReplenishNeeds(Citizen citizen)
         {
-            ScriptableItem item = citizen.Home.GetComponent<Storage>().GetDrink();
-            if (item == null)
+            // Do we need to order needs here, instead of just satisfying the first one ?
+            foreach (ScriptableCitizenNeed need in citizen.Needs.Keys)
             {
-                yield return citizen.StartCoroutine(GetWater(citizen));
-                yield break;
+                if (citizen.Needs[need] < 20)
+                {
+                    ScriptableItem item = citizen.Home.GetComponent<Storage>().GetNeedReplenishingItem(need);
+
+                    if (item == null)
+                    {
+                        yield return citizen.StartCoroutine(GetNeedReplenishingItem(citizen, need));
+                        yield break;
+                    }
+                    citizen.Home.GetComponent<Storage>().RemoveItems(item, 1);
+                    citizen.ReplenishNeed(item);
+
+                    // Only replenish one item every time the coroutine is called
+                    yield break;
+                }
             }
-            citizen.Home.GetComponent<Storage>().RemoveItems(item, 1);
-            citizen.ReplenishThirst(item);
         }
 
-        private IEnumerator GetWater(Citizen citizen)
+        private IEnumerator GetNeedReplenishingItem(Citizen citizen, ScriptableCitizenNeed need)
         {
             // What about the possibility to get water from storage ??
+
+            // ToDo - adapt to now generic needs
+            yield break;
 
             ResourceSite waterCollectionSite = Object.FindObjectsOfType<ResourceSite>()
                 .Where(rs => rs.ScriptableResourceSite.ResourceSiteType == ResourceSiteType.Water)
